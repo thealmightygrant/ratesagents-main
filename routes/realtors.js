@@ -1,5 +1,7 @@
 var express = require('express')
-,   router  = express.Router();
+,   router  = express.Router()
+,   models = require('../models/index')
+,   bcrypt = require('bcryptjs');
 
 router.get('/register', function(req, res){
   res.render('realtor-register');
@@ -28,8 +30,14 @@ router.post('/register', function(req, res){
     })
   }
   else {
-    //redirect to dashboard
-    console.log("nothing here yet");
+    var newRealtor = models.Realtor.create({
+      email: req.body.email,
+      name: req.body.name,
+      password: req.body.password,
+      userid: req.body.userid
+    }).then(function(realtor) {
+      console.log("new user: ", res.json(realtor));
+    });
   }
 })
 
