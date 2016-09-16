@@ -14,16 +14,16 @@ var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 
 var routes = require('./routes/index');
-var realtors = require('./routes/realtor');
-var humans = require('./routes/human');
+var realtors = require('./routes/realtors');
+var humans = require('./routes/humans');
 
 
 var app = express();
 
 app.set('views', path.join(__dirname, 'views'));
-app.engine('.hbs', expresshbs({defaultLayout: 'layout',
+app.engine('hbs', expresshbs({defaultLayout: 'layout-base',
                                      extname: '.hbs'}));
-app.set('view engine', '.hbs');
+app.set('view engine', 'hbs');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 // session
 app.use(expressSession({
-  // TODO: setup password config
+  // TODO: setup password config for session
   secret: 'secretsecret'
   , saveUninitialized: true
   , resave: true

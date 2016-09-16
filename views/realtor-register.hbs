@@ -1,1 +1,31 @@
-REALTOR REGISTER
+<div class="header clearfix">
+  {{> page/nav-realtors}}
+  <h3 class="text-muted">Rates and Agents</h3>
+</div>
+
+<h2 class="page-header">Realtor Registration</h2>
+<form method="post" action="/realtors/register">
+  <div class="form-group">
+    <label>Name</label>
+    <input type="text" name="name" class="form-control" placeholder="Janie McRealty">
+  </div>
+  <div class="form-group">
+    <label>Email</label>
+    <input type="email" name="email" class="form-control" placeholder="janie@some-realty-firm.com">
+  </div>
+   <div class="form-group">
+    <label>Username</label>
+    <input type="text" name="username" class="form-control" placeholder="janie-the-realtor">
+   </div>
+   <div class="form-group">
+    <label>Password</label>
+    <input type="password" name="password" class="form-control" placeholder="s0meC0mplic4t3dP455w0rd">
+  </div>
+  <div class="form-group">
+    <label>Confirm Password</label>
+    <input type="password" name="password-confirm" class="form-control" placeholder="s0meC0mplic4t3dP455w0rd">
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-default">Submit</button>
+  </div>
+</form>
