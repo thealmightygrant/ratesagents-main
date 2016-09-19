@@ -1,8 +1,9 @@
 var express = require('express')
 ,   router  = express.Router()
-,   models = require('../models/index')
 ,   bcrypt = require('bcryptjs')
-,   Promise = require("bluebird");
+,   Promise = require("bluebird")
+,   models = require('../models/index')
+,   user_utils = require('../utils/user_related')
 
 router.get('/register', function(req, res){
   res.render('realtor-register');
@@ -49,41 +50,11 @@ router.get('/login', function(req, res){
   res.render('realtor-login');
 });
 
-router.post('/login', function(req, res){
-  var username = req.body.username
-  ,   password = req.body.password;
-
-  req.checkBody('username', 'Please give us your username or email :D').notEmpty();
-  req.checkBody('password', 'Please tell us some kind of password. We hope it\'s yours...').notEmpty();
-
-  var errors = req.validationErrors();
-
-  if(errors){
-    res.render('realtor-login', {
-      errors: errors
-    })
-  }
-  else {
-    Promise.any(
-      [
-        models.Realtor.find({
-          where: {
-            username: username
-          }
-        }),
-        models.Realtor.find({
-          where: {
-            email: username
-          }
-        })]).then(function(realtor) {
-          if(bcrypt.compareSync(password, realtor.password)) {
-            console.log("passwords matched!!");
-          }
-          else {
-            console.log("passwords did not match!!!");
-          }
-        })
-  }
-})
+router.post('/login', user_utils.login.bind(null,
+                                            {
+                                              suc_view: 'realtor-dashboard',
+                                              err_view: 'realtor-login',
+                                              model_name: 'Realtor'
+                                            }));
 
 module.exports = router;
