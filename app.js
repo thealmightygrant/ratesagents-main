@@ -13,6 +13,7 @@ var expresshbs = require('express-handlebars');
 var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 
+var validators = require('./utils/validators');
 var routes = require('./routes/index');
 var realtors = require('./routes/realtors');
 var humans = require('./routes/humans');
@@ -49,7 +50,11 @@ app.use(passport.session());
 
 //validator (from GH page for express-validator)
 app.use(expressValidator({
-  errorFormatter: function(param, msg, value){
+  customValidators:{
+    isEmailAvailable: validators.isEmailAvailable
+    , isUsernameAvailable: validators.isUsernameAvailable
+  } 
+  , errorFormatter: function(param, msg, value){
     var namespace = param.split('.')
     ,   root = namespace.shift()
     ,   formParam = root;

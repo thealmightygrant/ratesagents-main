@@ -11,7 +11,6 @@ exports.register = function(options, req, res){
   ,   password = req.body.password
   ,   passwordconfirm = req.body.passwordconfirm
   ,   err_msgs = {}
-  ,   errors = []
   ,   options = typeof(options) !== 'undefined' ? options : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login'
   ,   suc_view = typeof(options.suc_view) === 'string' ? options.suc_view : 'realtor-sales'
@@ -32,7 +31,9 @@ exports.register = function(options, req, res){
     err_msgs.name.empty = 'Please tell us your name :D';
     err_msgs.email.empty = 'Please tell us your email :D';
     err_msgs.email.fake = 'Please tell us a REAL email.';
+    err_msgs.email.in_use = 'Sorry, but that email has already been used to sign up. Please try logging in.'
     err_msgs.username.empty = 'Please give us your username :D';
+    err_msgs.username.in_use = 'Sorry, but that username is already in use. Please select another one.';
     err_msgs.password.empty = 'Please tell us your password. Don\'t keep us waiting.';
     err_msgs.password.match = 'Sorry, these passwords don\'t match. Please try again';
   }
@@ -43,38 +44,32 @@ exports.register = function(options, req, res){
   req.checkBody('password', err_msgs.password.empty ).notEmpty();
   req.checkBody('passwordconfirm', err_msgs.password.match ).equals(req.body.password);
   req.checkBody('email', err_msgs.email.fake ).isEmail();
+  req.checkBody('email', err_msgs.email.in_use).isEmailAvailable(model_name);
+  req.checkBody('username', err_msgs.username.in_use).isUsernameAvailable(model_name);
 
-  //TODO: check that this is a unique user
-
-  if(req.validationErrors())
-  {
-    errors = errors.concat(req.validationErrors());
-  }
-
-  if(errors.length > 0)
-  {
-    res.render(err_view, {
-      username: username,
-      email: email,
-      name: name,
-      errors: errors
+  req.asyncValidationErrors()
+    .then(function() {
+      var salt = bcrypt.genSaltSync(10);
+      var hash = bcrypt.hashSync(password, salt);
+      var newRealtor = models.Realtor.create({
+        email: email,
+        name: name,
+        password: hash,
+        username: username
+      }).then(function(user) {
+        res.render(suc_view, {
+          user: user
+        })
+      });
     })
-  }
-  else
-  {
-    var salt = bcrypt.genSaltSync(10);
-    var hash = bcrypt.hashSync(password, salt);
-    var newRealtor = models.Realtor.create({
-      email: email,
-      name: name,
-      password: hash,
-      username: username
-    }).then(function(user) {
-      res.render(suc_view, {
-        user: user
+    .catch(function(errors) {
+      res.render(err_view, {
+        username: username,
+        email: email,
+        name: name,
+        errors: errors
       })
     });
-  }
 }
 
 exports.login = function(options, req, res){
