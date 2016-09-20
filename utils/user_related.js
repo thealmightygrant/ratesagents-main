@@ -146,25 +146,37 @@ exports.login = function(options, req, res){
             email: username
           }
         })]).then(function(found_user) {
-          console.log('found a user!!!');
           if(bcrypt.compareSync(password, found_user.password))
           {
-            console.log("passwords matched!!");
             res.render(suc_view, {
               user: found_user
             })
           }
           else
           {
-            //TODO: add an error for no match to the errors object, it should contain at least a msg
-            errors.splice(errors.length, 0, { param: 'password'
-                                            , msg: 'Sorry. That password did not match user: ' + username
-                                            , value: password })
+            errors = [{ param: 'password'
+                        , msg: 'Sorry. That password did not match user: ' + username
+                        , value: password }]
             res.render(err_view, {
                username: username,
                errors: errors
              })
-           //console.log("passwords did not match!!!");
+          }
+        }).catch(TypeError, function(error) {
+          res.render(err_view, {
+            username: username,
+            errors: [{ param: 'username'
+                       , msg: 'We couln\'t find that username or email...Did you sign up with a different one?'
+                       , value: username }]
+          })
+        }).catch(function(error){
+          if(error){
+            res.render(err_view, {
+              username: username,
+              errors: [{ param: 'username'
+                         , msg: error
+                         , value: username }]
+            })
           }
         })
   }
