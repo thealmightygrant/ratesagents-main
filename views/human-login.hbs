@@ -2,16 +2,16 @@
   {{> page/nav-humans}}
   <h3 class="text-muted">Rates and Agents</h3>
 </div>
-
+{{> page/errors}}
 <h2 class="page-header">Homeowner Login</h2>
 <form method="post" action="/humans/login">
   <div class="form-group">
-    <label>Username</label>
-    <input type="text" class="form-control" placeholder="janie-the-realtor">
+    <label>Username <b>OR</b> Email</label>
+    <input type="text" name="username" class="form-control" value="{{#if username}}{{username}}{{/if}}" placeholder="joe-homeowner">
   </div>
   <div class="form-group">
     <label>Password</label>
-    <input type="text" class="form-control">
+    <input type="password" name="password" class="form-control">
   </div>
   <div class="form-group">
     <button type="submit" class="btn btn-default">Submit</button>

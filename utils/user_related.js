@@ -33,7 +33,7 @@ exports.register = function(options, req, res){
     err_msgs.email.fake = 'Please tell us a REAL email.';
     err_msgs.email.in_use = 'Sorry, but the email ' + email + ' has already been used to sign up. Please try logging in.'
     err_msgs.username.empty = 'Please give us your username :D';
-    err_msgs.username.is_alphanum = 'Sorry, but your username needs to contain only numbers and letters.'
+    err_msgs.username.isnt_weird = 'Sorry, but your username needs to contain only numbers, letters, dashes, and underscores.'
     err_msgs.username.in_use = 'Sorry, but the username ' + username + ' is already in use. Please select another one.';
     err_msgs.password.empty = 'Please tell us your password. Don\'t keep us waiting.';
     err_msgs.password.match = 'Sorry, these passwords don\'t match. Please try again';
@@ -52,7 +52,7 @@ exports.register = function(options, req, res){
   if(!req.validationErrors()){
     //TODO: restrict password and name to certain characters?
     req.checkBody('email', err_msgs.email.fake ).isEmail();
-    req.checkBody('username', err_msgs.username.is_alphanum ).isAlphanumeric(); 
+    req.checkBody('username', err_msgs.username.isnt_weird ).matches(/[A-Za-z0-9_\-]+/);
   }
 
   if(!req.validationErrors()) {

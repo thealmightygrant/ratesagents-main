@@ -1,8 +1,5 @@
 var express = require('express')
 ,   router  = express.Router()
-,   bcrypt = require('bcryptjs')
-,   Promise = require("bluebird")
-,   models = require('../models/index')
 ,   user_utils = require('../utils/user_related')
 
 router.get('/register', function(req, res){
