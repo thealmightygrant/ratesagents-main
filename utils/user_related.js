@@ -3,6 +3,49 @@ var ra_utils = require('./utils')
 ,   bcrypt = require('bcryptjs')
 ,   Promise = require("bluebird")
 
+var default_err_msgs = {
+  name: {
+    empty: 'Please tell us your name :D'
+  }
+  , email: {
+    empty: 'Please tell us your email :D'
+    , fake: 'Please tell us a REAL email.'
+    , in_use: 'Sorry, but the email has already been used to sign up. Please try logging in'
+  }
+  , username: {
+    empty: 'Please give us your username :D'
+    , isnt_weird: 'Sorry, but your username needs to contain only numbers, letters, dashes, and underscores.'
+    , in_use: 'Sorry, but that username is already in use. Please select another one.'
+  }
+  , password: {
+    empty: 'Please tell us your password. Don\'t keep us waiting.'
+    , match: 'Sorry, these passwords don\'t match. Please try again'
+  }
+}
+
+function retrieveErrorMsgs(desired_atts, des_err_msgs){
+  var att, msg;
+  var err_msgs = {};
+
+  desired_atts.forEach(function(att){
+    err_msgs[att] = {}
+  });
+
+  if(typeof(des_err_msgs) !== 'undefined')
+  {
+    for (att in des_err_msgs) { err_msgs[att] = des_err_msgs[att]; }
+  }
+
+  for(att in default_err_msgs){
+    for(msg in default_err_msgs[att]){
+      if(err_msgs[att] && !err_msgs[att][msg])
+        err_msgs[att][msg] = default_err_msgs[att][msg];
+    }
+  }
+
+  return err_msgs; 
+}
+
 exports.register = function(options, req, res){
 
   var name = req.body.name
@@ -10,34 +53,12 @@ exports.register = function(options, req, res){
   ,   username = req.body.username
   ,   password = req.body.password
   ,   passwordconfirm = req.body.passwordconfirm
-  ,   err_msgs = {}
   ,   options = typeof(options) !== 'undefined' ? options : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login'
   ,   suc_view = typeof(options.suc_view) === 'string' ? options.suc_view : 'realtor-sales'
   ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "Realtor"
 
-  err_msgs.name = {};
-  err_msgs.email = {};
-  err_msgs.username = {};
-  err_msgs.password = {};
-  err_msgs.passwordconfirm = {};
-
-  if(typeof(options.des_err_msgs) !== 'undefined')
-  {
-    for (var att in options.des_err_msgs) { err_msgs[att] = options.des_err_msgs[att]; }
-  }
-  else
-  {
-    err_msgs.name.empty = 'Please tell us your name :D';
-    err_msgs.email.empty = 'Please tell us your email :D';
-    err_msgs.email.fake = 'Please tell us a REAL email.';
-    err_msgs.email.in_use = 'Sorry, but the email ' + email + ' has already been used to sign up. Please try logging in.'
-    err_msgs.username.empty = 'Please give us your username :D';
-    err_msgs.username.isnt_weird = 'Sorry, but your username needs to contain only numbers, letters, dashes, and underscores.'
-    err_msgs.username.in_use = 'Sorry, but the username ' + username + ' is already in use. Please select another one.';
-    err_msgs.password.empty = 'Please tell us your password. Don\'t keep us waiting.';
-    err_msgs.password.match = 'Sorry, these passwords don\'t match. Please try again';
-  }
+  var err_msgs = retrieveErrorMsgs(['name', 'email', 'username', 'password'])
 
   //sanitizers
   req.sanitizeBody('email').normalizeEmail();
@@ -96,27 +117,14 @@ exports.login = function(options, req, res){
 
   var username = req.body.username
   ,   password = req.body.password
-  ,   err_msgs = {}
   ,   errors = []
   ,   options = typeof(options) !== 'undefined' ? options : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login'
   ,   suc_view = typeof(options.suc_view) === 'string' ? options.suc_view : 'realtor-sales'
   ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "Realtor"
 
-  err_msgs.username = {};
-  err_msgs.password = {};
-
-  if(typeof(options.des_err_msgs) !== 'undefined')
-  {
-    err_msgs.username.empty = err_msgs.username.empty;
-    err_msgs.password.empty = err_msgs.password.empty;
-  }
-  else
-  {
-    err_msgs.username.empty = 'Please give us your username or email :D';
-    err_msgs.password.empty = 'Please tell us your password. Don\'t keep us waiting.';
-  }
-
+  var err_msgs = retrieveErrorMsgs(['username', 'password']);
+ 
   req.checkBody('username', err_msgs.username.empty ).notEmpty();
   req.checkBody('password', err_msgs.password.empty ).notEmpty();
 
@@ -166,7 +174,7 @@ exports.login = function(options, req, res){
           res.render(err_view, {
             username: username,
             errors: [{ param: 'username'
-                       , msg: 'We couln\'t find that username or email...Did you sign up with a different one?'
+                       , msg: 'We couldnt find that username or email...Did you sign up with a different one?'
                        , value: username }]
           })
         }).catch(function(error){
@@ -181,3 +189,5 @@ exports.login = function(options, req, res){
         })
   }
 }
+
+
