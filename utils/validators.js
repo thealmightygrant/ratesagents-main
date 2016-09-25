@@ -4,9 +4,9 @@ var Promise = require("bluebird")
 
 function isValueInUse(field_name, value, model_name) {
   return new Promise(function(resolve, reject) {
-    models[model_name].findOne({
-      field_name: value
-    }).then(function(item){
+    var field_object = {where: {}}
+    field_object["where"][field_name] = value;
+    models[model_name].findOne(field_object).then(function(item){
       if (item) {
         reject(item);
       }
