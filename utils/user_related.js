@@ -1,4 +1,5 @@
 var ra_utils = require('./utils')
+,   data_promises = require('./data_promises')
 ,   models = require('../models/index')
 ,   bcrypt = require('bcryptjs')
 ,   Promise = require("bluebird")
@@ -113,8 +114,6 @@ exports.login = function(options, req, res){
   //req = Express HTTP request
   //res = Express HTTP response
 
-  //console.log(options)
-
   var username = req.body.username
   ,   password = req.body.password
   ,   errors = []
@@ -130,63 +129,33 @@ exports.login = function(options, req, res){
 
   if(req.validationErrors())
   {
-    errors = errors.concat(req.validationErrors());
-  }
-
-  if(errors.length > 0)
-  {
     res.render(err_view, {
       username: username,
-      errors: errors
+      errors: req.validationErrors()
     })
   }
   else
   {
-    Promise.any(
-      [
-        models[model_name].find({
-          where: {
-            username: username
-          }
-        }),
-        models[model_name].find({
-          where: {
-            email: username
-          }
-        })]).then(function(found_user) {
-          if(bcrypt.compareSync(password, found_user.password))
-          {
-            res.render(suc_view, {
-              user: found_user
-            })
-          }
-          else
-          {
-            errors = [{ param: 'password'
-                        , msg: 'Sorry. That password did not match user: ' + username
-                        , value: password }]
-            res.render(err_view, {
-               username: username,
-               errors: errors
-             })
-          }
-        }).catch(TypeError, function(error) {
-          res.render(err_view, {
-            username: username,
-            errors: [{ param: 'username'
-                       , msg: 'We couldnt find that username or email...Did you sign up with a different one?'
-                       , value: username }]
-          })
-        }).catch(function(error){
-          if(error){
-            res.render(err_view, {
-              username: username,
-              errors: [{ param: 'username'
-                         , msg: error
-                         , value: username }]
-            })
-          }
+    data_promises.retrieveUserAndCheckPassword(username, password, model_name ).then(function (user){
+      if(user)
+        res.render(suc_view, {
+          user: user
         })
+      else
+        res.render(err_view, {
+          username: username,
+          errors: [{msg: 'Sorry, but that password isn\'t correct',
+                    parameter: 'password',
+                    value: 'incorrect'}]
+        })
+    }).catch(function (e){
+      res.render(err_view, {
+        username: username,
+        errors: [{msg: 'Sorry, but we couldn\'t find that user',
+                  parameter: 'username',
+                  value: 'incorrect'}]
+      })
+    })
   }
 }
 

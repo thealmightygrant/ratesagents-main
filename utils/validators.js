@@ -28,4 +28,3 @@ exports.isUsernameAvailable = function(username, model_name) {
 exports.isEmailAvailable = function(email, model_name) {
   return isValueInUse("email", email, model_name);
 }
-
