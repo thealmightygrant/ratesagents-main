@@ -16,7 +16,7 @@ var expressSession = require('express-session');
 var validators = require('./utils/validators');
 var routes = require('./routes/index');
 var realtors = require('./routes/realtors');
-var humans = require('./routes/humans');
+var homeowners = require('./routes/homeowners');
 
 
 var app = express();
@@ -84,7 +84,7 @@ app.use(function(req, res, next){
 
 app.use('/', routes)
 app.use('/realtors', realtors)
-app.use('/humans', humans)
+app.use('/homeowners', homeowners)
 
 app.set('port', (process.env.PORT || 3000));
 app.listen(app.get('port'), function(){

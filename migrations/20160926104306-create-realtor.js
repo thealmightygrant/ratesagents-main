@@ -1,7 +1,8 @@
 'use strict';
+
 module.exports = {
-  up: function(queryInterface, Sequelize) {
-    return queryInterface.createTable('Humans', {
+  up: function (queryInterface, Sequelize) {
+    return queryInterface.createTable('realtor', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -9,16 +10,19 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       username: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -30,7 +34,8 @@ module.exports = {
       }
     });
   },
-  down: function(queryInterface, Sequelize) {
-    return queryInterface.dropTable('Humans');
+
+  down: function (queryInterface, Sequelize) {
+    return queryInterface.dropTable('realtor');
   }
 };

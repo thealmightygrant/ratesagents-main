@@ -1,7 +1,6 @@
 var ra_utils = require('./utils')
 ,   data_promises = require('./data_promises')
 ,   models = require('../models/index')
-,   bcrypt = require('bcryptjs')
 ,   Promise = require("bluebird")
 
 var default_err_msgs = {
@@ -57,7 +56,7 @@ exports.register = function(options, req, res){
   ,   options = typeof(options) !== 'undefined' ? options : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login'
   ,   suc_view = typeof(options.suc_view) === 'string' ? options.suc_view : 'realtor-sales'
-  ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "Realtor"
+  ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
 
   var err_msgs = retrieveErrorMsgs(['name', 'email', 'username', 'password'])
 
@@ -84,12 +83,10 @@ exports.register = function(options, req, res){
 
   req.asyncValidationErrors()
     .then(function() {
-      var salt = bcrypt.genSaltSync(10);
-      var hash = bcrypt.hashSync(password, salt);
       var newUser = models[model_name].create({
         email: email,
         name: name,
-        password: hash,
+        password: password,
         username: username
       }).then(function(user) {
         res.render(suc_view, {
@@ -120,7 +117,7 @@ exports.login = function(options, req, res){
   ,   options = typeof(options) !== 'undefined' ? options : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login'
   ,   suc_view = typeof(options.suc_view) === 'string' ? options.suc_view : 'realtor-sales'
-  ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "Realtor"
+  ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
 
   var err_msgs = retrieveErrorMsgs(['username', 'password']);
  

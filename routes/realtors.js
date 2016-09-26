@@ -10,7 +10,7 @@ router.post('/register', user_utils.register.bind(null,
                                                   {
                                                     suc_view: 'realtor-dashboard',
                                                     err_view: 'realtor-register',
-                                                    model_name: 'Realtor'
+                                                    model_name: 'realtor'
                                                   }));
 
 router.get('/login', function(req, res){
@@ -21,7 +21,7 @@ router.post('/login', user_utils.login.bind(null,
                                             {
                                               suc_view: 'realtor-dashboard',
                                               err_view: 'realtor-login',
-                                              model_name: 'Realtor'
+                                              model_name: 'realtor'
                                             }));
 
 module.exports = router;

@@ -6,6 +6,9 @@ npm-debug.log*
 # temp emacs files
 .#*
 
+# MAC OS X
+.DS_Store
+
 # config/secret data
 config.json
 

@@ -2,7 +2,7 @@
 var bcrypt = require('bcryptjs')
 
 module.exports = function(sequelize, DataTypes) {
-  var Realtor = sequelize.define('realtor', {
+  var Homeowner = sequelize.define('homeowner', {
     name: DataTypes.STRING,
     username: {
       type: DataTypes.STRING,
@@ -24,5 +24,5 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     freezeTableName: true
   });
-  return Realtor;
+  return Homeowner;
 };

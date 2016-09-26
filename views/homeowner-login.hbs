@@ -1,10 +1,10 @@
 <div class="header clearfix">
-  {{> page/nav-humans}}
+  {{> page/nav-homeowners}}
   <h3 class="text-muted">Rates and Agents</h3>
 </div>
 {{> page/errors}}
 <h2 class="page-header">Homeowner Login</h2>
-<form method="post" action="/humans/login">
+<form method="post" action="/homeowners/login">
   <div class="form-group">
     <label>Username <b>OR</b> Email</label>
     <input type="text" name="username" class="form-control" value="{{#if username}}{{username}}{{/if}}" placeholder="joe-homeowner">
