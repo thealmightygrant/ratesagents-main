@@ -73,11 +73,9 @@ app.use(expressValidator({
 
 app.use(flash());
 
-//globals?
 app.use(function(req, res, next){
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
-  // b/c of how passport defines error messages
   res.locals.error = req.flash('error');
   next();
 });

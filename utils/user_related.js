@@ -46,16 +46,16 @@ function retrieveErrorMsgs(desired_atts, des_err_msgs){
   return err_msgs; 
 }
 
-exports.register = function(options, req, res){
+exports.register = function(req, res){
 
   var name = req.body.name
   ,   email = req.body.email
   ,   username = req.body.username
   ,   password = req.body.password
   ,   passwordconfirm = req.body.passwordconfirm
-  ,   options = typeof(options) !== 'undefined' ? options : {}
+  ,   options = typeof(res.locals) !== 'undefined' ? res.locals : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login'
-  ,   suc_view = typeof(options.suc_view) === 'string' ? options.suc_view : 'realtor-sales'
+  ,   success_url = typeof(options.success_url) === 'string' ? options.success_url : '/'
   ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
 
   var err_msgs = retrieveErrorMsgs(['name', 'email', 'username', 'password'])
@@ -89,9 +89,8 @@ exports.register = function(options, req, res){
         password: password,
         username: username
       }).then(function(user) {
-        res.render(suc_view, {
-          user: user
-        })
+        req.flash('success_msg', "You just successfully registered!");
+        res.redirect(success_url);
       });
     })
     .catch(function(errors) {
@@ -104,7 +103,7 @@ exports.register = function(options, req, res){
     });
 }
 
-exports.login = function(options, req, res){
+exports.login = function(req, res){
   //options.err_view / options.suc_view = string (name of a view)
   //options.model_name = string (name of a model)
   //options.des_err_msgs = { name_of_input { error_type: string}, ...}
@@ -114,9 +113,9 @@ exports.login = function(options, req, res){
   var username = req.body.username
   ,   password = req.body.password
   ,   errors = []
-  ,   options = typeof(options) !== 'undefined' ? options : {}
+  ,   options = typeof(res.locals) !== 'undefined' ? res.locals : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login'
-  ,   suc_view = typeof(options.suc_view) === 'string' ? options.suc_view : 'realtor-sales'
+  ,   success_url = typeof(options.success_url) === 'string' ? options.success_url : '/'
   ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
 
   var err_msgs = retrieveErrorMsgs(['username', 'password']);
@@ -135,16 +134,19 @@ exports.login = function(options, req, res){
   {
     data_promises.retrieveUserAndCheckPassword(username, password, model_name ).then(function (user){
       if(user)
-        res.render(suc_view, {
-          user: user
-        })
+      {
+        req.flash('success_msg', 'You just successfully logged in!');
+        res.redirect(success_url);
+      }
       else
+      {
         res.render(err_view, {
           username: username,
           errors: [{msg: 'Sorry, but that password isn\'t correct',
                     parameter: 'password',
                     value: 'incorrect'}]
         })
+      }
     }).catch(function (e){
       res.render(err_view, {
         username: username,

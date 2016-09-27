@@ -6,22 +6,22 @@ router.get('/register', function(req, res){
   res.render('realtor-register');
 });
 
-router.post('/register', user_utils.register.bind(null,
-                                                  {
-                                                    suc_view: 'realtor-dashboard',
-                                                    err_view: 'realtor-register',
-                                                    model_name: 'realtor'
-                                                  }));
+router.post('/register', function(req, res, next){
+  res.locals.success_url = '/';
+  res.locals.err_view = 'realtor-register';
+  res.locals.model_name = 'realtor';
+  next();
+}, user_utils.register);
 
 router.get('/login', function(req, res){
   res.render('realtor-login');
 });
 
-router.post('/login', user_utils.login.bind(null,
-                                            {
-                                              suc_view: 'realtor-dashboard',
-                                              err_view: 'realtor-login',
-                                              model_name: 'realtor'
-                                            }));
+router.post('/login', function(req, res, next){
+  res.locals.success_url = '/';
+  res.locals.err_view = 'realtor-login';
+  res.locals.model_name = 'realtor';
+  next();
+}, user_utils.login);
 
 module.exports = router;
