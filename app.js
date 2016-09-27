@@ -35,12 +35,18 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 // session
 app.use(expressSession({
-  // TODO: setup password config for session
+  // TODO: setup config for session, use high entropy secret
   secret: 'secretsecret'
   , saveUninitialized: true
   , resave: true
   , store: new SequelizeStore({
-    db: models.sequelize
+    // The maximum age (in milliseconds) of a valid session.
+    // two weeks is default as of 9-27-16
+    expiration: 14 * 24 * 60 * 60 * 1000
+    // The interval at which to clean up sessions
+    // 2 hours is default as of 9-27-16
+    , checkExpirationInterval: 2 * 60 * 60 * 1000
+    , db: models.sequelize
   })
   //TODO: when SSL added (from SequelizeStore docs)
   // proxy: true // if you SSL is done outside of node.

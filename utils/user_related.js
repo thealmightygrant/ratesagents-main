@@ -133,7 +133,15 @@ exports.login = function(req, res){
   else
   {
     data_promises.retrieveUserAndCheckPassword(username, password, model_name ).then(function(user){
-      req.flash('success_msg', 'You just successfully logged in!')
+      req.flash('messages', {success_msg: 'You just successfully logged in!'});
+      var sess = req.session;
+      sess.user = {
+        type: model_name
+        , name: user.name
+        , username: user.username
+        , email: user.email
+      }
+      //TODO: store user info in session?
       res.redirect(success_url);
     }).catch(function (e){
       if (e.message === 'incorrect user') {
@@ -163,4 +171,25 @@ exports.login = function(req, res){
   }
 }
 
+exports.alreadyLoggedIn = function alreadyLoggedIn(req, res, next){
+  var options = typeof(res.locals) !== 'undefined' ? res.locals : {}
+  , error_url = typeof(options.error_url) === 'string' ? options.error_url : "/realtors/login"
+  , model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
 
+  if (req.session && req.session.user)
+  {
+    data_promises.retrieveUser(req.session.user.email, model_name).then(function(found_user){
+      res.locals.user = req.session.user;
+      next();
+    }).catch(function(e){
+      console.log("session error: ", e)
+      req.flash("messages", {error_msg: "Sorry! Can you please re-login?"});
+      res.redirect(error_url)
+    })
+  }
+  else
+  {
+    req.flash("messages", {error_msg: "Sorry! Can you please re-login?"});
+    res.redirect(error_url);
+  } 
+}

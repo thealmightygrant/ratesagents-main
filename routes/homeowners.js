@@ -7,7 +7,7 @@ router.get('/register', function(req, res){
 });
 
 router.post('/register', function(req, res, next){
-  res.locals.success_url = '/';
+  res.locals.success_url = '/homeowners/dashboard';
   res.locals.err_view = 'homeowner-register';
   res.locals.model_name = 'homeowner';
   next();
@@ -18,10 +18,14 @@ router.get('/login', function(req, res){
 });
 
 router.post('/login', function(req, res, next){
-  res.locals.success_url = '/';
+  res.locals.success_url = '/homeowners/dashboard';
   res.locals.err_view = 'homeowner-login';
   res.locals.model_name = 'homeowner';
   next();
 }, user_utils.login);
+
+router.get('/dashboard', function(req, res){
+  res.render('homeowner-dashboard');
+});
 
 module.exports = router;

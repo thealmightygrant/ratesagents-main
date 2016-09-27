@@ -1,3 +1,5 @@
+
+
 exports.logErrors = function logErrors(err, req, res, next) {
   console.error(err.stack);
   next(err);
@@ -20,8 +22,6 @@ exports.errorHandler = function errorHandler(err, req, res, next) {
 }
 
 exports.flashMsgs = function flashMsgs(req, res, next){
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
-  res.locals.error = req.flash('error');
+  res.locals.messages = req.flash('messages');
   next();
 }
