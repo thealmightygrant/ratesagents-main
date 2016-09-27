@@ -6,18 +6,18 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local'),Strategy;
 var pg = require('pg');
 var hstore = require('pg-hstore')();
-var Sequelize = require('sequelize');
 
 var bodyParser = require('body-parser');
 var expresshbs = require('express-handlebars');
 var expressValidator = require('express-validator');
 var expressSession = require('express-session');
+var SequelizeStore = require('connect-session-sequelize')(expressSession.Store);
 
 var validators = require('./utils/validators');
 var routes = require('./routes/index');
 var realtors = require('./routes/realtors');
 var homeowners = require('./routes/homeowners');
-
+var models = require('./models/index')
 
 var app = express();
 
@@ -38,6 +38,12 @@ app.use(expressSession({
   secret: 'secretsecret'
   , saveUninitialized: true
   , resave: true
+  , store: new SequelizeStore({
+    db: models.sequelize
+  })
+  //TODO: when SSL added (from SequelizeStore docs)
+  // proxy: true // if you SSL is done outside of node.
+  
   // TODO: once https is setup
   //, cookie: { secure: true
   //          , maxAge: 2592000000 //30 days in ms
