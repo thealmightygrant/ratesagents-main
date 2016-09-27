@@ -132,14 +132,19 @@ exports.login = function(req, res){
   }
   else
   {
-    data_promises.retrieveUserAndCheckPassword(username, password, model_name ).then(function (user){
-      if(user)
-      {
-        req.flash('success_msg', 'You just successfully logged in!');
-        res.redirect(success_url);
+    data_promises.retrieveUserAndCheckPassword(username, password, model_name ).then(function(user){
+      req.flash('success_msg', 'You just successfully logged in!')
+      res.redirect(success_url);
+    }).catch(function (e){
+      if (e.message === 'incorrect user') {
+        res.render(err_view, {
+          username: username,
+          errors: [{msg: 'Sorry, but we couldn\'t find that user',
+                    parameter: 'username',
+                    value: 'incorrect'}]
+        })
       }
-      else
-      {
+      else if (e.message === 'incorrect password') {
         res.render(err_view, {
           username: username,
           errors: [{msg: 'Sorry, but that password isn\'t correct',
@@ -147,13 +152,13 @@ exports.login = function(req, res){
                     value: 'incorrect'}]
         })
       }
-    }).catch(function (e){
-      res.render(err_view, {
-        username: username,
-        errors: [{msg: 'Sorry, but we couldn\'t find that user',
-                  parameter: 'username',
-                  value: 'incorrect'}]
-      })
+      else {
+        res.render(err_view, {
+          username: username,
+          errors: [{msg: e.message,
+                    parameter: e.name}]
+        })
+      }
     })
   }
 }

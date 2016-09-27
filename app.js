@@ -14,6 +14,7 @@ var expressSession = require('express-session');
 var SequelizeStore = require('connect-session-sequelize')(expressSession.Store);
 
 var validators = require('./utils/validators');
+var middleware = require('./utils/middleware');
 var routes = require('./routes/index');
 var realtors = require('./routes/realtors');
 var homeowners = require('./routes/homeowners');
@@ -78,17 +79,15 @@ app.use(expressValidator({
 }));
 
 app.use(flash());
-
-app.use(function(req, res, next){
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
-  res.locals.error = req.flash('error');
-  next();
-});
+app.use(middleware.flashMsgs);
 
 app.use('/', routes)
 app.use('/realtors', realtors)
 app.use('/homeowners', homeowners)
+
+app.use(middleware.logErrors);
+app.use(middleware.clientErrorHandler);
+app.use(middleware.errorHandler);
 
 app.set('port', (process.env.PORT || 3000));
 app.listen(app.get('port'), function(){
