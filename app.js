@@ -13,6 +13,7 @@ var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 var SequelizeStore = require('connect-session-sequelize')(expressSession.Store);
 
+var env       = process.env.NODE_ENV || 'development';
 var validators = require('./utils/validators');
 var middleware = require('./utils/middleware');
 var routes = require('./routes/index');
@@ -30,8 +31,9 @@ app.set('view engine', 'hbs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// css, js, html, etc
-app.use(express.static(path.join(__dirname, 'static')));
+// css, js, html, etc...should be served by nginx otherwise
+if(env === 'development')
+  app.use(express.static(path.join(__dirname, 'static')));
 
 // session
 app.use(expressSession({
