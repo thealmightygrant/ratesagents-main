@@ -9,11 +9,13 @@ var hstore = require('pg-hstore')();
 
 var bodyParser = require('body-parser');
 var expresshbs = require('express-handlebars');
+var HBars = require('handlebars');
 var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 var SequelizeStore = require('connect-session-sequelize')(expressSession.Store);
 
 var env       = process.env.NODE_ENV || 'development';
+var helpers = require('./utils/hb_helpers');
 var validators = require('./utils/validators');
 var middleware = require('./utils/middleware');
 var routes = require('./routes/index');
@@ -24,8 +26,12 @@ var models = require('./models/index')
 var app = express();
 
 app.set('views', path.join(__dirname, 'views'));
+
 app.engine('hbs', expresshbs({defaultLayout: 'layout-base',
-                                     extname: '.hbs'}));
+                              handlebars: HBars,
+                              helpers: helpers,
+                              extname: '.hbs'}));
+
 app.set('view engine', 'hbs');
 
 app.use(bodyParser.json());
