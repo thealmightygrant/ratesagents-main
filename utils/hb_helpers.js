@@ -4,7 +4,7 @@ exports.facebook_sdk = function facebook_sdk(options){
   return new HBars.SafeString('<script>' + 
                               'window.fbAsyncInit = function() { ' +
                               '  FB.init({ ' + 
-                              'appId      : \'700329213454300\',' + 
+                              'appId      : \' 700329213454300 \',' + 
                               'xfbml      : true,' + 
                                   'version    : \'v2.7\'' + 
                               '});' + 

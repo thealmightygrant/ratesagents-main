@@ -94,8 +94,8 @@ exports.register = function(req, res){
           , username: user.username
           , email: user.email
         }
+        req.flash('messages', {success_msg: "You just successfully registered!"});
         data_promises.session(req, 'save').then(function(extra_data){
-          req.flash('success_msg', "You just successfully registered!");
           res.redirect(success_url);
         })
       })
@@ -149,6 +149,7 @@ exports.login = function(req, res){
           , username: extra_data.username
           , email: extra_data.email
         }
+        req.flash("messages", {success_msg: "Welcome Back!"});
         return data_promises.session(req, 'save').then(function(extra_data){
           res.redirect(success_url);
         })
