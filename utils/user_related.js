@@ -88,10 +88,17 @@ exports.register = function(req, res){
         name: name,
         password: password,
         username: username
-      }).then(function(user) {
-        req.flash('success_msg', "You just successfully registered!");
-        res.redirect(success_url);
-      });
+      }).then(function(user){
+        req.session[model_name] = {
+          name: user.name
+          , username: user.username
+          , email: user.email
+        }
+        data_promises.session(req, 'save').then(function(extra_data){
+          req.flash('success_msg', "You just successfully registered!");
+          res.redirect(success_url);
+        })
+      })
     })
     .catch(function(errors) {
       res.render(err_view, {
@@ -134,14 +141,18 @@ exports.login = function(req, res){
   }
   else
   {
-    data_promises.retrieveUserAndCheckPassword(username, password, model_name ).then(function(user){
-      req.flash('messages', {success_msg: 'You just successfully logged in!'});
-      req.session[model_name] = {
-        name: user.name
-        , username: user.username
-        , email: user.email
-      }
-      res.redirect(success_url);
+    data_promises.checkPassword(username, password, model_name ).then(function(user){
+      return data_promises.session(req, 'regenerate', user).then(function(extra_data){
+        req = extra_data.req;
+        req.session[model_name] = {
+          name: extra_data.name
+          , username: extra_data.username
+          , email: extra_data.email
+        }
+        return data_promises.session(req, 'save').then(function(extra_data){
+          res.redirect(success_url);
+        })
+      })
     }).catch(function (e){
       if (e.message === 'incorrect user') {
         res.render(err_view, {
@@ -175,9 +186,8 @@ exports.logout = function logout(req, res, next){
   , error_url = typeof(options.error_url) === 'string' ? options.error_url : "/"
   , success_url = typeof(options.success_url) === 'string' ? options.success_url : "/" 
   , model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
-  , destroy_session_promise = Promise.promisify(req.session.destroy, {context: req.session})
 
-  destroy_session_promise().then(function(){
+  data_promises.session(req, 'destroy').then(function(extra_data){
     res.redirect(success_url)
   }).catch(function(e){
     console.log("session error: ", e)
@@ -192,12 +202,16 @@ exports.alreadyLoggedIn = function alreadyLoggedIn(req, res, next){
 
   if (req.session && req.session[model_name])
   {
-    var sess = req.session[model_name];
-    data_promises.retrieveUser(sess.email, model_name).then(function(found_user){
-      res.locals[model_name] = sess;
+    var email = req.session[model_name].email;
+    data_promises.retrieveUser(email, model_name).then(function(user_data){
+      res.locals[model_name] = {
+        name: user_data.name
+        , username: user_data.username
+        , email: user_data.email
+      }
       next();
     }).catch(function(e){
-      console.log("session error: ", e)
+      console.error(e)
       req.flash("messages", {error_msg: "Sorry! Can you please re-login?"});
       res.redirect(error_url)
     })
