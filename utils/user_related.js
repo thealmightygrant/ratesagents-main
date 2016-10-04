@@ -119,7 +119,9 @@ exports.login = function(req, res){
   ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
 
   var err_msgs = retrieveErrorMsgs(['username', 'password']);
- 
+
+  //TODO: redirect to dashboard or something if already logged in, mayyybe
+
   req.checkBody('username', err_msgs.username.empty ).notEmpty();
   req.checkBody('password', err_msgs.password.empty ).notEmpty();
 
@@ -134,14 +136,11 @@ exports.login = function(req, res){
   {
     data_promises.retrieveUserAndCheckPassword(username, password, model_name ).then(function(user){
       req.flash('messages', {success_msg: 'You just successfully logged in!'});
-      var sess = req.session;
-      sess.user = {
-        type: model_name
-        , name: user.name
+      req.session[model_name] = {
+        name: user.name
         , username: user.username
         , email: user.email
       }
-      //TODO: store user info in session?
       res.redirect(success_url);
     }).catch(function (e){
       if (e.message === 'incorrect user') {
@@ -171,15 +170,31 @@ exports.login = function(req, res){
   }
 }
 
+exports.logout = function logout(req, res, next){
+  var options = typeof(res.locals) !== 'undefined' ? res.locals : {}
+  , error_url = typeof(options.error_url) === 'string' ? options.error_url : "/"
+  , success_url = typeof(options.success_url) === 'string' ? options.success_url : "/" 
+  , model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
+  , destroy_session_promise = Promise.promisify(req.session.destroy, {context: req.session})
+
+  destroy_session_promise().then(function(){
+    res.redirect(success_url)
+  }).catch(function(e){
+    console.log("session error: ", e)
+    res.redirect(error_url)
+  })
+}
+
 exports.alreadyLoggedIn = function alreadyLoggedIn(req, res, next){
   var options = typeof(res.locals) !== 'undefined' ? res.locals : {}
   , error_url = typeof(options.error_url) === 'string' ? options.error_url : "/realtors/login"
   , model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
 
-  if (req.session && req.session.user)
+  if (req.session && req.session[model_name])
   {
-    data_promises.retrieveUser(req.session.user.email, model_name).then(function(found_user){
-      res.locals.user = req.session.user;
+    var sess = req.session[model_name];
+    data_promises.retrieveUser(sess.email, model_name).then(function(found_user){
+      res.locals[model_name] = sess;
       next();
     }).catch(function(e){
       console.log("session error: ", e)

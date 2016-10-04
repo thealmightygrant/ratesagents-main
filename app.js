@@ -2,8 +2,6 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var flash = require('connect-flash');
-var passport = require('passport');
-var LocalStrategy = require('passport-local'),Strategy;
 var pg = require('pg');
 var hstore = require('pg-hstore')();
 
@@ -41,33 +39,30 @@ app.use(bodyParser.urlencoded({ extended: false }));
 if(env === 'development')
   app.use(express.static(path.join(__dirname, 'static')));
 
-// session
-app.use(expressSession({
+var sessOptions = {
   // TODO: setup config for session, use high entropy secret
   secret: 'secretsecret'
-  , saveUninitialized: true
-  , resave: true
+  , saveUninitialized: false
+  , resave: false
+  , cookie: {
+    maxAge: 2592000000 //30 days in ms
+  }
   , store: new SequelizeStore({
-    // The maximum age (in milliseconds) of a valid session.
-    // two weeks is default as of 9-27-16
-    expiration: 14 * 24 * 60 * 60 * 1000
     // The interval at which to clean up sessions
     // 2 hours is default as of 9-27-16
-    , checkExpirationInterval: 2 * 60 * 60 * 1000
+    checkExpirationInterval: 2 * 60 * 60 * 1000
     , db: models.sequelize
   })
-  //TODO: when SSL added (from SequelizeStore docs)
-  // proxy: true // if you SSL is done outside of node.
-  
-  // TODO: once https is setup
-  //, cookie: { secure: true
-  //          , maxAge: 2592000000 //30 days in ms
-  //          }
-}));
+}
 
-//passport init
-app.use(passport.initialize());
-app.use(passport.session());
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1) // trust first proxy
+  sessOptions.cookie.secure = true // serve secure cookies
+  sessOptions.proxy = true
+}
+
+// session
+app.use(expressSession(sessOptions));
 
 //validator (from GH page for express-validator)
 app.use(expressValidator({
