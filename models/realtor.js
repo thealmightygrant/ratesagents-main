@@ -10,7 +10,6 @@ module.exports = function(sequelize, DataTypes) {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
       set: function(string_val){
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(string_val, salt);
@@ -19,10 +18,24 @@ module.exports = function(sequelize, DataTypes) {
     },
     email: {
       type: DataTypes.STRING,
+    },
+    userType: {
+      type: DataTypes.ENUM('realtor'),
+      defaultValue: 'realtor',
       allowNull: false
     }
   }, {
     freezeTableName: true
+    , classMethods: {
+      associate: function(models) {
+        Realtor.belongsTo(models.facebookAccount, {
+          //TODO: does this need to be contraints: false?
+          onDelete: "CASCADE"
+        });
+      }
+    }
+
   });
+
   return Realtor;
 };

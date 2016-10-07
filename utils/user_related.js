@@ -1,6 +1,5 @@
 var ra_utils = require('./utils')
 ,   data_promises = require('./data_promises')
-,   models = require('../models/index')
 ,   Promise = require("bluebird")
 
 var default_err_msgs = {
@@ -46,7 +45,7 @@ function retrieveErrorMsgs(desired_atts, des_err_msgs){
   return err_msgs; 
 }
 
-exports.register = function(req, res){
+exports.validateRegister = function(req, res, next){
 
   var name = req.body.name
   ,   email = req.body.email
@@ -55,7 +54,6 @@ exports.register = function(req, res){
   ,   passwordconfirm = req.body.passwordconfirm
   ,   options = typeof(res.locals) !== 'undefined' ? res.locals : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login'
-  ,   success_url = typeof(options.success_url) === 'string' ? options.success_url : '/'
   ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
 
   var err_msgs = retrieveErrorMsgs(['name', 'email', 'username', 'password'])
@@ -83,22 +81,7 @@ exports.register = function(req, res){
 
   req.asyncValidationErrors()
     .then(function() {
-      var newUser = models[model_name].create({
-        email: email,
-        name: name,
-        password: password,
-        username: username
-      }).then(function(user){
-        req.session[model_name] = {
-          name: user.name
-          , username: user.username
-          , email: user.email
-        }
-        req.flash('messages', {success_msg: "You just successfully registered!"});
-        data_promises.session(req, 'save').then(function(extra_data){
-          res.redirect(success_url);
-        })
-      })
+      next()
     })
     .catch(function(errors) {
       res.render(err_view, {
@@ -110,22 +93,12 @@ exports.register = function(req, res){
     });
 }
 
-exports.login = function(req, res){
-  //options.err_view / options.suc_view = string (name of a view)
-  //options.model_name = string (name of a model)
-  //options.des_err_msgs = { name_of_input { error_type: string}, ...}
-  //req = Express HTTP request
-  //res = Express HTTP response
-
+exports.validateLogin = function(req, res, next){
   var username = req.body.username
   ,   password = req.body.password
-  ,   errors = []
   ,   options = typeof(res.locals) !== 'undefined' ? res.locals : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login'
-  ,   success_url = typeof(options.success_url) === 'string' ? options.success_url : '/'
-  ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
-
-  var err_msgs = retrieveErrorMsgs(['username', 'password']);
+  ,   err_msgs = retrieveErrorMsgs(['username', 'password']);
 
   //TODO: redirect to dashboard or something if already logged in, mayyybe
 
@@ -141,85 +114,19 @@ exports.login = function(req, res){
   }
   else
   {
-    data_promises.checkPassword(username, password, model_name ).then(function(user){
-      return data_promises.session(req, 'regenerate', user).then(function(extra_data){
-        req = extra_data.req;
-        req.session[model_name] = {
-          name: extra_data.name
-          , username: extra_data.username
-          , email: extra_data.email
-        }
-        req.flash("messages", {success_msg: "Welcome Back!"});
-        return data_promises.session(req, 'save').then(function(extra_data){
-          res.redirect(success_url);
-        })
-      })
-    }).catch(function (e){
-      if (e.message === 'incorrect user') {
-        res.render(err_view, {
-          username: username,
-          errors: [{msg: 'Sorry, but we couldn\'t find that user',
-                    parameter: 'username',
-                    value: 'incorrect'}]
-        })
-      }
-      else if (e.message === 'incorrect password') {
-        res.render(err_view, {
-          username: username,
-          errors: [{msg: 'Sorry, but that password isn\'t correct',
-                    parameter: 'password',
-                    value: 'incorrect'}]
-        })
-      }
-      else {
-        res.render(err_view, {
-          username: username,
-          errors: [{msg: e.message,
-                    parameter: e.name}]
-        })
-      }
-    })
+    next();
   }
 }
 
-exports.logout = function logout(req, res, next){
-  var options = typeof(res.locals) !== 'undefined' ? res.locals : {}
-  , error_url = typeof(options.error_url) === 'string' ? options.error_url : "/"
-  , success_url = typeof(options.success_url) === 'string' ? options.success_url : "/" 
-  , model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
-
-  data_promises.session(req, 'destroy').then(function(extra_data){
-    res.redirect(success_url)
-  }).catch(function(e){
-    console.log("session error: ", e)
-    res.redirect(error_url)
-  })
-}
-
-exports.alreadyLoggedIn = function alreadyLoggedIn(req, res, next){
-  var options = typeof(res.locals) !== 'undefined' ? res.locals : {}
-  , error_url = typeof(options.error_url) === 'string' ? options.error_url : "/realtors/login"
-  , model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
-
-  if (req.session && req.session[model_name])
-  {
-    var email = req.session[model_name].email;
-    data_promises.retrieveUser(email, model_name).then(function(user_data){
-      res.locals[model_name] = {
-        name: user_data.name
-        , username: user_data.username
-        , email: user_data.email
-      }
-      next();
-    }).catch(function(e){
-      console.error(e)
-      req.flash("messages", {error_msg: "Sorry! Can you please re-login?"});
-      res.redirect(error_url)
-    })
+exports.isLoggedIn = function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()){
+    res.locals.user = {
+      name: req.user.name
+      , userType: req.user.userType
+      , username: req.user.username
+      , email: req.user.email
+    }
+    return next();
   }
-  else
-  {
-    req.flash("messages", {error_msg: "Sorry! Can you please re-login?"});
-    res.redirect(error_url);
-  } 
+  res.redirect('/');
 }

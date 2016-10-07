@@ -3,5 +3,8 @@
     {{#if this.success_msg}}
       <div class="alert alert-success">{{this.success_msg}}</div>
     {{/if}}
+    {{#if this.error_msg}}
+      <div class="alert alert-danger">{{this.error_msg}}</div>
+    {{/if}}
   {{/each}}
 {{/if}}

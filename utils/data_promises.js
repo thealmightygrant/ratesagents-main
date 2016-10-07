@@ -20,7 +20,45 @@ exports.retrieveUser =
         if(found_user !== null)
           return found_user;
         else
-          throw Error('incorrect user')
+          return false;
+      })
+      .catch(function(e){
+        e.message = 'database error: ' + e.message;
+        throw e;
+      })
+  }
+
+exports.retrieveFBAccount =
+  function retrieveFBAccount(fb_id){
+    return models.facebookAccount.findOne({
+      where: {
+        profileId: fb_id
+      }
+    }) 
+      .then(function(fbAccount) {
+        if(fbAccount !== null)
+          return fbAccount;
+        else
+          return false;
+      })
+      .catch(function(e){
+        e.message = 'database error: ' + e.message;
+        throw e;
+      })
+  }
+
+exports.retrieveUserViaFB =
+  function retrieveUserViaFB(fbAccount, model_name){
+    return models[model_name].findOne({
+      where: {
+        facebookAccountId: fbAccount.id
+      }
+    })
+      .then(function(user){
+        if(user !== null)
+          return user;
+        else
+          return false;
       })
       .catch(function(e){
         e.message = 'database error: ' + e.message;
@@ -29,20 +67,16 @@ exports.retrieveUser =
   }
 
 exports.checkPassword =
-  function checkPassword(username_or_email, password, model_name){
-    return exports.retrieveUser(username_or_email, model_name)
-      .then(function(found_user){
-        if(bcrypt.compareSync(password, found_user.password))
-          return found_user;
-        else
-          throw new Error('incorrect password');
-      })
-      .catch(function(e){
-        if((e instanceof TypeError) && (e.message === 'Cannot read property \'password\' of null'))
-          throw new Error('incorrect user');
-        else
-          throw e;
-      })
+  function checkPassword(user, password){
+    return Promise.try(function(){
+      if(bcrypt.compareSync(password, user.password))
+        return user;
+      else
+        return false;
+    }).catch(function(e){
+      e.message = 'password check error: ' + e.message;
+      throw e;
+    })
   }
 
 exports.session =

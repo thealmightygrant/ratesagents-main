@@ -12,9 +12,12 @@ var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 var SequelizeStore = require('connect-session-sequelize')(expressSession.Store);
 
+var passport = require('passport')
+
 var env       = process.env.NODE_ENV || 'development';
 var helpers = require('./utils/hb_helpers');
 var validators = require('./utils/validators');
+var strategies = require('./utils/strategies');
 var middleware = require('./utils/middleware');
 var routes = require('./routes/index');
 var realtors = require('./routes/realtors');
@@ -64,6 +67,18 @@ if (app.get('env') === 'production') {
 // session
 app.use(expressSession(sessOptions));
 
+// initialize passport
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use('realtor-local-login', strategies.realtorLocalLogin);
+passport.use('homeowner-local-login', strategies.homeownerLocalLogin);
+passport.use('realtor-local-register', strategies.realtorLocalRegister);
+passport.use('homeowner-local-register', strategies.homeownerLocalRegister);
+passport.use('realtor-fb-login', strategies.realtorFacebookLogin);
+passport.use('homeowner-fb-login', strategies.homeownerFacebookLogin);
+passport.serializeUser(strategies.serializer);
+passport.deserializeUser(strategies.deserializer);
+
 //validator (from GH page for express-validator)
 app.use(expressValidator({
   customValidators:{
@@ -98,8 +113,19 @@ app.use(middleware.logErrors);
 app.use(middleware.clientErrorHandler);
 app.use(middleware.errorHandler);
 
-app.set('port', (process.env.PORT || 3000));
-app.listen(app.get('port'), function(){
-  console.log('Server started on port: ' + app.get('port'))
-})
+var port = normalizePort(process.env.PORT, 3000);
+app.set('port', port);
+app.listen(port, onListening)
 
+function onListening(){
+  console.log('Server started on port: ' + app.get('port'))
+}
+
+function normalizePort(port, defaultPort){
+  if(typeof(port) === 'string')
+    return parseInt(port);
+  else if(typeof(port) === 'number')
+    return port;
+  else
+    return defaultPort;
+}
