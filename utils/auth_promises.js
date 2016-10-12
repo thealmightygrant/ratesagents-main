@@ -27,7 +27,7 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
               username: username,
               name: name,
               userType: model_name,
-              facebookAccountId: fbAccount.id 
+              facebookAccountId: parseInt(fbAccount.id) 
             })
           }
           else {
@@ -40,7 +40,7 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
                 username: username,
                 name: name,
                 userType: model_name,
-                facebookAccountId: fbAccount.id 
+                facebookAccountId: parseInt(fbAccount.id) 
               }
             })
           }
