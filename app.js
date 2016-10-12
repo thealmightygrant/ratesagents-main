@@ -40,7 +40,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // css, js, html, etc...should be served by nginx otherwise
 if(env === 'development')
-  app.use(express.static(path.join(__dirname, 'static')));
+  app.use(express.static(__dirname));
 
 var sessOptions = {
   // TODO: setup config for session, use high entropy secret
