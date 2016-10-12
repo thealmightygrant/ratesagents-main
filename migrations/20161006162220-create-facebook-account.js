@@ -3,18 +3,14 @@ module.exports = {
   up: function(queryInterface, Sequelize) {
     return queryInterface.createTable('facebookAccount', {
       id: {
-        allowNull: false,
-        autoIncrement: true,
+        type: Sequelize.BIGINT,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        allowNull: false
       },
       accessToken: {
         type: Sequelize.STRING
       },
       refreshToken: {
-        type: Sequelize.STRING
-      },
-      profileId: {
         type: Sequelize.STRING
       },
       createdAt: {

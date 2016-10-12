@@ -119,7 +119,10 @@ exports.validateLogin = function(req, res, next){
 }
 
 exports.isLoggedIn = function isLoggedIn(req, res, next) {
+  console.log("testing authentication...")
+  console.log(req.session);
   if (req.isAuthenticated()){
+    console.log("passed authentication")
     res.locals.user = {
       name: req.user.name
       , userType: req.user.userType
@@ -128,5 +131,6 @@ exports.isLoggedIn = function isLoggedIn(req, res, next) {
     }
     return next();
   }
-  res.redirect('/');
+  console.log("failed authentication")
+  return res.redirect('/'); 
 }

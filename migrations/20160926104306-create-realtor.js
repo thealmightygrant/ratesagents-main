@@ -4,10 +4,10 @@ module.exports = {
   up: function (queryInterface, Sequelize) {
     return queryInterface.createTable('realtor', {
       id: {
-        allowNull: false,
-        autoIncrement: true,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        allowNull: false
       },
       name: {
         type: Sequelize.STRING,

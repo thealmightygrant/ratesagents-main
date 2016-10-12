@@ -14,18 +14,19 @@ function localRegister(model_name, req, username, password, done){
 }
 
 function facebookLogin(model_name, token, refreshToken, profile, done){
-  return auth_promises.facebookLoginVerify(token, refreshToken, profile, model_name).asCallback(done, {spread: true});
+  return auth_promises.facebookLoginVerify(token, refreshToken, profile, model_name).asCallback(done);
 }
 
 exports.serializer = function serializer(user, done){
-  done(null, {email: user.email, userType: user.userType});
+  done(null, {id: user.id, userType: user.userType});
 }
 
 exports.deserializer = function deserializer(user, done){
   var model_name = user.userType === 'homeowner' ? 'homeowner' : 'realtor';
   
   //TODO: this should be updated to use straight id
-  data_promises.retrieveUser(user.email, model_name).asCallback(done);
+  console.log("deserializing: ", user.id)
+  data_promises.retrieveUserById(user.id, model_name).asCallback(done);
 }
 
 exports.realtorLocalLogin = new LocalStrategy(

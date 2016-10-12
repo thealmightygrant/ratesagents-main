@@ -28,16 +28,17 @@ exports.retrieveUser =
       })
   }
 
-exports.retrieveFBAccount =
-  function retrieveFBAccount(fb_id){
-    return models.facebookAccount.findOne({
+exports.retrieveUserById =
+  function retrieveUserById(user_id, model_name ){
+    return models[model_name].findOne({
       where: {
-        profileId: fb_id
+        id: user_id
       }
     }) 
-      .then(function(fbAccount) {
-        if(fbAccount !== null)
-          return fbAccount;
+      .then(function(found_user) {
+        console.log("deserialized");
+        if(found_user !== null)
+          return found_user;
         else
           return false;
       })
@@ -45,6 +46,31 @@ exports.retrieveFBAccount =
         e.message = 'database error: ' + e.message;
         throw e;
       })
+  }
+
+
+exports.retrieveFBAccount =
+  function retrieveFBAccount(fb_id){
+    if(!fb_id)
+      return false;
+    else {
+      return models.facebookAccount.findOne({
+        where: {
+          id: fb_id
+        }
+      }) 
+        .then(function(fbAccount) {
+          //console.log("found fb account: ", fbAccount)
+          if(fbAccount !== null)
+            return fbAccount;
+          else
+            return false;
+        })
+        .catch(function(e){
+          e.message = 'database error: ' + e.message;
+          throw e;
+        })
+    }
   }
 
 exports.retrieveUserViaFB =

@@ -69,7 +69,7 @@ app.use(expressSession(sessOptions));
 
 // initialize passport
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.session({pauseStream: true}));
 passport.use('realtor-local-login', strategies.realtorLocalLogin);
 passport.use('homeowner-local-login', strategies.homeownerLocalLogin);
 passport.use('realtor-local-register', strategies.realtorLocalRegister);

@@ -1,6 +1,7 @@
 var express = require('express')
 ,   passport = require('passport')
 ,   router  = express.Router()
+,   data_promises = require('../utils/data_promises')
 ,   user_utils = require('../utils/user_related')
 
 //TODO: think about some better logic here
@@ -47,17 +48,19 @@ router.post('/login'
                                       failureFlash: true }));
 
 //TODO: add location to scope
-router.get('/auth/facebook', passport.authenticate('realtor-fb-login', { scope : ['email']}));
+router.get('/auth/facebook'
+           , passport.authenticate('realtor-fb-login'
+                                   , { scope : ['email']}));
 
 // handle the callback after facebook has authenticated the user
-router.get('/auth/facebook/callback',
-        passport.authenticate('realtor-fb-login', {
-          failureRedirect : '/realtors/login'
-        }),
-        function(req, res) {
-          // Successful authentication, redirect home.
-          res.redirect('/realtors/dashboard');
-        });
+router.get('/auth/facebook/callback'
+           , passport.authenticate('realtor-fb-login', {
+             failureRedirect : '/realtors/login'
+           })
+           , function(req, res) {
+             //TODO: add flash message for fb login/registration
+             res.redirect('/realtors/dashboard')
+           });
 
 
 //TODO: this should be a post

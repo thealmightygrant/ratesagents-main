@@ -3,6 +3,12 @@ var bcrypt = require('bcryptjs')
 
 module.exports = function(sequelize, DataTypes) {
   var Realtor = sequelize.define('realtor', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      allowNull: false
+    },
     name: DataTypes.STRING,
     username: {
       type: DataTypes.STRING,
