@@ -4,7 +4,7 @@ module.exports = function(sequelize, DataTypes) {
     accessToken: DataTypes.STRING,
     refreshToken: DataTypes.STRING,
     id: {
-      type: DataTypes.UUID,
+      type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true
     }

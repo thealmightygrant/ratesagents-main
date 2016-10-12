@@ -6,14 +6,14 @@ var data_promises = require('./data_promises')
 exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, profile, model_name){
   //TODO: session is being saved after authentication, causing failure on the next tick
   //NOTE: there's only a login because they can register or login via this endpoint
-  return data_promises.retrieveFBAccount(profile.id)
+  return data_promises.retrieveFBAccount(parseInt(profile.id))
     .then(function(fbAccount){
       //NOTE: theyve never logged in or registered with us via fb
       if(!fbAccount) {
         return models.facebookAccount.create({
           accessToken: token,
           refreshToken: refreshToken,
-          id: profile.id
+          id: parseInt(profile.id)
         }).then(function(fbAccount){
           //TODO: they may have a regular login, we need to check that here
           var email = profile.emails && profile.emails.length ? profile.emails[0].value : null
@@ -27,7 +27,7 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
               username: username,
               name: name,
               userType: model_name,
-              facebookAccountId: fbAccount.id 
+              facebookAccountId: parseInt(fbAccount.id) 
             })
           }
           else {
@@ -40,7 +40,7 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
                 username: username,
                 name: name,
                 userType: model_name,
-                facebookAccountId: fbAccount.id 
+                facebookAccountId: parseInt(fbAccount.id) 
               }
             })
           }
@@ -49,7 +49,7 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
             //NOTE: if there is a regular login, update fb account id
             if((typeof(created) !== 'undefined') && !created)
               return models[model_name].update({
-                facebookAccountId: fbAccount.id
+                facebookAccountId: parseInt(fbAccount.id)
               }, {
                 where: {
                   id: user.id 

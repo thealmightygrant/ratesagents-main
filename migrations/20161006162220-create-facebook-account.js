@@ -3,7 +3,7 @@ module.exports = {
   up: function(queryInterface, Sequelize) {
     return queryInterface.createTable('facebookAccount', {
       id: {
-        type: Sequelize.UUID,
+        type: Sequelize.BIGINT,
         primaryKey: true,
         allowNull: false
       },
