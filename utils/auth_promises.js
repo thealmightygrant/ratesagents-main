@@ -31,6 +31,7 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
             })
           }
           else {
+            //TODO: this findOrCreate is all f'd up
             user_creation_promise = models[model_name].findOrCreate({
               where: {
                 email: email
@@ -47,7 +48,7 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
 
           return user_creation_promise.spread(function(user, created){
             //NOTE: if there is a regular login, update fb account id
-            if((typeof(created) !== 'undefined') && !created)
+            if((typeof(created) !== 'undefined') && !created) {
               return models[model_name].update({
                 facebookAccountId: parseInt(fbAccount.id)
               }, {
@@ -58,15 +59,17 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
                 console.log("updated? ", created)
                 return user;
               })
-            else
+            }
+            else {
+              console.log("user created via fb: ", user);
               return user;
+            }
           })
         }).catch(function(e){
           throw e;
         })
       }
       else{
-        //success redirect fails here when not already logged in...
         return data_promises.retrieveUserViaFB(fbAccount, model_name)
           .then(function(user){
             console.log("user: ", !!user)

@@ -5,6 +5,7 @@ var flash = require('connect-flash');
 var pg = require('pg');
 var hstore = require('pg-hstore')();
 
+var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
 var expresshbs = require('express-handlebars');
 var HBars = require('handlebars');
@@ -35,6 +36,22 @@ app.engine('hbs', expresshbs({defaultLayout: 'layout-base',
 
 app.set('view engine', 'hbs');
 
+app.use(methodOverride());
+var allowCrossDomain = function(req, res, next) {
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // intercept OPTIONS method
+  if ('OPTIONS' == req.method) {
+    res.send(200);
+  }
+  else {
+    next();
+  }
+};
+app.use(allowCrossDomain);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
