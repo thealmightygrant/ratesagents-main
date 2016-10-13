@@ -7,6 +7,7 @@ var hstore = require('pg-hstore')();
 
 var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var expresshbs = require('express-handlebars');
 var HBars = require('handlebars');
 var expressValidator = require('express-validator');
@@ -23,7 +24,9 @@ var middleware = require('./utils/middleware');
 var routes = require('./routes/index');
 var realtors = require('./routes/realtors');
 var homeowners = require('./routes/homeowners');
-var models = require('./models/index')
+var models = require('./models/index');
+
+var appConfig = require('./config/app');
 
 var app = express();
 
@@ -53,7 +56,8 @@ var allowCrossDomain = function(req, res, next) {
 };
 app.use(allowCrossDomain);
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser(appConfig.session.secret));
 
 // css, js, html, etc...should be served by nginx otherwise
 if(env === 'development')
@@ -61,12 +65,16 @@ if(env === 'development')
 
 var sessOptions = {
   // TODO: setup config for session, use high entropy secret
-  secret: 'secretsecret'
-  , saveUninitialized: false
+  secret: appConfig.session.secret
+  , saveUninitialized: true
   , resave: false
   , cookie: {
+    httpOnly: true,  //true is default, does not allow client-side JS to read document.cookie
     maxAge: 2592000000 //30 days in ms
   }
+  //TODO: look into other possibilities for session storage
+  //      secure cookies might be an option (with something like node-client-sessions)
+  //      redis or mongo are other possibilities
   , store: new SequelizeStore({
     // The interval at which to clean up sessions
     // 2 hours is default as of 9-27-16

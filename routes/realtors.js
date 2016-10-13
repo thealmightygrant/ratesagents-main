@@ -50,7 +50,8 @@ router.post('/login'
 //TODO: add location to scope
 router.get('/auth/facebook'
            , passport.authenticate('realtor-fb-login'
-                                   , { scope : ['email']}));
+                                   , { session: false
+                                       , scope : ['email']}));
 
 // handle the callback after facebook has authenticated the user
 router.get('/auth/facebook/callback'
