@@ -56,6 +56,7 @@ var allowCrossDomain = function(req, res, next) {
 };
 app.use(allowCrossDomain);
 app.use(bodyParser.json());
+//TODO: extended determines type of querystring parsing, look into this once parsing qs's
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(appConfig.session.secret));
 
@@ -64,7 +65,6 @@ if(env === 'development')
   app.use(express.static(__dirname));
 
 var sessOptions = {
-  // TODO: setup config for session, use high entropy secret
   secret: appConfig.session.secret
   , saveUninitialized: true
   , resave: false
@@ -84,7 +84,7 @@ var sessOptions = {
 }
 
 if (app.get('env') === 'production') {
-  app.set('trust proxy', 1) // trust first proxy
+  app.set('trust proxy', 1) // trust first proxy, aka nginx
   sessOptions.cookie.secure = true // serve secure cookies
   sessOptions.proxy = true
 }

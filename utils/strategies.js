@@ -18,14 +18,12 @@ function facebookLogin(model_name, token, refreshToken, profile, done){
 }
 
 exports.serializer = function serializer(user, done){
+  //TODO: serialize whole user instead of doing db lookup?
   done(null, {id: user.id, userType: user.userType});
 }
 
 exports.deserializer = function deserializer(user, done){
   var model_name = user.userType === 'homeowner' ? 'homeowner' : 'realtor';
-  
-  //TODO: this should be updated to use straight id
-  console.log("deserializing: ", user.id)
   data_promises.retrieveUserById(user.id, model_name).asCallback(done);
 }
 
