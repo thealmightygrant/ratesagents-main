@@ -15,7 +15,7 @@ exports.retrieveUser =
           }
         ]
       }
-    }) 
+    })
       .then(function(found_user) {
         if(found_user !== null)
           return found_user;
@@ -34,9 +34,8 @@ exports.retrieveUserById =
       where: {
         id: user_id
       }
-    }) 
+    })
       .then(function(found_user) {
-        console.log("deserialized");
         if(found_user !== null)
           return found_user;
         else
@@ -58,7 +57,7 @@ exports.retrieveFBAccount =
         where: {
           id: fb_id
         }
-      }) 
+      })
         .then(function(fbAccount) {
           //console.log("found fb account: ", fbAccount)
           if(fbAccount !== null)

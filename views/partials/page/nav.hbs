@@ -1,0 +1,14 @@
+<nav>
+  <div class="nav-wrapper green lighten-1">
+    <div class="container">
+      <a href="/" class="brand-logo">Rates and Agents</a>
+      <a href="#" data-activates="mobile-nav" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+        {{{navLinks type=this.navType navData=this.navData}}}
+      </ul>
+      <ul class="side-nav" id="mobile-nav">
+        {{{navLinks type=(str 'mobile-' this.navType) navData=this.navData}}}
+      </ul>
+    </div>
+  </div>
+</nav>
