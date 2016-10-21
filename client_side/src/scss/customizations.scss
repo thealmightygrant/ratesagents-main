@@ -1,3 +1,116 @@
+//custom main-sales
+
+//materialize customizations
+.waves-effect.waves-light-green .waves-ripple {
+     /* The alpha value allows the text and background color
+     of the button to still show through. */
+      background-color: rgba(#8bc34a, 0.65);
+}
+
+
+//spacing and size related
+$big-room: 6em;
+$med-room: 4.5em;
+$small-room: 2em;
+$very-small-room: 0.75em;
+
+.big-t-room {
+  margin-top: $big-room;
+}
+.big-b-room {
+  margin-bottom: $big-room;
+}
+.big-v-room {
+  @extend .big-t-room;
+  @extend .big-b-room;
+}
+
+.big-l-room {
+  margin-left: $big-room;
+}
+.big-r-room {
+  margin-right: $big-room;
+}
+.big-h-room {
+  @extend .big-r-room;
+  @extend .big-l-room;
+}
+
+.med-t-room {
+  margin-top: $med-room;
+}
+.med-b-room {
+  margin-bottom: $med-room;
+}
+.med-v-room {
+  @extend .med-t-room;
+  @extend .med-b-room;
+}
+
+.med-l-room {
+  margin-left: $med-room;
+}
+.med-r-room {
+  margin-right: $med-room;
+}
+.med-h-room {
+  @extend .med-r-room;
+  @extend .med-l-room;
+}
+
+.small-t-room {
+  margin-top: $small-room;
+}
+.small-b-room {
+  margin-bottom: $small-room;
+}
+.small-v-room {
+  @extend .small-t-room;
+  @extend .small-b-room;
+}
+
+.small-l-room {
+  margin-left: $small-room;
+}
+.small-r-room {
+  margin-right: $small-room;
+}
+.small-h-room {
+  @extend .small-r-room;
+  @extend .small-l-room;
+}
+
+
+.very-small-t-room {
+  margin-top: $very-small-room;
+}
+.very-small-b-room {
+  margin-bottom: $very-small-room;
+}
+.very-small-v-room {
+  @extend .very-small-t-room;
+  @extend .very-small-b-room;
+}
+
+
+.very-small-l-room {
+  margin-left: $very-small-room;
+}
+.very-small-r-room {
+  margin-right: $very-small-room;
+}
+.very-small-h-room {
+  @extend .very-small-r-room;
+  @extend .very-small-l-room;
+}
+
+
+
+.placeholder-height {
+  height: 30em;
+}
+
+
 //popover from bootstrap v3.3.7
 .popover {
   position: absolute;

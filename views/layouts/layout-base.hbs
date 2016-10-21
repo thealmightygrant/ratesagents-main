@@ -2,12 +2,15 @@
 <html>
   {{> page/head socialData=this.socialData}}
 
-  <body class="white">
-
-    {{> page/nav type=this.navType data=this.navData}}
+  <body>
+    <header>
+      {{> page/nav type=this.navType data=this.navData}}
+    </header>
 
     <div class="container">
-      {{{body}}}
+      <main>
+        {{{body}}}
+      </main>
 
       <!-- TODO: add a similar partial for footers -->
       <footer class="footer">
