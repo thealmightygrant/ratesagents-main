@@ -62,7 +62,7 @@ app.use(cookieParser(appConfig.session.secret));
 
 // css, js, html, etc...should be served by nginx otherwise
 if(env === 'development')
-  app.use(express.static(__dirname));
+  app.use(express.static(__dirname + "/client_side/dist" ));
 
 var sessOptions = {
   secret: appConfig.session.secret
@@ -109,7 +109,7 @@ app.use(expressValidator({
   customValidators:{
     isEmailAvailable: validators.isEmailAvailable
     , isUsernameAvailable: validators.isUsernameAvailable
-  } 
+  }
   , errorFormatter: function(param, msg, value){
     var namespace = param.split('.')
     ,   root = namespace.shift()
