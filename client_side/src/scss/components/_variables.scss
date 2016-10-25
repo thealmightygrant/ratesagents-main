@@ -33,11 +33,11 @@
 /* 1. Colors
    ========================================================================== */
 
-$primary-color: color("materialize-red", "lighten-2") !default;
+$primary-color: color("light-green", "darken-2") !default;
 $primary-color-light: lighten($primary-color, 15%) !default;
 $primary-color-dark: darken($primary-color, 15%) !default;
 
-$secondary-color: color("teal", "lighten-1") !default;
+$secondary-color: color("blue", "lighten-2") !default;
 $success-color: color("green", "base") !default;
 $error-color: color("red", "base") !default;
 $link-color: color("light-blue", "darken-1") !default;
@@ -149,11 +149,11 @@ $input-background: #fff !default;
 $input-error-color: $error-color !default;
 $input-success-color: $success-color !default;
 $input-focus-color: $secondary-color !default;
-$input-font-size: 1rem !default;
+$input-font-size: 1.3rem !default;
 $input-margin: 0 0 20px 0 !default;
 $input-padding: 0 !default;
 $input-transition: all .3s !default;
-$label-font-size: .8rem !default;
+$label-font-size: 1rem !default;
 $input-disabled-color: rgba(0,0,0, .26) !default;
 $input-disabled-solid-color: #BDBDBD !default;
 $input-disabled-border: 1px dotted $input-disabled-color !default;
@@ -274,12 +274,12 @@ $toast-text-color: #fff !default;
 
 $off-black: rgba(0, 0, 0, 0.87) !default;
 // Header Styles
-$h1-fontsize: 4.2rem !default;
-$h2-fontsize: 3.56rem !default;
-$h3-fontsize: 2.92rem !default;
-$h4-fontsize: 2.28rem !default;
-$h5-fontsize: 1.64rem !default;
-$h6-fontsize: 1rem !default;
+$h1-fontsize: 3rem !default;
+$h2-fontsize: 2.7rem !default;
+$h3-fontsize: 2.35rem !default;
+$h4-fontsize: 1.9rem !default;
+$h5-fontsize: 1.45rem !default;
+$h6-fontsize: 1.1rem !default;
 
 
 /* 21. Footer

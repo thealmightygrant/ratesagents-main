@@ -10,5 +10,8 @@
     //init selects
     $('select').material_select();
 
+    //init scrolling animation
+    $('.scrollspy').scrollSpy();
+
   }); // end of document ready
 })(jQuery); // end of jQuery name space

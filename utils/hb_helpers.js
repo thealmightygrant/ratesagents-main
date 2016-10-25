@@ -5,7 +5,7 @@ exports.getDateNumeral = function getDateNumeral(){
 }
 
 exports.socialTags = function socialTags(options) {
-  var tags = options.hash.socialData;
+  var tags = options.hash.socialData ? options.hash.socialData : {};
   if(!tags.url) tags.url = "https://ratesandagents.com/" + tags.page_name;
   if(!tags.site_name) tags.site_name = "Rates and Agents";
   if(!tags.twitter_site) tags.twitter_site = "@ratesandagents";

@@ -112,6 +112,18 @@ $very-small-room: 0.75em;
   height: 30em;
 }
 
+.divider {
+  @extend .divider;
+  height: 2px;
+  background-color: #f1f7fb;
+}
+
+@media #{$medium-and-up} {
+  .shift-left-and-extend {
+    left: -9%;
+    width: 107%;
+  }
+}
 
 //popover from bootstrap v3.3.7
 .popover {
