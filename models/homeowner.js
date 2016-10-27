@@ -23,8 +23,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     email: {
-      //TODO: this seems like a security issue with nonlocal logins
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
     },
     userType: {
       type: DataTypes.ENUM('homeowner'),

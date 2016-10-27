@@ -118,10 +118,39 @@ $very-small-room: 0.75em;
   background-color: #f1f7fb;
 }
 
+//special purpose for forms with pre icons
 @media #{$medium-and-up} {
-  .shift-left-and-extend {
+  input.shift-left-and-extend {
     left: -9%;
-    width: 107%;
+    width: 110%;
+  }
+  button.shift-left-and-extend {
+    width: 110%;
+    left: -2.5%;
+  }
+}
+
+
+//special purpose for form error msgs
+input:not([type]),
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=url],
+input[type=time],
+input[type=date],
+input[type=datetime],
+input[type=datetime-local],
+input[type=tel],
+input[type=number],
+input[type=search],
+textarea.materialize-textarea {
+  & + label:after {
+    top: 200%;
+    font-size: 0.85em;
+  }
+  & + label.active:after {
+    content: none !important;
   }
 }
 

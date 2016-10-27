@@ -1,28 +1,36 @@
-{{> page/errors}}
-{{> page/flash_msgs}}
 <div class="big-v-room section">
 <div class="row">
-  <h4 class="col center s12 m12">Create your Rates and Agents Account</h4>
+  <h5 class="col center s12 m12">Create your Rates and Agents Account</h5>
   <div class="col s8 push-s2 m6 push-m3 divider very-small-v-room"></div>
-  <h6 class="col center s12 m8 push-m2">or you can <a href="/homeowners/dashboard/anonymous">go ahead and check it out <b>now</b></a></h6>
+  <h6 class="col center s12 m8 push-m2">or go ahead and <a href="/homeowners/dashboard/anonymous">check us out <b>now</b></a></h6>
 </div>
 <div class="row very-small-v-room">
-<div class="col s12 m6 push-m3">
-<form method="post" action="/homeowners/register">
+<div class="col s12 m6 push-m3 xl6 push-xl3">
+<form method="post" class="signup-form" action="/homeowners/register">
+  <input type="hidden" name="_csrf" value="{{csrfToken}}">
+  <div class="input-field shift-left-and-extend">
+    <i class="material-icons prefix">face</i>
+    <input type="text" name="first_name" class="validate {{#if errors.first_name}}invalid{{/if}}" value="{{#if first_name}}{{first_name}}{{/if}}">
+    <label for="first_name" data-error="{{#if errors.first_name}}{{errors.first_name.msg}}{{/if}}">First Name</label>
+  </div>
+  <div class="input-field shift-left-and-extend">
+    <i class="material-icons prefix">face</i>
+    <input type="text" name="last_name" class="validate {{#if errors.last_name}}invalid{{/if}}" value="{{#if last_name}}{{last_name}}{{/if}}">
+    <label for="last_name" data-error="{{#if errors.last_name}}{{errors.last_name.msg}}{{/if}}">Last Name</label>
+  </div>
   <div class="input-field shift-left-and-extend">
     <i class="material-icons prefix">email</i>
-    <input type="email" name="email" class="form-control" value="{{#if email}}{{email}}{{/if}}" placeholder="email">
-  </div>
-   <div class="input-field shift-left-and-extend">
-     <i class="material-icons prefix">vpn_key</i>
-    <input type="password" name="password" class="form-control" placeholder="Password">
+    <input type="text" name="email" class="validate {{#if errors.email}}invalid{{/if}}" data-error="{{#if errors.email}}{{errors.email.msg}}{{/if}}" value="{{#if email}}{{email}}{{/if}}">
+    <label for="email" data-error="{{#if errors.email}}{{errors.email.msg}}{{/if}}">Email Address</label>
   </div>
   <div class="input-field shift-left-and-extend">
     <i class="material-icons prefix">vpn_key</i>
-    <input type="password" name="passwordconfirm" class="form-control" placeholder="Confirm Password">
+    <!-- TODO: inline password strenght validation, use react -->
+     <input type="password" name="password" class="validate {{#if errors.password}}invalid{{/if}}" value="{{#if password}}{{password}}{{/if}}">
+    <label for="password" data-error="{{#if errors.password}}{{errors.password.msg}}{{/if}}">Password</label>
   </div>
-  <div class="input-field very-small-v-room">
-    <button type="submit" class="btn btn-large full-width waves-effect">Submit</button>
+  <div class="input-field very-small-v-room" style="margin-top: 1em;">
+    <button type="submit" class="btn btn-large full-width shift-left-and-extend waves-effect">Submit</button>
   </div>
 </form>
 </div>

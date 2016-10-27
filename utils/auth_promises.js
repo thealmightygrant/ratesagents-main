@@ -4,7 +4,6 @@ var data_promises = require('./data_promises')
 
 //TODO: this function is fairly ugly, refactor, look into better promise chaining.
 exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, profile, model_name){
-  //TODO: session is being saved after authentication, causing failure on the next tick
   //NOTE: there's only a login because they can register or login via this endpoint
   return data_promises.retrieveFBAccount(parseInt(profile.id))
     .then(function(fbAccount){
@@ -15,7 +14,7 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
           refreshToken: refreshToken,
           id: parseInt(profile.id)
         }).then(function(fbAccount){
-          //TODO: they may have a regular login, we need to check that here
+          //NOTE: they may have a regular login, we need to check that here
           var email = profile.emails && profile.emails.length ? profile.emails[0].value : null
           ,   username = profile.username || profile.displayName.replace(/\s/g, "").toLowerCase() || profile.id
           ,   name = profile.displayName || model_name
@@ -27,11 +26,11 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
               username: username,
               name: name,
               userType: model_name,
-              facebookAccountId: parseInt(fbAccount.id) 
+              facebookAccountId: parseInt(fbAccount.id)
             })
           }
           else {
-            //TODO: this findOrCreate is all f'd up
+            //TODO: this findOrCreate is all f'd up...still?
             user_creation_promise = models[model_name].findOrCreate({
               where: {
                 email: email
@@ -41,7 +40,7 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
                 username: username,
                 name: name,
                 userType: model_name,
-                facebookAccountId: parseInt(fbAccount.id) 
+                facebookAccountId: parseInt(fbAccount.id)
               }
             })
           }
@@ -53,7 +52,7 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
                 facebookAccountId: parseInt(fbAccount.id)
               }, {
                 where: {
-                  id: user.id 
+                  id: user.id
                 }
               }).then(function(created){
                 console.log("updated? ", created)
@@ -86,13 +85,13 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
 }
 
 
-exports.localLoginVerify = function localLoginVerify(req, username, password, model_name){
+exports.localLoginVerify = function localLoginVerify(req, email, password, model_name){
   return data_promises.retrieveUser(username, model_name)
     .then(function(user){
       if(!user)
         return [false, req.flash('messages', {error_msg: 'Sorry, but we couldn\'t find that user'})]
       else {
-        //TODO: look into if this is the right way to set this up, or if there is some other way to cascade them 
+        //TODO: look into if this is the right way to set this up, or if there is some other way to cascade promises
         return data_promises.checkPassword(user, password).then(function(user){
           console.log("user: ", user)
           if(!user)
@@ -107,20 +106,20 @@ exports.localLoginVerify = function localLoginVerify(req, username, password, mo
     })
 }
 
-exports.localRegisterVerify = function localRegisterVerify(req, username, password, model_name){
+exports.localRegisterVerify = function localRegisterVerify(req, email, password, model_name){
+
   return models[model_name].create({
-      email: req.body.email,
-      name: req.body.name,
-      password: req.body.password,
-      username: req.body.username,
-      userType: model_name,
-      facebookAccountId: null
+      email: email
+    , name: req.body.first_name + " " + req.body.last_name
+    , password: password
+    , username: req.body.username || email.split('@')[0]
+    , userType: model_name
+    , facebookAccountId: null
     })
     .then(function(user){
-      return [user, req.flash('messages', {success_msg: "You just signed up for Rates and Agents!"})];
+      return [user, {message: 'successful registration!!!'}];
     })
     .catch(function(e){
       throw e;
     })
 }
-

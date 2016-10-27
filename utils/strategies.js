@@ -10,6 +10,9 @@ function localLogin(model_name, req, username, password, done){
 }
 
 function localRegister(model_name, req, username, password, done){
+  var registerPromise = auth_promises.localRegisterVerify(req, username, password, model_name)
+  console.log(registerPromise);
+  console.log(auth_promises.localRegisterVerify(req, username, password, model_name).asCallback(done, {spread: true}))
   return auth_promises.localRegisterVerify(req, username, password, model_name).asCallback(done, {spread: true});
 }
 
@@ -28,19 +31,35 @@ exports.deserializer = function deserializer(user, done){
 }
 
 exports.realtorLocalLogin = new LocalStrategy(
-  { passReqToCallback : true },
+  {
+    passReqToCallback : true
+    , usernameField: 'email'
+    , passwordField: 'password'
+  },
   localLogin.bind(null, "realtor"));
 
 exports.homeownerLocalLogin = new LocalStrategy(
-  { passReqToCallback : true },
+  {
+    passReqToCallback : true
+    , usernameField: 'email'
+    , passwordField: 'password'
+  },
   localLogin.bind(null, "homeowner"));
 
 exports.realtorLocalRegister = new LocalStrategy(
-  { passReqToCallback : true },
+  {
+    passReqToCallback : true
+    , usernameField: 'email'
+    , passwordField: 'password'
+  },
   localRegister.bind(null, "realtor"));
 
 exports.homeownerLocalRegister = new LocalStrategy(
-  { passReqToCallback : true },
+  {
+    passReqToCallback : true
+    , usernameField: 'email'
+    , passwordField: 'password'
+  },
   localRegister.bind(null, "homeowner"));
 
 exports.realtorFacebookLogin = new FacebookStrategy({

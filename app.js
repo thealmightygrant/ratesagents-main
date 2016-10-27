@@ -4,15 +4,14 @@ var logger = require('morgan');
 var flash = require('connect-flash');
 var pg = require('pg');
 var hstore = require('pg-hstore')();
+var helmet = require('helmet');
 
-var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
+
 var expresshbs = require('express-handlebars');
 var HBars = require('handlebars');
 var expressValidator = require('express-validator');
-var expressSession = require('express-session');
-var SequelizeStore = require('connect-session-sequelize')(expressSession.Store);
+var cookieSession = require('cookie-session');
 
 var passport = require('passport')
 
@@ -39,62 +38,60 @@ app.engine('hbs', expresshbs({defaultLayout: 'layout-base',
 
 app.set('view engine', 'hbs');
 
-app.use(methodOverride());
-var allowCrossDomain = function(req, res, next) {
-  res.header('Access-Control-Allow-Credentials', true);
-  res.header('Access-Control-Allow-Origin', req.headers.origin);
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+app.use(helmet());
 
-  // intercept OPTIONS method
-  if ('OPTIONS' == req.method) {
-    res.send(200);
-  }
-  else {
-    next();
-  }
-};
-app.use(allowCrossDomain);
+//TODO: check into if this is required for fb auth
+//      if it is required, then use the 'cors' package and setup a whitelist
+//
+// var allowCrossDomain = function(req, res, next) {
+//   res.header('Access-Control-Allow-Credentials', true);
+//   res.header('Access-Control-Allow-Origin', req.headers.origin);
+//   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+//   // intercept OPTIONS method
+//   if ('OPTIONS' == req.method) {
+//     res.send(200);
+//   }
+//   else {
+//     next();
+//   }
+// };
+// app.use(allowCrossDomain);
+
 app.use(bodyParser.json());
 //TODO: extended determines type of querystring parsing, look into this once parsing qs's
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser(appConfig.session.secret));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // css, js, html, etc...should be served by nginx otherwise
 if(env === 'development')
   app.use(express.static(__dirname + "/client_side/dist" ));
 
 var sessOptions = {
-  secret: appConfig.session.secret
-  , saveUninitialized: true
-  , resave: false
+  name: 'session'
+  , keys: appConfig.session.keys
   , cookie: {
-    httpOnly: true,  //true is default, does not allow client-side JS to read document.cookie
-    maxAge: 2592000000 //30 days in ms
+    httpOnly: true  //true is default, does not allow client-side JS to read document.cookie
+    , expires: new Date( Date.now() + 30 * 24 * 60 * 60 * 1000 ) //thirty days from now in ms
+    , maxAge: (30 * 24 * 60 * 60 * 1000) //30 days in ms
   }
-  //TODO: look into other possibilities for session storage
-  //      secure cookies might be an option (with something like node-client-sessions)
-  //      redis or mongo are other possibilities
-  , store: new SequelizeStore({
-    // The interval at which to clean up sessions
-    // 2 hours is default as of 9-27-16
-    checkExpirationInterval: 2 * 60 * 60 * 1000
-    , db: models.sequelize
-  })
 }
 
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1) // trust first proxy, aka nginx
   sessOptions.cookie.secure = true // serve secure cookies
+  sessOptions.cookie.domain = appConfig.domain
+  //TODO: set path here and confirm cookie paths??
+  //      see here: https://expressjs.com/en/advanced/best-practice-security.html
   sessOptions.proxy = true
 }
 
 // session
-app.use(expressSession(sessOptions));
+app.use(cookieSession(sessOptions));
 
 // initialize passport
 app.use(passport.initialize());
-app.use(passport.session({pauseStream: true}));
+app.use(passport.session());
 passport.use('realtor-local-login', strategies.realtorLocalLogin);
 passport.use('homeowner-local-login', strategies.homeownerLocalLogin);
 passport.use('realtor-local-register', strategies.realtorLocalRegister);

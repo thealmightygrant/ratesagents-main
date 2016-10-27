@@ -3,51 +3,9 @@ var express = require('express')
 ,   router  = express.Router()
 ,   data_promises = require('../utils/data_promises')
 ,   user_utils = require('../utils/user_related')
+,   csrf_protection = require('csurf')();
 
-// //TODO: think about some better logic here
-//TODO: think about some better logic here
-//      this is anything but /register and /login
-// router.use(/^((?!(\/register|\/logout|\/login)).)*$/, function(req, res, next){
-//   res.locals.error_url = '/homeowners/login'
-//   res.locals.model_name = "homeowner"
-//   next();
-// }, user_utils.alreadyLoggedIn);
-
-router.use(function(req, res, next){
-  res.locals.model_name = 'homeowner';
-  next();
-})
-
-router.get('/register', function(req, res){
-  res.render('homeowner-register');
-});
-
-router.post('/register'
-            , function(req, res, next){
-              res.locals.err_view = 'homeowner-register';
-              next();
-            }
-            , user_utils.validateRegister
-            , passport.authenticate('homeowner-local-register',
-                                    { successRedirect: '/homeowners/dashboard',
-                                      failureRedirect: '/homeowners/register',
-                                      failureFlash: true }));
-
-router.get('/login', function(req, res){
-  res.render('homeowner-login');
-});
-
-router.post('/login'
-            , function(req, res, next){
-                res.locals.error_view = 'homeowner-login'
-                next();
-            }
-            , user_utils.validateLogin
-            , passport.authenticate('homeowner-local-login',
-                                    { successRedirect: '/homeowners/dashboard',
-                                      failureRedirect: '/homeowners/login',
-                                      failureFlash: true }));
-
+//external calls
 //TODO: add location to scope
 router.get('/auth/facebook'
            , passport.authenticate('homeowner-fb-login'
@@ -63,6 +21,43 @@ router.get('/auth/facebook/callback'
              //TODO: add flash message for fb login/registration
              res.redirect('/homeowners/dashboard')
            });
+
+//internal calls
+//anything below protected from csrf
+router.use(csrf_protection
+           , function(req, res, next){
+             res.locals.model_name = 'homeowner';
+             next();
+           })
+
+router.get('/register', function(req, res){
+  res.render('homeowner-register', { csrfToken: req.csrfToken() });
+});
+
+router.post('/register'
+            , function(req, res, next){
+              res.locals.err_view = 'homeowner-register';
+              next();
+            }
+            , user_utils.validateRegister
+            , passport.authenticate('homeowner-local-register')
+            , function(req, res){
+              res.redirect('/homeowners/dashboard');
+            })
+
+router.get('/login', function(req, res){
+  res.render('homeowner-login', { csrfToken: req.csrfToken() });
+});
+
+router.post('/login'
+            , function(req, res, next){
+                res.locals.error_view = 'homeowner-login'
+                next();
+            }
+            , user_utils.validateLogin
+            , passport.authenticate('homeowner-local-login',
+                                    { successRedirect: '/homeowners/dashboard',
+                                      failureRedirect: '/homeowners/login' }));
 
 
 //TODO: this should be a post
