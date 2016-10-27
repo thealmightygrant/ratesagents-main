@@ -125,7 +125,7 @@ app.use(expressValidator({
 }));
 
 app.use(flash());
-app.use(middleware.flashMsgs);
+app.use(middleware.addMessages);
 
 app.use('/', routes)
 app.use('/realtors', realtors)

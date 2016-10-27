@@ -10,9 +10,6 @@ function localLogin(model_name, req, username, password, done){
 }
 
 function localRegister(model_name, req, username, password, done){
-  var registerPromise = auth_promises.localRegisterVerify(req, username, password, model_name)
-  console.log(registerPromise);
-  console.log(auth_promises.localRegisterVerify(req, username, password, model_name).asCallback(done, {spread: true}))
   return auth_promises.localRegisterVerify(req, username, password, model_name).asCallback(done, {spread: true});
 }
 

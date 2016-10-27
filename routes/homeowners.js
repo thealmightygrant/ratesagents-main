@@ -3,6 +3,7 @@ var express = require('express')
 ,   router  = express.Router()
 ,   data_promises = require('../utils/data_promises')
 ,   user_utils = require('../utils/user_related')
+,   middleware = require('../utils/middleware')
 ,   csrf_protection = require('csurf')();
 
 //external calls
@@ -18,9 +19,11 @@ router.get('/auth/facebook/callback'
              failureRedirect : '/homeowners/login'
            })
            , function(req, res) {
-             //TODO: add flash message for fb login/registration
+             //TODO: info is in req.user[0].message
              res.redirect('/homeowners/dashboard')
            });
+
+//TODO: add redirects from '/' to '/login' or '/dashboard' depending on login status
 
 //internal calls
 //anything below protected from csrf
@@ -31,7 +34,7 @@ router.use(csrf_protection
            })
 
 router.get('/register', function(req, res){
-  res.render('homeowner-register', { csrfToken: req.csrfToken() });
+  res.render('homeowner-register', { data: { csrfToken: req.csrfToken() }});
 });
 
 router.post('/register'
@@ -40,25 +43,23 @@ router.post('/register'
               next();
             }
             , user_utils.validateRegister
-            , passport.authenticate('homeowner-local-register')
-            , function(req, res){
-              res.redirect('/homeowners/dashboard');
-            })
+            , middleware.authMiddlewareFactory('homeowner-local-register',
+                                               '/homeowners/register',
+                                               '/homeowners/dashboard'))
 
 router.get('/login', function(req, res){
-  res.render('homeowner-login', { csrfToken: req.csrfToken() });
+  res.render('homeowner-login', { data: {csrfToken: req.csrfToken()}});
 });
 
 router.post('/login'
             , function(req, res, next){
-                res.locals.error_view = 'homeowner-login'
+                res.locals.err_view = 'homeowner-login'
                 next();
             }
             , user_utils.validateLogin
-            , passport.authenticate('homeowner-local-login',
-                                    { successRedirect: '/homeowners/dashboard',
-                                      failureRedirect: '/homeowners/login' }));
-
+            , middleware.authMiddlewareFactory('homeowner-local-login',
+                                               '/homeowners/login',
+                                               '/homeowners/dashboard'))
 
 //TODO: this should be a post
 router.use('/logout', function(req, res, next){

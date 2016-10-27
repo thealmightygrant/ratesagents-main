@@ -51,11 +51,7 @@ function retrieveErrorMsgs(desired_atts, des_err_msgs){
 function arrangeValidationErrors(errors){
   var updatedErrors = {};
   errors.forEach(function(val, idx, arr){
-    updatedErrors[val.param] = {
-      msg: val.msg
-      //TODO add previous value?
-      //, value: val.value
-    }
+    updatedErrors[val.param] = val.msg;
   })
   return updatedErrors;
 }
@@ -87,6 +83,10 @@ exports.validateRegister = function(req, res, next){
     req.checkBody('email', err_msgs.email.fake ).isEmail();
   }
 
+
+  //TODO: this isn't working, for some reason the async validation is f'ed up
+  //SOLUTION? move to be done in auth_promises...
+
   if(!req.validationErrors()) {
     req.checkBody('email', err_msgs.email.in_use).isEmailAvailable(model_name);
   }
@@ -96,10 +96,14 @@ exports.validateRegister = function(req, res, next){
       next()
     })
     .catch(function(errors) {
+      console.log(errors);
       res.render(err_view, {
-        first_name: first_name,
-        last_name: last_name,
-        errors: arrangeValidationErrors(errors)
+        data: {
+          first_name: first_name,
+          last_name: last_name,
+          email: email,
+          csrfToken: req.body._csrf
+        }, messages: arrangeValidationErrors(errors)
       })
     });
 }
@@ -119,8 +123,10 @@ exports.validateLogin = function(req, res, next){
   if(req.validationErrors())
   {
     res.render(err_view, {
-      email: email,
-      errors: req.validationErrors()
+      data: {
+        email: email,
+        csrfToken: req.body._csrf
+      }, messages: arrangeValidationErrors(req.validationErrors())
     })
   }
   else

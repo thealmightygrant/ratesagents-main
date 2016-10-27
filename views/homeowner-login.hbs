@@ -1,19 +1,29 @@
-<div class="header clearfix">
-  {{> page/nav-homeowners}}
-  <h3 class="text-muted">Rates and Agents</h3>
+<div class="big-v-room section">
+  <div class="row">
+    <h5 class="col center s12 m12">Login to your Rates and Agents Account</h5>
+    <div class="col s8 push-s2 m6 push-m3 divider very-small-v-room"></div>
+    <h6 class="col center s12 m8 push-m2">or login with <a href="/realtors/auth/facebook">Facebook</a></h6>
+  </div>
+  <div class="row very-small-v-room">
+    <div class="col s12 m6 push-m3 xl6 push-xl3">
+      <!-- TODO: add a generic error catcher for server errors, etc -->
+      <form method="post" class="login-form" action="/homeowners/login">
+        <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
+        <div class="input-field shift-left-and-extend">
+          <i class="material-icons prefix">email</i>
+          <input type="text" name="email" class="validate {{#if messages.email}}invalid{{/if}}" data-error="{{#if messages.email}}{{messages.email}}{{/if}}" value="{{#if data.email}}{{data.email}}{{/if}}">
+          <label for="email" data-error="{{#if messages.email}}{{messages.email}}{{/if}}">Email Address</label>
+        </div>
+        <div class="input-field shift-left-and-extend">
+          <i class="material-icons prefix">vpn_key</i>
+          <!-- TODO: inline password strenght validation, use react -->
+          <input type="password" name="password" class="validate {{#if messages.password}}invalid{{/if}}">
+          <label for="password" data-error="{{#if messages.password}}{{messages.password}}{{/if}}">Password</label>
+        </div>
+        <div class="input-field very-small-v-room" style="margin-top: 1em;">
+          <button type="submit" class="btn btn-large full-width shift-left-and-extend waves-effect">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
-<h2 class="page-header">Homeowner Login</h2>
-<form method="post" action="/homeowners/login">
-  <input type="hidden" name="_csrf" value="{{csrfToken}}">
-  <div class="form-group">
-    <label>Username <b>OR</b> Email</label>
-    <input type="text" name="username" class="form-control" value="{{#if username}}{{username}}{{/if}}" placeholder="joe-homeowner">
-  </div>
-  <div class="form-group">
-    <label>Password</label>
-    <input type="password" name="password" class="form-control">
-  </div>
-  <div class="form-group">
-    <button type="submit" class="btn btn-default">Submit</button>
-  </div>
-</form>

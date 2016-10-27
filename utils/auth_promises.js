@@ -86,18 +86,22 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
 
 
 exports.localLoginVerify = function localLoginVerify(req, email, password, model_name){
-  return data_promises.retrieveUser(username, model_name)
+  var passthroughData = {email: email}
+  return data_promises.retrieveUser(email, model_name)
     .then(function(user){
+      var phrase = 'We can\'t find that email. Maybe you registered via Facebook?'
       if(!user)
-        return [false, req.flash('messages', {error_msg: 'Sorry, but we couldn\'t find that user'})]
+        return [false, {messages: {email: phrase}, data: passthroughData}]
       else {
         //TODO: look into if this is the right way to set this up, or if there is some other way to cascade promises
         return data_promises.checkPassword(user, password).then(function(user){
-          console.log("user: ", user)
+          var cemail = email.charAt(0).toUpperCase() + email.slice(1);
+          var phrase = cemail.split('@')[0] +
+                ', go home. You\'re drunk. That\'s not your password.'
           if(!user)
-            return [false, req.flash('messages', {error_msg: 'Sorry, but that password isn\'t correct'})];
+            return [false, {messages: {password: phrase}, data: passthroughData}];
           else
-            return [user, req.flash('messages', {success_msg: 'Welcome!!!'})];
+            return [user, {}];
         })
       }
     })
@@ -117,7 +121,7 @@ exports.localRegisterVerify = function localRegisterVerify(req, email, password,
     , facebookAccountId: null
     })
     .then(function(user){
-      return [user, {message: 'successful registration!!!'}];
+      return [user, {}];
     })
     .catch(function(e){
       throw e;
