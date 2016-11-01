@@ -3,7 +3,8 @@ var passport = require('passport')
 ,   FacebookStrategy = require('passport-facebook').Strategy
 ,   data_promises = require('./data_promises')
 ,   auth_promises = require('./auth_promises')
-,   config_auth = require('../config/auth')
+,   conf = require('../config.js')
+,   config_auth = conf.get('auth')
 
 function localLogin(model_name, req, username, password, done){
   return auth_promises.localLoginVerify(req, username, password, model_name).asCallback(done, {spread: true});

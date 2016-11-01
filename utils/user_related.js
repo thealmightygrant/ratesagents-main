@@ -64,7 +64,7 @@ exports.validateRegister = function(req, res, next){
   ,   last_name = req.body.last_name
   ,   password = req.body.password
   ,   options = typeof(res.locals) !== 'undefined' ? res.locals : {}
-  ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login'
+  ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login.hbs'
   ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
 
   var err_msgs = retrieveErrorMsgs(['first_name', 'last_name', 'email', 'password'])
@@ -112,7 +112,7 @@ exports.validateLogin = function(req, res, next){
   var email = req.body.email
   ,   password = req.body.password
   ,   options = typeof(res.locals) !== 'undefined' ? res.locals : {}
-  ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login'
+  ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login.hbs'
   ,   err_msgs = retrieveErrorMsgs(['email', 'password']);
 
   //TODO: redirect to dashboard or something if already logged in, mayyybe

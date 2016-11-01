@@ -6,29 +6,29 @@ exports.getDateNumeral = function getDateNumeral(){
 
 exports.socialTags = function socialTags(options) {
   var tags = options.hash.socialData ? options.hash.socialData : {};
-  if(!tags.url) tags.url = "https://ratesandagents.com/" + tags.page_name;
-  if(!tags.site_name) tags.site_name = "Rates and Agents";
-  if(!tags.twitter_site) tags.twitter_site = "@ratesandagents";
-  //if(!tags.fb_app_id) tags.fb_app_id = "";
-  var social_tags = ''
-  var tag_map = {
+  if(!tags.url) tags.url = "https://ratesandagents.com/" + tags.pageName;
+  if(!tags.siteName) tags.siteName = "Rates and Agents";
+  if(!tags.twitterSite) tags.twitterSite = "@ratesandagents";
+  //if(!tags.fbAppId) tags.fbAppId = "";
+  var socialTags = ''
+  var tagMap = {
     url: "og:url"
-    , twitter_site: "twitter:site"
-    , fb_app_id: "fb:app_id"
+    , twitterSite: "twitter:site"
+    , fbAppId: "fb:app_id"
     , description: "og:description"
     , title: "og:title"
     , video: "og:video"
-    , video_width: "og:video:width"
-    , video_height: "og:video:height"
+    , videoWidth: "og:video:width"
+    , videoHeight: "og:video:height"
     , image: "og:image"
-    , image_width: "og:image:width"
-    , image_height: "og:image:height"
-    , site_name: "og:site_name"
+    , imageWidth: "og:image:width"
+    , imageHeight: "og:image:height"
+    , siteName: "og:site_name"
   };
   Object.keys(tags).forEach(function(k){
-    social_tags = social_tags + (tag_map[k] ? '<meta property="' + tag_map[k] + '" name="' + tag_map[k] + '" content="' + tags[k] + '" />' : '');
+    socialTags = socialTags + (tagMap[k] ? '<meta property="' + tagMap[k] + '" name="' + tagMap[k] + '" content="' + tags[k] + '" />' : '');
   });
-  return new HBars.SafeString(social_tags);
+  return new HBars.SafeString(socialTags);
 }
 
 //TODO: fuck this function, this should be removed eventually

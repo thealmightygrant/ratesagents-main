@@ -1,0 +1,20 @@
+{
+  "session": {
+    "keys": ["ddvDzTiy8qibtkFq)%C6kzn6Ly3nTg$7", "Rob4UA9W,KZX4q8gs$LzbQ)bpvDbit2T", "P8c43^mWGGVXQRYXY2q9kiTa(odErQ^f", "7$CLTteGPjsmtHa{6cPwb^aJN426cvJo", "?4cYRoMiDy7y3#vbygGFrHVJ7.Uo4dqG", "zw2ox4YPGaaRkEAt/w&9>Yy6Qd7fmCoY", "whiwbZx8UBTP(3iVTswR3KW3hY>T7#WY"]
+  },
+  "sequelize": {
+    "username": "sherrick",
+    "password": "r4tesAg3nts",
+    "database": "ratesagents_main_dev",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "auth": {
+    "facebookAuth": {
+      "clientID": "703696456450909",
+      "clientSecret": "bf8153c2c5c5f82a8dd3c044d03cd507",
+      "realtorCallbackURL": "http://localhost:3000/realtors/auth/facebook/callback",
+      "homeownerCallbackURL": "http://localhost:3000/homeowners/auth/facebook/callback"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "pages": {
+    "main-sales-nav": {
+      "navType": "main-sales",
+      "navData": {
+        "realtors": {
+          "title": "Realtors",
+          "linkData": [
+            {
+              "href": "/realtors/login",
+              "value": "Login"
+            },
+            {
+              "href": "/realtors/faqs",
+              "value": "FAQs"
+            },
+            {
+              "href": "/realtors/register",
+              "value": "Register"
+            }
+          ]
+        },
+        "homeowners": {
+          "title": "Homeowners",
+          "linkData": [
+            {
+              "href": "/homeowners/login",
+              "value": "Login"
+            },
+            {
+              "href": "/homeowners/faqs",
+              "value": "FAQs"
+            },
+            {
+              "href": "/homeowners/register",
+              "value": "Register"
+            }
+          ]
+        },
+        "company": {
+          "title": "Company",
+          "linkData": [
+            {
+              "href": "/about",
+              "value": "About Us"
+            },
+            {
+              "href": "/license",
+              "value": "License"
+            },
+          ]
+        }
+      }
+    }
+  }
+}

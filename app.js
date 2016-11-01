@@ -14,8 +14,8 @@ var expressValidator = require('express-validator');
 var cookieSession = require('cookie-session');
 
 var passport = require('passport')
+var conf = require('./config')
 
-var env       = process.env.NODE_ENV || 'development';
 var helpers = require('./utils/hb_helpers');
 var validators = require('./utils/validators');
 var strategies = require('./utils/strategies');
@@ -25,17 +25,12 @@ var realtors = require('./routes/realtors');
 var homeowners = require('./routes/homeowners');
 var models = require('./models/index');
 
-var appConfig = require('./config/app');
-
 var app = express();
-
-app.set('views', path.join(__dirname, 'views'));
 
 app.engine('hbs', expresshbs({defaultLayout: 'layout-base',
                               handlebars: HBars,
                               helpers: helpers,
                               extname: '.hbs'}));
-
 app.set('view engine', 'hbs');
 
 app.use(helmet());
@@ -64,12 +59,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // css, js, html, etc...should be served by nginx otherwise
-if(env === 'development')
+if(conf.get('env') === 'development')
   app.use(express.static(__dirname + "/client_side/dist" ));
 
 var sessOptions = {
   name: 'session'
-  , keys: appConfig.session.keys
+  , keys: conf.get('session').keys
   , cookie: {
     httpOnly: true  //true is default, does not allow client-side JS to read document.cookie
     , expires: new Date( Date.now() + 30 * 24 * 60 * 60 * 1000 ) //thirty days from now in ms
@@ -80,7 +75,7 @@ var sessOptions = {
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1) // trust first proxy, aka nginx
   sessOptions.cookie.secure = true // serve secure cookies
-  sessOptions.cookie.domain = appConfig.domain
+  sessOptions.cookie.domain = conf.get('domain')
   //TODO: set path here and confirm cookie paths??
   //      see here: https://expressjs.com/en/advanced/best-practice-security.html
   sessOptions.proxy = true
@@ -135,19 +130,9 @@ app.use(middleware.logErrors);
 app.use(middleware.clientErrorHandler);
 app.use(middleware.errorHandler);
 
-var port = normalizePort(process.env.PORT, 3000);
-app.set('port', port);
-app.listen(port, onListening)
+app.set('port', conf.get('port'));
+app.listen(conf.get('port'), onListening)
 
 function onListening(){
   console.log('Server started on port: ' + app.get('port'))
-}
-
-function normalizePort(port, defaultPort){
-  if(typeof(port) === 'string')
-    return parseInt(port);
-  else if(typeof(port) === 'number')
-    return port;
-  else
-    return defaultPort;
 }
