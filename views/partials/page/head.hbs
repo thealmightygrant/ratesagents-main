@@ -12,8 +12,10 @@
 
   {{{socialTags socialData=this.socialData}}}
 
-  <script type="text/javascript" src="/js/vendor/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="/js/vendor/materialize.min.js"></script>
-  <script type="text/javascript" src="/js/vendor/bootstrap-3.3.7-popover.min.js"></script>
-  <script type="text/javascript" src="/js/client_side.js?tcb={{getDateNumeral}}"></script>
+  {{#if reduxRender}}
+  <script type="text/javascript" src="/js/hbs.bundle.js?tcb={{getDateNumeral}}"></script>
+  <script type="text/javascript" src="/js/redux.bundle.js?tcb={{getDateNumeral}}"></script>
+  {{else}}
+  <script type="text/javascript" src="/js/hbs.bundle.js?tcb={{getDateNumeral}}"></script>
+  {{/if}}
 </head>

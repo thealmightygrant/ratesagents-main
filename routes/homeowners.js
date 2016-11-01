@@ -4,29 +4,31 @@ var express = require('express')
 ,   data_promises = require('../utils/data_promises')
 ,   user_utils = require('../utils/user_related')
 ,   middleware = require('../utils/middleware')
-,   csrf_protection = require('csurf')();
+,   conf = require('../config')
+,   csrf_protection = require('csurf')()
+,   merge = require('lodash.merge')
 
-//external calls
-//TODO: add location to scope
-router.get('/auth/facebook'
-           , passport.authenticate('homeowner-fb-login'
-                                   , { session: false
-                                       , scope : ['email']}));
+// //external calls
+// //TODO: add location to scope
+// router.get('/auth/facebook'
+//            , passport.authenticate('homeowner-fb-login'
+//                                    , { session: false
+//                                        , scope : ['email']}));
 
-// handle the callback after facebook has authenticated the user
-router.get('/auth/facebook/callback'
-           , passport.authenticate('homeowner-fb-login', {
-             failureRedirect : '/homeowners/login'
-           })
-           , function(req, res) {
-             //TODO: info is in req.user[0].message
-             res.redirect('/homeowners/dashboard')
-           });
+// // handle the callback after facebook has authenticated the user
+// router.get('/auth/facebook/callback'
+//            , passport.authenticate('homeowner-fb-login', {
+//              failureRedirect : '/homeowners/login'
+//            })
+//            , function(req, res) {
+//              //TODO: info is in req.user[0].message
+//              res.redirect('/homeowners/dashboard')
+//            });
+
 
 //TODO: add redirects from '/' to '/login' or '/dashboard' depending on login status
-
-//internal calls
-//anything below protected from csrf
+//NOTE: internal calls
+//NOTE: anything below is protected from CSRF
 router.use(csrf_protection
            , function(req, res, next){
              res.locals.model_name = 'homeowner';
@@ -34,12 +36,15 @@ router.use(csrf_protection
            })
 
 router.get('/register', function(req, res){
-  res.render('homeowner-register', { data: { csrfToken: req.csrfToken() }});
+  //TODO: is there a better method for object merging?
+  var prd = merge(conf.get('pages.homeowners-register')
+                  , { data: { csrfToken: req.csrfToken() }})
+  res.render('homeowner-register.hbs', prd);
 });
 
 router.post('/register'
             , function(req, res, next){
-              res.locals.err_view = 'homeowner-register';
+              res.locals.err_view = 'homeowner-register.hbs';
               next();
             }
             , user_utils.validateRegister
@@ -48,12 +53,14 @@ router.post('/register'
                                                '/homeowners/dashboard'))
 
 router.get('/login', function(req, res){
-  res.render('homeowner-login', { data: {csrfToken: req.csrfToken()}});
+  var prd = merge(conf.get('pages.homeowners-login')
+                         , { data: { csrfToken: req.csrfToken() }})
+  res.render('homeowner-login.hbs', prd);
 });
 
 router.post('/login'
             , function(req, res, next){
-                res.locals.err_view = 'homeowner-login'
+                res.locals.err_view = 'homeowner-login.hbs'
                 next();
             }
             , user_utils.validateLogin
@@ -67,8 +74,13 @@ router.use('/logout', function(req, res, next){
   res.redirect('/');
 })
 
-router.get('/dashboard'
+router.use('/'
            , user_utils.isLoggedIn
-           , function(req, res){ res.render('homeowner-dashboard'); })
+           , function(req, res){
+             var prd = merge(conf.get('pages.redux')
+                             , conf.get('pages.homeowners-dashboard')
+                             , { data: { csrfToken: req.csrfToken() }})
+             res.render('redux-render.hbs', prd);
+           })
 
 module.exports = router;

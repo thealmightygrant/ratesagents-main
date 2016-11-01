@@ -1,4 +1,3 @@
-var Promise = require('bluebird')
 var glob = require('glob')
 var convict = require('convict')
 
@@ -29,7 +28,7 @@ var conf = convict({
     env: "SITE_DOMAIN"
   },
   pages: {
-    //TODO: add schema for pages
+    //TODO: add schema for pages, redo pages structure
     doc: "data used for pages",
     format: Object,
     default: {}
