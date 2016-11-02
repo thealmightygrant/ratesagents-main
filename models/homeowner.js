@@ -11,10 +11,15 @@ module.exports = function(sequelize, DataTypes) {
     },
     name: DataTypes.STRING,
     username: {
-      type: DataTypes.STRING,
-      allowNull: false
+      //NOTE: the goal is for this to be unique-ish
+      //it can be null, it doesn't have to be set
+      //NEVER have logins use this, only unique
+      //to facilate user to user identification
+      //within the Rates and Agents community
+      type: DataTypes.STRING
     },
     password: {
+      //NOTE: can be null when loggin in via external service
       type: DataTypes.STRING,
       set: function(string_val){
         var salt = bcrypt.genSaltSync(10);
@@ -23,6 +28,12 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     email: {
+      //NOTE: similar to username
+      //this should be unique, don't allow changes
+      //without checking for uniqueness
+      //this value IS used for logins
+      //==> it can be null due to FB and other logins
+      //in this instance
       type: DataTypes.STRING
     },
     userType: {

@@ -116,7 +116,7 @@ exports.localRegisterVerify = function localRegisterVerify(req, email, password,
       email: email
     , name: req.body.first_name + " " + req.body.last_name
     , password: password
-    , username: req.body.username || email.split('@')[0]
+    , username: null
     , userType: model_name
     , facebookAccountId: null
     })
