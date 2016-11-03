@@ -1764,7 +1764,7 @@ express-session@^1.14.1:
     uid-safe "~2.1.2"
     utils-merge "1.0.0"
 
-express-validator@^2.20.8:
+express-validator@2.21.0:
   version "2.21.0"
   resolved "https://registry.yarnpkg.com/express-validator/-/express-validator-2.21.0.tgz#f5fc2f9fa9e9a8578634f10e86ba5a4346b96f4f"
   dependencies:
@@ -3269,7 +3269,7 @@ lodash.assignwith@^4.0.7:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.assignwith/-/lodash.assignwith-4.2.0.tgz#127a97f02adc41751a954d24b0de17e100e038eb"
 
-lodash.clonedeep@^4.3.2:
+lodash.clonedeep, lodash.clonedeep@^4.3.2:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
 

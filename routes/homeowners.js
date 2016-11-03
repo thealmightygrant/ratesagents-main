@@ -37,7 +37,8 @@ router.use(csrf_protection
 
 router.get('/register', function(req, res){
   //TODO: is there a better method for object merging?
-  var prd = merge(conf.get('pages.homeowners-register')
+  var prd = merge(res.locals
+                  , conf.get('pages.homeowners-register')
                   , { data: { csrfToken: req.csrfToken() }})
   res.render('homeowner-register.hbs', prd);
 });
@@ -53,8 +54,9 @@ router.post('/register'
                                                '/homeowners/dashboard'))
 
 router.get('/login', function(req, res){
-  var prd = merge(conf.get('pages.homeowners-login')
-                         , { data: { csrfToken: req.csrfToken() }})
+  var prd = merge(res.locals
+                  , conf.get('pages.homeowners-login')
+                  , { data: { csrfToken: req.csrfToken() }})
   res.render('homeowner-login.hbs', prd);
 });
 
@@ -77,7 +79,8 @@ router.use('/logout', function(req, res, next){
 router.use('/'
            , user_utils.isLoggedIn
            , function(req, res){
-             var prd = merge(conf.get('pages.redux')
+             var prd = merge(res.locals
+                             , conf.get('pages.redux')
                              , conf.get('pages.homeowners-dashboard')
                              , { data: { csrfToken: req.csrfToken() }})
              res.render('redux-render.hbs', prd);

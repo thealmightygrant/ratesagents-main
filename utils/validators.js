@@ -18,7 +18,7 @@ function isValueInUse(field_name, value, model_name) {
     }).catch(function(error){
       //TODO: distinguish between database failures and used vals
       if (error) {
-        console.log("error: ", error);
+        console.error("error: ", error);
         reject(error);
       }
     });

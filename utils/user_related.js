@@ -12,7 +12,7 @@ var default_err_msgs = {
   , email: {
     empty: 'Please tell us your email :D'
     , fake: 'Your email doesn\'t look right, can you please try again?'
-    , in_use: 'Sorry, but that email has already been used to sign up. Please try logging in.'
+    , in_use: 'Sorry, but that email has already been used to sign up.'
   }
   , username: {
     empty: 'Please give us your username :D'
@@ -78,14 +78,10 @@ exports.validateRegister = function(req, res, next){
   //sanitizers
   req.sanitizeBody('email').normalizeEmail();
 
-  if(!req.validationErrors()){
-    //TODO: restrict password and name to certain characters?
+   if(!req.validationErrors()){
+    //TODO: restrict password to certain characters?
     req.checkBody('email', err_msgs.email.fake ).isEmail();
   }
-
-
-  //TODO: this isn't working, for some reason the async validation is f'ed up
-  //SOLUTION? move to be done in auth_promises...
 
   if(!req.validationErrors()) {
     req.checkBody('email', err_msgs.email.in_use).isEmailAvailable(model_name);
@@ -97,6 +93,7 @@ exports.validateRegister = function(req, res, next){
     })
     .catch(function(errors) {
       console.log(errors);
+      console.log(arrangeValidationErrors(errors))
       res.render(err_view, {
         data: {
           first_name: first_name,

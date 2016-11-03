@@ -1,4 +1,5 @@
 var passport = require('passport')
+var cloneDeep = require('lodash.clonedeep');
 
 exports.logErrors = function logErrors(err, req, res, next) {
   console.error(err.stack);
@@ -22,9 +23,9 @@ exports.errorHandler = function errorHandler(err, req, res, next) {
 }
 
 exports.addMessages = function addMessages(req, res, next){
-  res.locals.messages = req.session.messages || {};
-  res.locals.error = req.session.error || {};
-  res.locals.data = req.session.data || {}
+  res.locals.messages = cloneDeep(req.session.messages) || {};
+  res.locals.error = cloneDeep(req.session.error) || {};
+  res.locals.data = cloneDeep(req.session.data) || {}
 
   // Remove them so they're not displayed on subsequent renders.
   delete req.session.error;
@@ -45,6 +46,9 @@ function authCallbackFactory(strategy, req, res, next, failureRedirect, successR
 function localAuthCallbackFactory(req, res, next, failureRedirect, successRedirect){
   //NOTE: the original use of this was to add some data to the redirected url
   return function localAuthCallback(err, user, info, status) {
+    console.log("err: ", err)
+    console.log("user: ", user)
+    console.log("info: ", info)
     if (err) {
       req.session.error = err;
       return next(err)
