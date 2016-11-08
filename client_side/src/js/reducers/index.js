@@ -1,21 +1,28 @@
-import merge from 'lodash.merge'
-import { routerReducer as routing } from 'react-router-redux'
 import { combineReducers } from 'redux'
+import { routerReducer as routing } from 'react-router-redux'
+import cart, * as fromCart from './cart'
+import products, * as fromProducts from './products'
 
-// Updates error message to notify about the failed fetches.
-const errorMessage = (state = null, action) => {
-  const { type, error } = action
-
-  if (type === ActionTypes.RESET_ERROR_MESSAGE) {
-    return null
-  } else if (error) {
-    return action.error
-  }
-
-  return state
-}
-
-const rootReducer = combineReducers({
-  routing,
-  errorMessage
+export default combineReducers({
+  cart,
+  products,
+  routing
 })
+
+const getAddedIds = state => fromCart.getAddedIds(state.cart)
+const getQuantity = (state, id) => fromCart.getQuantity(state.cart, id)
+const getProduct = (state, id) => fromProducts.getProduct(state.products, id)
+
+export const getTotal = state =>
+  getAddedIds(state)
+  .reduce((total, id) =>
+          total + getProduct(state, id).price * getQuantity(state, id),
+          0
+         )
+  .toFixed(2)
+
+export const getCartProducts = state =>
+  getAddedIds(state).map(id => ({
+    ...getProduct(state, id),
+    quantity: getQuantity(state, id)
+  }))

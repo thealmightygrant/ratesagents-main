@@ -1,7 +1,6 @@
 {
   "pages": {
     "redux": {
-      "reduxRender": true,
       "layout": false
     }
   }
