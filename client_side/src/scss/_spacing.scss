@@ -1,13 +1,3 @@
-//custom main-sales
-
-//materialize customizations
-.waves-effect.waves-light-green .waves-ripple {
-     /* The alpha value allows the text and background color
-     of the button to still show through. */
-      background-color: rgba(#8bc34a, 0.65);
-}
-
-
 //spacing and size related
 $big-room: 6em;
 $med-room: 4.5em;
@@ -102,55 +92,4 @@ $very-small-room: 0.75em;
 .very-small-h-room {
   @extend .very-small-r-room;
   @extend .very-small-l-room;
-}
-
-
-.full-width {
-  width: 100%;
-}
-.placeholder-height {
-  height: 30em;
-}
-
-.divider {
-  @extend .divider;
-  height: 2px;
-  background-color: #f1f7fb;
-}
-
-//special purpose for forms with pre icons
-@media #{$medium-and-up} {
-  input.shift-left-and-extend {
-    left: -9%;
-    width: 110%;
-  }
-  button.shift-left-and-extend {
-    width: 110%;
-    left: -2.5%;
-  }
-}
-
-
-//special purpose for form error msgs
-input:not([type]),
-input[type=text],
-input[type=password],
-input[type=email],
-input[type=url],
-input[type=time],
-input[type=date],
-input[type=datetime],
-input[type=datetime-local],
-input[type=tel],
-input[type=number],
-input[type=search],
-textarea.materialize-textarea {
-  & + label:after {
-    top: 190%;
-    font-size: 0.85em;
-  }
-  & + label.active:after {
-    top: 330%;
-    transition: top .2s linear;
-  }
 }

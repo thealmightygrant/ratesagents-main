@@ -1,0 +1,11 @@
+@include B(page) {
+  //overflow: hidden;
+
+  @include E(header) {
+    position: relative;
+  }
+
+  @include E(body) {
+    position: relative;
+  }
+}
