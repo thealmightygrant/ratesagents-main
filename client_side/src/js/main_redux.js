@@ -2,10 +2,11 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import todoApp from './reducers'
+import reducer from './reducers'
 import App from './components/App'
 
-let store = createStore(todoApp)
+const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+console.log("initial state: ", store.getState())
 
 render(
     <Provider store={store}>

@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import todos from './todos'
-import visibilityFilter from './visibilityFilter'
+import { reducer as formReducer } from 'redux-form'
+import locations from './locations'
 
-const todoApp = combineReducers({
-  todos,
-  visibilityFilter
+const homeownerDashboard = combineReducers({
+  locations,
+  formReducer
 })
 
-export default todoApp
+export default homeownerDashboard

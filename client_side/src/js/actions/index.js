@@ -1,22 +1,14 @@
-let nextTodoId = 0
-export const addTodo = (text) => {
+export const searchingLocation = (term, results) => {
   return {
-    type: 'ADD_TODO',
-    id: nextTodoId++,
-    text
+    type: 'SEARCHING_LOCATION',
+    term,
+    results
   }
 }
 
-export const setVisibilityFilter = (filter) => {
+export const pickSearchLocation = (location) => {
   return {
-    type: 'SET_VISIBILITY_FILTER',
-    filter
-  }
-}
-
-export const toggleTodo = (id) => {
-  return {
-    type: 'TOGGLE_TODO',
-    id
+    type: 'PICK_SEARCH_LOCATION',
+    location
   }
 }
