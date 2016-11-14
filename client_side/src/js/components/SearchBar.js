@@ -1,36 +1,53 @@
 import React, { PropTypes } from 'react'
-
-function handleClick(e) {
-  e.preventDefault()
-  console.log('The bar was clicked.')
-}
+import StatefulBasicHomeForm from '../containers/StatefulBasicHomeForm'
 
 //TODO: add onKey events?
-const SearchBar = ({results, onTypeSearch}) => (
-    <form id="searchBar">
-    <input
-      onClick={handleClick}
-      onChange={(e) => onTypeSearch(e.target.value)}
-      placeholder="Where are you selling at?"
-      type="text" />
-    <ul>
-      {results.map((result, idx) => (
-           <li key={"" + idx}>{result.name}</li>
-      ))}
-    </ul>
-    <input type="submit" value="Submit"/>
-    </form>
+
+const searchResults = (searchCompleted, results, onClickLocation) => {
+  return results.map((result, idx) => (
+    <li onClick={() => onClickLocation(result)}
+      key={"searchResult" + idx}>{result.name}</li>
+  ))
+  //QUESTION: bad to return undefined here?
+}
+
+const SearchBar = ({term, searchCompleted, results, onTypeSearch, onClickLocation, onSubmit}) => (
+  <div>
+  <form
+    onSubmit={e => {
+        e.preventDefault()
+        onSubmit(term)
+      }}
+    id="searchBar">
+    <div>
+      <input
+        onChange={e => onTypeSearch(e.target.value)}
+        placeholder="Where are you selling at?"
+        value={term}
+        type="text" />
+    </div>
+    <button className="btn waves-effect waves-light" type="submit">
+      <i className="material-icons">search</i>
+    </button>
+  </form>
+  {searchCompleted ?
+   <StatefulBasicHomeForm /> :
+   <ul>{searchResults(searchCompleted, results, onClickLocation)}</ul> }
+  </div>
 )
 
 SearchBar.propTypes = {
-  /* term: PropTypes.string.isRequired, */
+  term: PropTypes.string.isRequired,
+  searchCompleted: PropTypes.bool.isRequired,
   results: PropTypes.arrayOf(
     PropTypes.shape({
-      /* id: PropTypes.number.isRequired,
-       * completed: PropTypes.bool.isRequired,*/
+      /* id: PropTypes.string.isRequired,
+       * href: PropTypes.string.isRequired, */
       name: PropTypes.string.isRequired
     }).isRequired).isRequired,
-  onTypeSearch: PropTypes.func.isRequired
+  onTypeSearch: PropTypes.func.isRequired,
+  onClickLocation: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired
 }
 
 export default SearchBar

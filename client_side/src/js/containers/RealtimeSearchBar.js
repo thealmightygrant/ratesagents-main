@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { searchingLocation } from '../actions'
+import { searchingLocation, pickSearchLocation } from '../actions'
 import dallas_neighborhoods from '../constants/dallas_neighborhoods'
 import SearchBar from '../components/SearchBar'
 
@@ -16,14 +16,24 @@ const realtimeSearch = (term) => {
 
 const mapStateToProps = (state) => {
   return {
+    term: state.locations.searchLocation.term,
+    searchCompleted: state.locations.searchCompleted,
     results: realtimeSearch(state.locations.searchLocation.term)
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onTypeSearch: (term) => {
+    //QUESTION: go straight to results on submit??
+    onSubmit: term => {
+      if(realtimeSearch(term).length)
+        dispatch(pickSearchLocation(realtimeSearch(term)[0]))
+    },
+    onTypeSearch: term => {
       dispatch(searchingLocation(term, realtimeSearch(term)))
+    },
+    onClickLocation: location => {
+      dispatch(pickSearchLocation(location))
     }
   }
 }

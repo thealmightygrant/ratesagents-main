@@ -12,3 +12,16 @@ export const pickSearchLocation = (location) => {
     location
   }
 }
+
+export const changeBasicHomeInfo = (homeInfo) => {
+  return {
+    type: 'CHANGE_BASIC_HOME_INFO',
+    homeInfo
+  }
+}
+
+export const showHomeResults = () => {
+  return {
+    type: 'SHOW_HOME_RESULTS'
+  }
+}

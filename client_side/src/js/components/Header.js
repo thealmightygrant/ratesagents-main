@@ -2,9 +2,9 @@ import React from 'react'
 import RealtimeSearchBar from '../containers/RealtimeSearchBar'
 
 const Header = () => (
-    <div>
+  <div>
     <RealtimeSearchBar />
-    </div>
+  </div>
 )
 
 export default Header

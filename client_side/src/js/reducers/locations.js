@@ -1,4 +1,18 @@
 import { combineReducers } from 'redux'
+import searchLocation from './searchLocation'
+
+//   searchCompleted: boolean
+const searchCompleted = (state = false, action) => {
+  switch (action.type) {
+  case 'SEARCHING_LOCATION':
+    return false
+  case 'PICK_SEARCH_LOCATION':
+    return true
+  default:
+    return state
+  }
+}
+
 
 //   currentLocation: {
 //   name: ""
@@ -20,58 +34,26 @@ const currentLocation = (state = {}, action) => {
   }
 }
 
-// recentLocations: [
-//   {
-//      id: ""
+// recentLocations: {
+//   "0jeakd93": {
 //      name: ""
 //      href: ""
 //   }
-// ]
-const recentLocations = (state = [], action) => {
-  switch (action.type) {
-  case 'SEARCHING_LOCATION':
-    return state;
-  case 'PICK_SEARCH_LOCATION':
-    return [
-      ...state,
-      {
-        id: action.location.id,
-        name: action.location.name,
-        href: action.location.href
-      }
-    ]
-  default:
-    return state;
-  }
-}
+// }
+//TODO: cap at some number of locations
+// const recentLocations = (state = {}, action) => {
+//   switch (action.type) {
+//   case 'SEARCHING_LOCATION':
+//     return state;
+//   case 'PICK_SEARCH_LOCATION':
+//     return Object.assign({},
+//                          {[action.id]: {name: action.name, href: action.href}},
+//                          ...state)
+//   default:
+//     return state;
+//   }
+// }
 
-//TODO: maybe need to break this out into individual results depends on search backend
-const results = (state = [], action) => {
-  switch(action.type) {
-  case 'SEARCHING_LOCATION':
-    return Object.assign([], action.results);
-  case 'PICK_SEARCH_LOCATION':
-    return [];
-  default:
-    return state;
-  }
-}
-
-const term = (state = "", action) => {
-  switch(action.type) {
-  case 'SEARCHING_LOCATION':
-    return action.term;
-  case 'PICK_SEARCH_LOCATION':
-    return "";
-  default:
-    return state;
-  }
-}
-
-const searchLocation = combineReducers({
-  term,
-  results
-})
 
 // locations : {
 //   currentLocation: {
@@ -79,13 +61,12 @@ const searchLocation = combineReducers({
 //   href: ""
 //   id: ""
 // }
-// recentLocations: [
-//   {
-//      id: ""
+// recentLocations: {
+//   "9238kaed": {
 //      name: ""
 //      href: ""
 //   }
-// ]
+// }
 // searchLocation: {
 //   term: ""
 //   results: [
@@ -99,9 +80,10 @@ const searchLocation = combineReducers({
 // }
 
 const locations = combineReducers({
+  searchCompleted,
   searchLocation,
   currentLocation,
-  recentLocations
+  // recentLocations
 })
 
 export default locations;
