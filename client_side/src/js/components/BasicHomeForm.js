@@ -30,13 +30,22 @@ const BasicHomeForm = ({info, onSubmit, onChange}) => (
       </DropDownMenu>
       <DropDownMenu
         onChange={(e, key, payload) => onChange({numBathrooms: payload})}
-        value={info.numBathrooms}>
+        value={Math.floor(info.numBathrooms)}>
         <MenuItem value={1} primaryText="1 bathroom" />
-        <MenuItem value={2} primaryText="2 bathooms" />
+        <MenuItem value={2} primaryText="2 bathrooms" />
         <MenuItem value={3} primaryText="3 bathrooms" />
         <MenuItem value={4} primaryText="4 bathrooms" />
         <MenuItem value={5} primaryText="5+ bathrooms" />
       </DropDownMenu>
+      <Checkbox
+        label="+ 0.5 bathrooms"
+        value={!(info.numBathrooms - Math.floor(info.numBathrooms))}
+        onCheck={(e, checked) => {
+          let halfNumBath = checked ? 0.5 : -1 * (info.numBathrooms - Math.floor(info.numBathrooms))
+          onChange({
+            numBathrooms: (info.numBathrooms + halfNumBath),
+          })}}
+        style={styles.checkbox} />
       <DropDownMenu
         onChange={(e, key, payload) => onChange({homeType: payload})}
         value={info.homeType}>
