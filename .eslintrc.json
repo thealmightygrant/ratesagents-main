@@ -15,7 +15,8 @@
     "sourceType": "module"
   },
   "plugins": [
-    "react"
+    "react",
+    "class-property"
   ],
   "rules": {
     "indent": [
@@ -25,10 +26,6 @@
     "linebreak-style": [
       "error",
       "unix"
-    ],
-    "semi": [
-      "error",
-      "never"
     ]
   }
 }

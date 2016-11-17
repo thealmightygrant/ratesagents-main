@@ -1,8 +1,10 @@
 import React from 'react'
+import HelpDrawerContainer from '../containers/HelpDrawerContainer'
 
 const Dashboard = () => (
-    <div>
-    </div>
+  <div>
+    <HelpDrawerContainer />
+  </div>
 )
 
 export default Dashboard

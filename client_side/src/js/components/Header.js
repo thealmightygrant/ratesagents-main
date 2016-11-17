@@ -1,9 +1,10 @@
 import React from 'react'
-import RealtimeSearchBar from '../containers/RealtimeSearchBar'
+import HeaderEngagementBarContainer from '../containers/HeaderEngagementBarContainer'
 
 const Header = () => (
   <div>
-    <RealtimeSearchBar />
+    <HeaderEngagementBarContainer />
+    {/* <HeaderNavigationBar /> */}
   </div>
 )
 

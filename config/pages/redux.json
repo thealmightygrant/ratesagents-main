@@ -1,7 +1,7 @@
 {
   "pages": {
     "redux": {
-      "disableSCSS": true,
+      "alternateCSS": true,
       "layout": false
     }
   }

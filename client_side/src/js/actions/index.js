@@ -25,3 +25,10 @@ export const showHomeResults = () => {
     type: 'SHOW_HOME_RESULTS'
   }
 }
+
+export const openHelpDrawer = (help) => {
+  return {
+    type: 'OPEN_HELP_DRAWER',
+    help
+  }
+}

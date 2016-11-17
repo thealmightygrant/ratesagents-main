@@ -5,6 +5,7 @@ import { createStore } from 'redux'
 import reducer from './reducers'
 import App from './components/App'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
@@ -14,7 +15,7 @@ console.log("initial state: ", store.getState())
 
 render(
   <Provider store={store}>
-    <MuiThemeProvider >
+    <MuiThemeProvider muiTheme={getMuiTheme()}>
       <App />
     </MuiThemeProvider>
   </Provider>,
