@@ -8,14 +8,10 @@
 
   <!-- TODO serve fonts locally? -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!-- <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
   {{{socialTags socialData=this.socialData}}}
-
-  {{#if reduxRender}}
-  <script type="text/javascript" src="/js/hbs.bundle.js?tcb={{getDateNumeral}}"></script>
-  <script type="text/javascript" src="/js/redux.bundle.js?tcb={{getDateNumeral}}"></script>
-  {{else}}
-  <script type="text/javascript" src="/js/hbs.bundle.js?tcb={{getDateNumeral}}"></script>
-  {{/if}}
+  <script type="text/javascript" src="/js/materialize.min.js?tcb={{getDateNumeral}}"></script>
+  <script type="text/javascript" src="/js/jquery-2.1.1.min.js?tcb={{getDateNumeral}}"></script>
+  <script type="text/javascript" src="/js/main.js?tcb={{getDateNumeral}}"></script>
 </head>

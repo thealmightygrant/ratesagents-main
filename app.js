@@ -1,29 +1,25 @@
-import express from 'express'
+var express = require('express');
+//var flash = require('connect-flash');
+var helmet = require('helmet');
 
-import 'pg'
-import 'pg-hstore'
+var bodyParser = require('body-parser');
 
-import passport from 'passport'
-import helmet from 'helmet'
-import bodyParser from 'body-parser'
+var expresshbs = require('express-handlebars');
+var HBars = require('handlebars');
+var expressValidator = require('express-validator');
+var cookieSession = require('cookie-session');
 
-import expresshbs from 'express-handlebars'
-import HBars from 'handlebars'
+var passport = require('passport')
+var conf = require('./config')
 
-import expressValidator from 'express-validator'
-import cookieSession from 'cookie-session'
-
-import conf from './config'
-
-import helpers from './utils/hb_helpers'
-import validators from './utils/validators'
-import strategies from './utils/strategies'
-import middleware from './utils/middleware'
-
-import routes from './routes/index'
-import realtors from './routes/realtors'
-import homeowners from './routes/homeowners'
-import models from './models/index'
+var helpers = require('./utils/hb_helpers');
+var validators = require('./utils/validators');
+var strategies = require('./utils/strategies');
+var middleware = require('./utils/middleware');
+var routes = require('./routes/index');
+var realtors = require('./routes/realtors');
+var homeowners = require('./routes/homeowners');
+var models = require('./models/index');
 
 var app = express();
 
@@ -34,6 +30,25 @@ app.engine('hbs', expresshbs({defaultLayout: 'layout-base',
 app.set('view engine', 'hbs');
 
 app.use(helmet());
+
+//TODO: check into if this is required for fb auth
+//      if it is required, then use the 'cors' package and setup a whitelist
+//
+// var allowCrossDomain = function(req, res, next) {
+//   res.header('Access-Control-Allow-Credentials', true);
+//   res.header('Access-Control-Allow-Origin', req.headers.origin);
+//   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+//   // intercept OPTIONS method
+//   if ('OPTIONS' == req.method) {
+//     res.send(200);
+//   }
+//   else {
+//     next();
+//   }
+// };
+// app.use(allowCrossDomain);
 
 app.use(bodyParser.json());
 //TODO: extended determines type of querystring parsing, look into this once parsing qs's
@@ -100,6 +115,8 @@ app.use(expressValidator({
   }
 }));
 
+//TODO: add back in if needed
+//app.use(flash());
 app.use(middleware.addMessages);
 
 app.use('/', routes)
