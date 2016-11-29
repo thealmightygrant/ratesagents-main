@@ -1,14 +1,19 @@
-<nav>
+<nav {{#if tabData}}class="nav-extended"{{/if}}>
   <div class="nav-wrapper light-green darken-2">
     <div class="container">
       <a href="/" class="brand-logo">Rates and Agents</a>
       <a href="#" data-activates="mobile-nav" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
-        {{{navLinks type=this.navType navData=this.navData}}}
+        {{{navLinks navData=this.navData navType="main-nav"}}}
       </ul>
       <ul class="side-nav" id="mobile-nav">
-        {{{navLinks type=(str 'mobile-' this.navType) navData=this.navData}}}
+        {{{navLinks navData=this.navData navType="mobile-main-nav"}}}
       </ul>
+      {{#if tabData}}
+      <ul class="tabs tabs-transparent">
+        {{{navLinks tabData=this.tabData navType="tabs"}}}
+      </ul>
+      {{/if}}
     </div>
   </div>
 </nav>

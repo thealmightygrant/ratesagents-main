@@ -80,6 +80,7 @@ router.use('/'
            , user_utils.isLoggedIn
            , function(req, res){
              var prd = merge(res.locals
+                             , conf.get('pages.homeowners-dashboard-nav')
                              , conf.get('pages.homeowners-dashboard')
                              , { data: { csrfToken: req.csrfToken() }})
              res.render('homeowner-dashboard.hbs', prd);

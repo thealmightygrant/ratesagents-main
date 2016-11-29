@@ -1,0 +1,43 @@
+{
+  "pages": {
+    "homeowners-dashboard-nav": {
+      "tabData": [
+        {
+          "href": "#listings",
+          "value": "Listings"
+        },
+        {
+          "href": "#auctions",
+          "value": "Auctions"
+        }
+      ],
+      "navData": {
+        "setuplisting": {
+          "href": "/homeowners/home-information",
+          "value": "Showcase your home"
+        },
+        "findrealtor": {
+          "href": "/homeowners/start-auction",
+          "value": "Find a realtor"
+        },
+        "help": {
+          "value": "Help",
+          "href": "/homeowners/help"
+        },
+        "user": {
+          "value": "Account",
+          "linkData": [
+            {
+              "href": "/homeowners/profile",
+              "value": "Homeowner Profile"
+            },
+            {
+              "href": "/homeowners/logout",
+              "value": "Login"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

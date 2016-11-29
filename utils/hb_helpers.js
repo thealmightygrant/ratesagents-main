@@ -4,6 +4,10 @@ exports.getDateNumeral = function getDateNumeral(){
   return '' + new Date().getTime();
 }
 
+exports.isEqual = function isEqual(options){
+
+}
+
 exports.socialTags = function socialTags(options) {
   var tags = options.hash.socialData ? options.hash.socialData : {};
   if(!tags.url) tags.url = "https://ratesandagents.com/" + tags.pageName;
@@ -36,12 +40,19 @@ exports.str = function str(str1, str2){
   return str1 + str2;
 }
 
+function createClassedLink(href, value, options){
+  if(!options) options = {};
+  var anchorClassStr = options.anchorClassName ? ' class="' + options.anchorClassName + '"' : '';
+  var listItemClassStr = options.liClassName ? ' class="' + options.liClassName + '"' : '';
+  return '<li' + listItemClassStr + '><a href="' + href + '"' + anchorClassStr + '>' + value + '</a></li>';
+}
+
 function createHtmlLinks(dataArr, options){
   var options = options ? options : {};
   return dataArr.reduce(function(prev, cur, ind, arr){
-    var link = '<li><a href="' + cur.href + '">' + cur.value + '</a></li>'
+    var link = createClassedLink(cur.href, cur.value, cur.options)
     if(prev.length === 0){
-      return '<ul ' + (options.groupid ? 'id="' + options.groupid + '" ': '') + (options.groupclass ? 'class="' + options.groupclass + '" ': '') + '>' + link;
+      return '<ul ' + (options.groupId ? 'id="' + options.groupId + '" ': '') + (options.groupClassName ? 'class="' + options.groupClassName + '" ': '') + '>' + link;
     }
     else if(ind === (arr.length - 1)){
       return prev + link + '</ul>'
@@ -52,41 +63,69 @@ function createHtmlLinks(dataArr, options){
   }, '')
 }
 
-function createDropdownLink(dropdownName, title){
-  return '<li><a class="dropdown-button" data-constrainwidth="false" data-activates="' + dropdownName + '" data-hover="true" data-beloworigin="true">' + title + '</a></li>'
+function createDropdownLink(dropdownName, href, value){
+  console.log("value: ", value)
+  return '<li><a class="dropdown-button" data-constrainwidth="false" ' + (href ? 'href="' + href + '" ' : '') + 'data-activates="' + dropdownName + '" data-hover="true" data-beloworigin="true">' + value + '</a></li>'
 }
 
 function slideoutLink(title, content){
   return '<li><a class="subheader">' + title + '</a></li>' + content;
 }
 
-exports.navLinks = function navLinks(options) {
-  var navData = options.hash.navData
-  ,   navType = options.hash.type
-  ,   navElements = ''
-  ,   dropdownElements = ''
+function tabLink(href, value, options){
+  if(!options) options = {};
+  options.liClassName = "tab"
+  return createClassedLink(href, value, options)
+}
 
-  if(navType === 'main-sales'){
+exports.navLinks = function navLinks(options) {
+  var navData = options.hash.navData || {}
+  ,   tabData = options.hash.tabData || []
+  ,   navType = options.hash.navType
+  ,   navElements = ''
+  ,   childElements = ''
+
+  switch(navType){
+  case 'main-nav':
     Object.keys(navData).forEach(function(key){
-      navElements = navElements +
-        createDropdownLink(key + '-dropdown-link', navData[key].title);
-      dropdownElements = dropdownElements +
-        createHtmlLinks(navData[key].linkData, {
-          groupid: (key + '-dropdown-link'),
-          groupclass: 'dropdown-content'
-        })
+      if(navData[key].linkData && navData[key].linkData.length){
+        navElements = navElements +
+          createDropdownLink(key + '-dropdown-link', navData[key].href, navData[key].value);
+        childElements = childElements +
+          createHtmlLinks(navData[key].linkData, {
+            groupId: (key + '-dropdown-link'),
+            groupClassName: 'dropdown-content'
+          })
+      }
+      else {
+        navElements = navElements +
+          createClassedLink(navData[key].href, navData[key].value);
+      }
     })
-  }
-  else if(navType === 'mobile-main-sales'){
+    break;
+  case 'mobile-main-nav':
     navElements = navElements +
       '<li><a href="/">Rates and Agents</a></li>' +
       '<li><div class="divider"></div></li>';
-    Object.keys(navData).forEach(function(key, index, arr){
-      navElements = navElements +
-        slideoutLink(navData[key].title, createHtmlLinks(navData[key].linkData))
-      if(index < arr.length)
+    Object.keys(navData).forEach(function(key, index){
+      if(navData[key].linkData && navData[key].linkData.length){
+        navElements +=
+          slideoutLink(navData[key].value, createHtmlLinks(navData[key].linkData))
+      }
+      else {
+        navElements = navElements +
+          createClassedLink(navData[key].href, navData[key].value)
+      }
+      if(index < navData.length)
         navElements = navElements + '<li><div class="divider"></div></li>'
     })
+    break;
+  case 'tabs':
+    tabData.forEach(function(tab, index){
+      navElements = navElements +
+        tabLink(tab.href, tab.value, (index === 0 ? {anchorClassStr: "active"} : {}))
+    })
+    break;
   }
-  return new HBars.SafeString(navElements + dropdownElements);
+  return new HBars.SafeString(navElements + childElements);
 }

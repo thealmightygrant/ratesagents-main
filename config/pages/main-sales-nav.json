@@ -1,10 +1,9 @@
 {
   "pages": {
     "main-sales-nav": {
-      "navType": "main-sales",
       "navData": {
         "realtors": {
-          "title": "Realtors",
+          "value": "Realtors",
           "linkData": [
             {
               "href": "/realtors/login",
@@ -21,7 +20,7 @@
           ]
         },
         "homeowners": {
-          "title": "Homeowners",
+          "value": "Homeowners",
           "linkData": [
             {
               "href": "/homeowners/login",
@@ -38,7 +37,7 @@
           ]
         },
         "company": {
-          "title": "Company",
+          "value": "Company",
           "linkData": [
             {
               "href": "/about",

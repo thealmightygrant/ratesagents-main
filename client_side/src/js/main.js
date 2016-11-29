@@ -4,8 +4,12 @@
     //init side nav
     $('.button-collapse').sideNav();
 
-    //init all popovers for now
-    $('[data-toggle="popover"]').popover()
+    //init all popovers
+    //$('[data-toggle="popover"]').popover()
+
+    $(document).ready(function(){
+      $('ul.tabs').tabs();
+    });
 
     //init selects
     $('select').material_select();
