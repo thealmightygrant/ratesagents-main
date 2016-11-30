@@ -76,7 +76,7 @@ router.use('/logout', function(req, res, next){
   res.redirect('/');
 })
 
-router.use('/'
+router.get('/dashboard'
            , user_utils.isLoggedIn
            , function(req, res){
              var prd = merge(res.locals
@@ -84,6 +84,19 @@ router.use('/'
                              , conf.get('pages.homeowners-dashboard')
                              , { data: { csrfToken: req.csrfToken() }})
              res.render('homeowner-dashboard.hbs', prd);
+           })
+
+router.get('/basic-home-information'
+           , user_utils.isLoggedIn
+           , function(req, res){
+             var prd = merge(res.locals
+                             , conf.get('pages.basic-home-information')
+                             , {
+                               data: { csrfToken: req.csrfToken(),
+                                       googleMaps: conf.get("apis.googleMaps") },
+                               includeMap: true
+                             })
+             res.render('basic-home-information.hbs', prd);
            })
 
 module.exports = router;

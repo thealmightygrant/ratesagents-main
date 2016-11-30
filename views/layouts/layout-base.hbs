@@ -18,5 +18,8 @@
       </footer>
 
     </div>
+    {{#if includeMap}}
+      <script src="https://maps.googleapis.com/maps/api/js?key={{data.googleMaps.apiKey}}&libraries=places&callback=initMap" async defer></script>
+    {{/if}}
   </body>
 </html>

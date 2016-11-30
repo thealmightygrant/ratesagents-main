@@ -82,6 +82,10 @@ var conf = convict({
         default: "https://someothercallback.com/callback"
       }
     }
+  },
+  apis: {
+    format: Object,
+    default: {}
   }
 });
 

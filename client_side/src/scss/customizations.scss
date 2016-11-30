@@ -118,6 +118,17 @@ $very-small-room: 0.75em;
   background-color: #f1f7fb;
 }
 
+//for card titles
+.card .card-image .card-title {
+  bottom: -1.5em;
+  left: -0.5em;
+  max-width: 100%;
+}
+
+#map {
+  height: 300px;
+}
+
 //special purpose for forms with pre icons
 @media #{$medium-and-up} {
   input.shift-left-and-extend {

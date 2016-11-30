@@ -16,5 +16,10 @@
       "realtorCallbackURL": "http://localhost:3000/realtors/auth/facebook/callback",
       "homeownerCallbackURL": "http://localhost:3000/homeowners/auth/facebook/callback"
     }
+  },
+  "apis": {
+    "googleMaps": {
+      "apiKey": "AIzaSyAjfFyZYkmNldGYxhuez3UJRSOW1WjD6zM"
+    }
   }
 }
