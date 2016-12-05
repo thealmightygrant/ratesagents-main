@@ -11,6 +11,8 @@ function initMap() {
     document.getElementById('street_number'));
   var route = /** @type {!HTMLInputElement} */(
     document.getElementById('route'));
+  var neighborhood = /** @type {!HTMLInputElement} */(
+    document.getElementById('neighborhood'));
   var city = /** @type {!HTMLInputElement} */(
     document.getElementById('city'));
   var county = /** @type {!HTMLInputElement} */(
@@ -66,6 +68,8 @@ function initMap() {
         street_number.value=component.short_name
       else if(component.types.indexOf("route") !== -1)
         route.value=component.short_name
+      else if(component.types.indexOf("neighborhood") !== -1)
+        neighborhood.value=component.short_name
       else if(component.types.indexOf("locality") !== -1)
         city.value=component.short_name
       else if(component.types.indexOf("administrative_area_level_2") !== -1)

@@ -8,11 +8,12 @@ var basename  = path.basename(module.filename);
 var conf      = require('../config.js')
 var seq_config = conf.get('sequelize')
 var db        = {};
+var sequelize;
 
 if (seq_config.use_env_variable) {
-  var sequelize = new Sequelize(process.env[seq_config.use_env_variable]);
+  sequelize = new Sequelize(process.env[seq_config.use_env_variable]);
 } else {
-  var sequelize = new Sequelize(seq_config.database, seq_config.username, seq_config.password, seq_config);
+  sequelize = new Sequelize(seq_config.database, seq_config.username, seq_config.password, seq_config);
 }
 
 fs

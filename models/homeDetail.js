@@ -8,8 +8,8 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     name: DataTypes.STRING,
-    size: DataTypes.INTEGER,      //almost always in sq footage
-    attributes: DataTypes.STRING  //CSVs
+    size: DataTypes.INTEGER,
+    features: DataTypes.TEXT
   }, {
     freezeTableName: true
     , classMethods: {

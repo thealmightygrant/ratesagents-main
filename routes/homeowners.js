@@ -62,8 +62,8 @@ router.get('/login', function(req, res){
 
 router.post('/login'
             , function(req, res, next){
-                res.locals.err_view = 'homeowner-login.hbs'
-                next();
+              res.locals.err_view = 'homeowner-login.hbs'
+              next();
             }
             , user_utils.validateLogin
             , middleware.authMiddlewareFactory('homeowner-local-login',

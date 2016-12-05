@@ -36,19 +36,21 @@ exports.addMessages = function addMessages(req, res, next){
 }
 
 function authCallbackFactory(strategy, req, res, next, failureRedirect, successRedirect){
-  if((strategy === 'homeowner-local-login') ||
-     (strategy === 'realtor-local-login')) {
+  switch(strategy){
+  case 'homeowner-local-login':
+  case 'homeowner-local-register':
+  case 'realtor-local-login':
+  case 'realtor-local-register':
     return localAuthCallbackFactory(req, res, next, failureRedirect, successRedirect);
+  default:
+    console.error('unknown authorization method');
+    return res.redirect(failureRedirect);
   }
-  //TODO: throw an error?
 }
 
 function localAuthCallbackFactory(req, res, next, failureRedirect, successRedirect){
   //NOTE: the original use of this was to add some data to the redirected url
   return function localAuthCallback(err, user, info, status) {
-    console.log("err: ", err)
-    console.log("user: ", user)
-    console.log("info: ", info)
     if (err) {
       req.session.error = err;
       return next(err)
@@ -68,6 +70,8 @@ function localAuthCallbackFactory(req, res, next, failureRedirect, successRedire
     });
   }
 }
+
+//TODO: this is kind of messy, refactor to have fewer inputs
 exports.authMiddlewareFactory = function authMiddlewareFactory(strategy, failureRedirect, successRedirect){
   return function passportAuthMiddleware(req, res, next){
     passport.authenticate(strategy, authCallbackFactory(strategy, req, res, next, failureRedirect, successRedirect))(req, res, next);

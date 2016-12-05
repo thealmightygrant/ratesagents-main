@@ -3,6 +3,7 @@ var ra_utils = require('./utils')
 ,   Promise = require("bluebird")
 ,   conf = require("../config")
 ,   merge = require('lodash.merge')
+,   models = require('../models/index')
 
 var default_err_msgs = {
   first_name: {
@@ -89,7 +90,7 @@ exports.validateRegister = function(req, res, next){
   //sanitizers
   req.sanitizeBody('email').normalizeEmail();
 
-   if(!req.validationErrors()){
+  if(!req.validationErrors()){
     //TODO: restrict password to certain characters?
     req.checkBody('email', err_msgs.email.fake ).isEmail();
   }
@@ -103,8 +104,6 @@ exports.validateRegister = function(req, res, next){
       next()
     })
     .catch(function(errors) {
-      console.log(errors);
-      console.log(arrangeValidationErrors(errors))
       res.render(err_view, {
         data: {
           first_name: first_name,
@@ -151,6 +150,7 @@ exports.validateAndSaveAddress = function(req, res){
   ,   street_number = req.body.street_number
   ,   address = req.body.address
   ,   route = req.body.route
+  ,   neighborhood = req.body.neighborhood
   ,   city = req.body.city
   ,   county = req.body.county
   ,   state = req.body.state
@@ -163,6 +163,7 @@ exports.validateAndSaveAddress = function(req, res){
   var err_msgs = retrieveErrorMsgs(['address', 'home_type', 'street_number', 'standard'])
   var messages;
 
+
   //validators
   req.checkBody('street_number', err_msgs.street_number.empty ).notEmpty();
   //TODO: map street address to address if the error exists
@@ -174,32 +175,60 @@ exports.validateAndSaveAddress = function(req, res){
       !county ||
       !state ||
       !zipcode)){
-    messages = {address: "Internal mapping error. Please refresh."}
+    //add an option to skip address input
+    messages = {address: "Please try searching your address again."}
   }
+
+  var errViewData = {
+    googleMaps: conf.get("apis.googleMaps"),
+    home_type: home_type,
+    num_bedrooms: num_bedrooms,
+    num_bathrooms: num_bathrooms,
+    address: address,
+    neighborhood: neighborhood,
+    street_number: street_number,
+    route: route,
+    city: city,
+    county: county,
+    state: state,
+    zipcode: zipcode,
+    csrfToken: req.body._csrf
+  };
 
   //TODO: write to DB
   if(req.validationErrors() || messages){
     res.render(err_view, {
       includeMap: true,
-      data: {
-        googleMaps: conf.get("apis.googleMaps"),
-        home_type: home_type,
-        num_bedrooms: num_bedrooms,
-        num_bathrooms: num_bathrooms,
-        address: address,
-        street_number: street_number,
-        route: route,
-        city: city,
-        county: county,
-        state: state,
-        zipcode: zipcode,
-        csrfToken: req.body._csrf
-      }, messages: merge(arrangeValidationErrors(req.validationErrors()), messages)
+      data: errViewData,
+      messages: merge(arrangeValidationErrors(req.validationErrors()), messages)
     })
   }
   else {
-    //write to db
-    res.render(suc_view);
+    models["home"].create({
+      homeType: home_type,
+      numBedrooms: num_bedrooms,
+      numBathrooms: num_bathrooms,
+      streetNumber: street_number,
+      route: route,
+      neighborhood: neighborhood,
+      city: city,
+      county: county,
+      state: state,
+      zipcode: zipcode
+    }).then(function(home){
+      return models["listing"].create({
+        homeId: home.id,
+        homeownerId: req.session.passport.user.id
+      })
+    }).then(function(listing){
+      res.render(suc_view);
+    }).catch(function(e){
+      res.render(err_view, {
+        includeMap: true,
+        data: errViewData,
+        messages: merge(arrangeValidationErrors(req.validationErrors()), messages)
+      })
+    })
   }
 }
 

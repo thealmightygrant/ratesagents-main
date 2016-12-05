@@ -8,17 +8,14 @@ function isValueInUse(field_name, value, model_name) {
     field_object["where"][field_name] = value;
     models[model_name].findOne(field_object).then(function(item){
       if (item) {
-        console.log("item found: ", item);
         reject(item);
       }
       else {
-        console.log("item not found: ", item);
         resolve(item);
       }
     }).catch(function(error){
       //TODO: distinguish between database failures and used vals
       if (error) {
-        console.error("error: ", error);
         reject(error);
       }
     });

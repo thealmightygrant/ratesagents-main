@@ -9,7 +9,6 @@ module.exports = function(sequelize, DataTypes) {
     },
     builtIn: DataTypes.INTEGER,     //e.g. 1999
     homeSize: DataTypes.INTEGER,    //e.g. 2000 sq ft
-    //NOTE: try to enumerate these ahead of time, rebuild could be expensive in the future
     homeType: DataTypes.ENUM('house', 'condo', 'townhome'),
     numBedrooms: {
       type: DataTypes.INTEGER,
@@ -35,6 +34,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     streetNumber: DataTypes.STRING,
     route: DataTypes.STRING,
+    neighborhood: DataTypes.STRING,
     city: DataTypes.STRING,
     county: DataTypes.STRING,
     state: DataTypes.STRING,

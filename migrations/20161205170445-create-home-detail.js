@@ -11,7 +11,7 @@ module.exports = {
       },
       name: Sequelize.STRING,
       size: Sequelize.INTEGER,
-      attributes: Sequelize.STRING,
+      features: Sequelize.TEXT,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

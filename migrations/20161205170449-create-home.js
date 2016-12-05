@@ -18,6 +18,7 @@ module.exports = {
       streetNumber: Sequelize.STRING,
       route: Sequelize.STRING,
       city: Sequelize.STRING,
+      neighborhood: Sequelize.STRING,
       county: Sequelize.STRING,
       state: Sequelize.STRING,
       zipcode: Sequelize.STRING,
