@@ -99,4 +99,29 @@ router.get('/basic-home-information'
              res.render('basic-home-information.hbs', prd);
            })
 
+router.get('/advanced-home-information'
+           , user_utils.isLoggedIn
+           , function(req, res){
+             var prd = merge(res.locals
+                             , conf.get('pages.advanced-home-information')
+                             , { data: { csrfToken: req.csrfToken() }})
+             res.render('advanced-home-information.hbs', prd);
+           })
+
+router.post('/basic-home-information'
+            , function(req, res, next){
+              res.locals.err_view = 'basic-home-information.hbs'
+              res.locals.suc_view = 'advanced-home-information.hbs'
+              next();
+            }
+            , user_utils.validateAndSaveAddress)
+
+router.post('/advanced-home-information'
+            , function(req, res, next){
+              res.locals.err_view = 'advanced-home-information.hbs'
+              res.locals.suc_view = 'homeowner-realtor-desires.hbs'
+              next();
+            }
+            , user_utils.validateAndSaveHomeDetails)
+
 module.exports = router;

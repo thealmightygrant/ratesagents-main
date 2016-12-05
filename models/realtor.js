@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
       //NEVER have logins use this, only unique
       //to facilate user to user identification
       //within the Rates and Agents community
-     type: DataTypes.STRING,
+      type: DataTypes.STRING,
     },
     password: {
       //NOTE: can be null when logging in via external service
@@ -46,9 +46,9 @@ module.exports = function(sequelize, DataTypes) {
     , classMethods: {
       associate: function(models) {
         Realtor.belongsTo(models.facebookAccount, {
-          //TODO: does this need to be contraints: false?
           onDelete: "CASCADE"
         });
+        Realtor.hasMany(models.listing);
       }
     }
 

@@ -4,8 +4,13 @@ exports.getDateNumeral = function getDateNumeral(){
   return '' + new Date().getTime();
 }
 
-exports.isEqual = function isEqual(options){
-
+exports.ifEquals = function ifEquals(item1, item2, options){
+  if(item1 === item2){
+    return options.fn(this);
+  }
+  else {
+    return options.inverse(this);
+  }
 }
 
 exports.socialTags = function socialTags(options) {

@@ -1,6 +1,8 @@
 var ra_utils = require('./utils')
 ,   data_promises = require('./data_promises')
 ,   Promise = require("bluebird")
+,   conf = require("../config")
+,   merge = require('lodash.merge')
 
 var default_err_msgs = {
   first_name: {
@@ -22,6 +24,15 @@ var default_err_msgs = {
   , password: {
     empty: 'Please tell us your password. Don\'t keep us waiting.'
     , strong: 'Your password is too weak, please try adding some symbols or making it longer.'
+  }
+  , address: {
+    empty: 'Please add an address.'
+  }
+  , street_number: {
+    empty: 'Sorry, we need the full address.'
+  }
+  , standard: {
+    empty: 'Sorry, but this can\'t be empty.'
   }
 }
 
@@ -130,6 +141,70 @@ exports.validateLogin = function(req, res, next){
   {
     next();
   }
+}
+
+exports.validateAndSaveAddress = function(req, res){
+
+  var home_type = req.body.home_type
+  ,   num_bedrooms = req.body.num_bedrooms
+  ,   num_bathrooms = req.body.num_bathrooms
+  ,   street_number = req.body.street_number
+  ,   address = req.body.address
+  ,   route = req.body.route
+  ,   city = req.body.city
+  ,   county = req.body.county
+  ,   state = req.body.state
+  ,   zipcode = req.body.zipcode
+  ,   options = typeof(res.locals) !== 'undefined' ? res.locals : {}
+  ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'basic-home-information.hbs'
+  ,   suc_view = typeof(options.suc_view) === 'string' ? options.suc_view : 'advanced-home-information.hbs'
+  ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "homeowner"
+
+  var err_msgs = retrieveErrorMsgs(['address', 'home_type', 'street_number', 'standard'])
+  var messages;
+
+  //validators
+  req.checkBody('street_number', err_msgs.street_number.empty ).notEmpty();
+  //TODO: map street address to address if the error exists
+  req.checkBody('address', err_msgs.address.empty ).notEmpty();
+
+  if(address &&
+     (!route ||
+      !city ||
+      !county ||
+      !state ||
+      !zipcode)){
+    messages = {address: "Internal mapping error. Please refresh."}
+  }
+
+  //TODO: write to DB
+  if(req.validationErrors() || messages){
+    res.render(err_view, {
+      includeMap: true,
+      data: {
+        googleMaps: conf.get("apis.googleMaps"),
+        home_type: home_type,
+        num_bedrooms: num_bedrooms,
+        num_bathrooms: num_bathrooms,
+        address: address,
+        street_number: street_number,
+        route: route,
+        city: city,
+        county: county,
+        state: state,
+        zipcode: zipcode,
+        csrfToken: req.body._csrf
+      }, messages: merge(arrangeValidationErrors(req.validationErrors()), messages)
+    })
+  }
+  else {
+    //write to db
+    res.render(suc_view);
+  }
+}
+
+exports.validateAndSaveHomeDetails = function(req, res){
+
 }
 
 exports.isLoggedIn = function isLoggedIn(req, res, next) {

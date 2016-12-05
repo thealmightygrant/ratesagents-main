@@ -1,0 +1,52 @@
+<h3 class="center small-t-room very-small-b-room">Your Home Information</h3>
+<div class="row">
+  <div class="col s12 m5 small-r-room">
+    <form method="post" class="signup-form" action="/homeowners/basic-home-information">
+      <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
+      <div class="input-field">
+        <select name="home_type" id="home_type">
+          <option value="house" {{#ifEquals data.home_type "house"}}selected{{/ifEquals}}>House</option>
+          <option value="condo" {{#ifEquals data.home_type "condo"}}selected{{/ifEquals}}>Condo</option>
+          <option value="townhome" {{#ifEquals data.home_type "townhome"}}selected{{/ifEquals}}>Townhome</option>
+        </select>
+        <label for="home_type">Type of home: </label>
+      </div>
+      <p class="range-field">
+        <label for="num_bedrooms">Num Bedrooms: </label>
+        <input type="range" id="num_bedrooms" name="num_bedrooms" min="1" max="10" value="{{#if data.num_bedrooms}}{{data.num_bedrooms}}{{else}}3{{/if}}" step="1" />
+      </p>
+      <p class="range-field">
+        <label for="num_bathrooms">Num Bathrooms: </label>
+        <input type="range" id="num_bathrooms" name="num_bathrooms" min="0.5" max="10" value="{{#if data.num_bedrooms}}{{data.num_bedrooms}}{{else}}2{{/if}}" step="0.5" />
+      </p>
+      <div class="input-field">
+        <input id="goog_address" name="address" placeholder="" class="controls validate {{#if messages.address}}invalid{{/if}}" value="{{#if data.address}}{{data.address}}{{/if}}" type="text">
+        <label for="goog_address" id="goog_address_msgs" data-error="{{#if messages.address}}{{messages.address}}{{else}}{{#if messages.street_number}}{{messages.street_number}}{{/if}}{{/if}}">Your address: </label>
+        <input type="hidden" id="street_number" name="street_number" value="{{#if data.street_number}}{{data.street_number}}{{/if}}"> <!-- the number of the house -->
+        <input type="hidden" id="route" name="route" value="{{#if data.route}}{{data.route}}{{/if}}">
+        <input type="hidden" id="city" name="city" value="{{#if data.city}}{{data.city}}{{/if}}"> <!-- locality -->
+        <input type="hidden" id="county" name="county" value="{{#if data.county}}{{data.county}}{{/if}}"> <!-- administrative_area_level_2 -->
+        <input type="hidden" id="state" name="state" value="{{#if data.state}}{{data.state}}{{/if}}"> <!-- administrative_area_level_1 -->
+        <input type="hidden" id="zipcode" name="zipcode" value="{{#if data.zipcode}}{{data.zipcode}}{{/if}}"> <!-- postal_code -->
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <select name="secondary_designator" id="secondary_designator">
+            <option value="" disabled {{#unless data.secondary_designator}}selected{{/unless}}>APT, UNIT, ...</option>
+            <option value="apt" {{#ifEquals data.secondary_designator "apt"}}selected{{/ifEquals}}>APT</option>
+            <option value="unit" {{#ifEquals data.secondary_designator "unit"}}selected{{/ifEquals}}>UNIT</option>
+          </select>
+        </div>
+        <div class="input-field col s6">
+          <input type="number" name="secondary_number" id="secondary_number" value="{{#if data.secondary_number}}{{data.secondary_number}}{{/if}}"/>
+          <label for="secondary_number">Number</label>
+        </div>
+      </div>
+      <div class="input-field">
+        <button class="btn waves-effect waves-light" type="submit">Next</button>
+      </div>
+    </form>
+  </div>
+  <div class="col s12 m6 small-t-room" id="map">
+  </div>
+</div>

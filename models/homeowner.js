@@ -46,9 +46,9 @@ module.exports = function(sequelize, DataTypes) {
     , classMethods: {
       associate: function(models) {
         Homeowner.belongsTo(models.facebookAccount, {
-         //TODO: does this need to be constraints false?
           onDelete: "CASCADE"
         });
+        Homeowner.hasMany(models.listing);
       }
     }
   });
