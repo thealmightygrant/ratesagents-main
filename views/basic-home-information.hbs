@@ -1,29 +1,39 @@
-<h3 class="center small-t-room very-small-b-room">Your Home Information</h3>
-<h4 class="center">Step 1 of 3</h4>
+<h3 class="center small-t-room">Your Home Information</h3>
+<h4 class="center small-b-room">Step 1 of 3</h4>
 <div class="row">
   <div class="col s12 m5 small-r-room">
     <form method="post" class="signup-form" action="/homeowners/basic-home-information">
       <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
       <div class="input-field">
-        <select name="home_type" id="home_type">
-          <option value="house" {{#ifEquals data.home_type "house"}}selected{{/ifEquals}}>House</option>
-          <option value="condo" {{#ifEquals data.home_type "condo"}}selected{{/ifEquals}}>Condo</option>
-          <option value="townhome" {{#ifEquals data.home_type "townhome"}}selected{{/ifEquals}}>Townhome</option>
+        <select name="homeType" id="homeType">
+          <option value="house" {{#ifEquals data.homeType "house"}}selected{{/ifEquals}}>House</option>
+          <option value="condo" {{#ifEquals data.homeType "condo"}}selected{{/ifEquals}}>Condo</option>
+          <option value="townhome" {{#ifEquals data.homeType "townhome"}}selected{{/ifEquals}}>Townhome</option>
         </select>
-        <label for="home_type">Type of home: </label>
+        <label for="homeType">Type of home: </label>
       </div>
       <p class="range-field">
-        <label for="num_bedrooms">Num Bedrooms: </label>
-        <input type="range" id="num_bedrooms" name="num_bedrooms" min="1" max="10" value="{{#if data.num_bedrooms}}{{data.num_bedrooms}}{{else}}3{{/if}}" step="1" />
+        <label for="numBedrooms">Num Bedrooms: </label>
+        <input type="range" id="numBedrooms" name="numBedrooms" min="1" max="10" value="{{#if data.numBedrooms}}{{data.numBedrooms}}{{else}}3{{/if}}" step="0.5" />
       </p>
       <p class="range-field">
-        <label for="num_bathrooms">Num Bathrooms: </label>
-        <input type="range" id="num_bathrooms" name="num_bathrooms" min="0.5" max="10" value="{{#if data.num_bedrooms}}{{data.num_bedrooms}}{{else}}2{{/if}}" step="0.5" />
+        <label for="numBathrooms">Num Bathrooms: </label>
+        <input type="range" id="numBathrooms" name="numBathrooms" min="0.25" max="10" value="{{#if data.numBathrooms}}{{data.numBathrooms}}{{else}}2{{/if}}" step="0.25" />
       </p>
+      <div class="row">
+        <div class="input-field col s6">
+          <input class="validate {{#if messages.builtIn}}invalid{{/if}}" type="number" id="builtIn" name="builtIn" min="1850" max="2017" value="{{#if data.builtIn}}{{data.builtIn}}{{else}}1985{{/if}}" step="1" />
+          <label for="builtIn" data-error="{{#if messages.builtIn}}{{messages.builtIn}}{{/if}}">Built In: </label>
+        </div>
+        <div class="input-field col s6">
+          <input class="validate {{#if messages.homeSize}}invalid{{/if}}" type="number" name="homeSize" id="homeSize" min="0" max="500000" step="100" value="{{#if data.homeSize}}{{data.homeSize}}{{else}}2000{{/if}}"/>
+          <label for="homeSize" data-error="{{#if messages.homeSize}}{{messages.homeSize}}{{/if}}">Size (in sq ft)</label>
+        </div>
+      </div>
       <div class="input-field">
-        <input id="goog_address" name="address" placeholder="" class="controls validate {{#if messages.address}}invalid{{/if}}" value="{{#if data.address}}{{data.address}}{{/if}}" type="text">
-        <label for="goog_address" id="goog_address_msgs" data-error="{{#if messages.address}}{{messages.address}}{{else}}{{#if messages.street_number}}{{messages.street_number}}{{/if}}{{/if}}">Your address: </label>
-        <input type="hidden" id="street_number" name="street_number" value="{{#if data.street_number}}{{data.street_number}}{{/if}}"> <!-- the number of the house -->
+        <input id="googAddress" name="address" placeholder="" class="controls validate {{#if messages.address}}invalid{{/if}}" value="{{#if data.address}}{{data.address}}{{/if}}" type="text">
+        <label for="googAddress" id="googAddressMsgs" data-error="{{#if messages.address}}{{messages.address}}{{else}}{{#if messages.streetNumber}}{{messages.streetNumber}}{{/if}}{{/if}}">Your address: </label>
+        <input type="hidden" id="streetNumber" name="streetNumber" value="{{#if data.streetNumber}}{{data.streetNumber}}{{/if}}"> <!-- the number of the house -->
         <input type="hidden" id="route" name="route" value="{{#if data.route}}{{data.route}}{{/if}}">
         <input type="hidden" id="city" name="city" value="{{#if data.city}}{{data.city}}{{/if}}"> <!-- locality -->
         <input type="hidden" id="neighborhood" name="neighborhood" value="{{#if data.neighborhood}}{{data.neighborhood}}{{/if}}">
@@ -33,15 +43,15 @@
       </div>
       <div class="row">
         <div class="input-field col s6">
-          <select name="secondary_designator" id="secondary_designator">
-            <option value="" disabled {{#unless data.secondary_designator}}selected{{/unless}}>APT, UNIT, ...</option>
-            <option value="apt" {{#ifEquals data.secondary_designator "apt"}}selected{{/ifEquals}}>APT</option>
-            <option value="unit" {{#ifEquals data.secondary_designator "unit"}}selected{{/ifEquals}}>UNIT</option>
+          <select name="secondaryDesignator" id="secondaryDesignator">
+            <option value="" disabled {{#unless data.secondaryDesignator}}selected{{/unless}}>APT, UNIT, ...</option>
+            <option value="apt" {{#ifEquals data.secondaryDesignator "apt"}}selected{{/ifEquals}}>APT</option>
+            <option value="unit" {{#ifEquals data.secondaryDesignator "unit"}}selected{{/ifEquals}}>UNIT</option>
           </select>
         </div>
         <div class="input-field col s6">
-          <input type="number" name="secondary_number" id="secondary_number" value="{{#if data.secondary_number}}{{data.secondary_number}}{{/if}}"/>
-          <label for="secondary_number">Number</label>
+          <input type="text" name="secondaryDescriptor" id="secondaryDescriptor" value="{{#if data.secondaryDescriptor}}{{data.secondaryDescriptor}}{{/if}}"/>
+          <label for="secondaryDescriptor">Number</label>
         </div>
       </div>
       <div class="input-field">

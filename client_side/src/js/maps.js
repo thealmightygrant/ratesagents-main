@@ -1,14 +1,14 @@
 
-
 function initMap() {
+
   var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 32.7745457, lng:-96.7804983 }, //NOTE: centers Dallas, TX
     zoom: 10
   });
   var input = /** @type {!HTMLInputElement} */(
-    document.getElementById('goog_address'));
+    document.getElementById('googAddress'));
   var street_number = /** @type {!HTMLInputElement} */(
-    document.getElementById('street_number'));
+    document.getElementById('streetNumber'));
   var route = /** @type {!HTMLInputElement} */(
     document.getElementById('route'));
   var neighborhood = /** @type {!HTMLInputElement} */(
@@ -61,7 +61,6 @@ function initMap() {
 
     var place = autocomplete.getPlace();
     //parse address
-    console.log(place.address_components)
     var address_components = place.address_components;
     address_components.forEach(function(component) {
       if(component.types.indexOf("street_number") !== -1)
@@ -113,15 +112,3 @@ function initMap() {
 
   autocomplete.addListener('place_changed', handleAddress);
 }
-
-// //HACK: replace or remove
-// function ensureMap(){
-//   if(!mapInitialized && (typeof window.google !== 'object' || typeof window.google.maps !== 'object')){
-//     setTimeout(ensureMap, 500)
-//   }
-//   else if(!mapInitialized){
-//     initMap()
-//   }
-// }
-
-// setTimeout(ensureMap, 500)

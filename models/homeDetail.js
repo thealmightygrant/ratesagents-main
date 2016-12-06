@@ -8,7 +8,15 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     name: DataTypes.STRING,
-    size: DataTypes.INTEGER,
+    size: {
+      type: DataTypes.INTEGER,
+      set: function(string_val){
+        this.setDataValue('size', +string_val);
+      },
+      get: function(int_val){
+        return int_val.toString();
+      }
+    },
     features: DataTypes.TEXT
   }, {
     freezeTableName: true

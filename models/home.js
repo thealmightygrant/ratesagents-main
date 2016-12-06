@@ -7,14 +7,30 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       allowNull: false
     },
-    builtIn: DataTypes.INTEGER,     //e.g. 1999
-    homeSize: DataTypes.INTEGER,    //e.g. 2000 sq ft
+    builtIn: {
+      type: DataTypes.INTEGER,
+      set: function(string_val){
+        this.setDataValue('builtIn', +string_val);
+      },
+      get: function(int_val){
+        return int_val.toString();
+      }
+    },     //e.g. 1999
+    homeSize: {
+      type: DataTypes.INTEGER,
+      set: function(string_val){
+        this.setDataValue('homeSize', +string_val);
+      },
+      get: function(int_val){
+        return int_val.toString();
+      }
+    },    //e.g. 2000 sq ft
     homeType: DataTypes.ENUM('house', 'condo', 'townhome'),
     numBedrooms: {
       type: DataTypes.INTEGER,
       set: function(string_val){
         var int_val = +string_val * 100;
-        this.setDataValue('num_bedrooms', int_val);
+        this.setDataValue('numBedrooms', int_val);
       },
       get: function(int_val){
         var string_val = (int_val / 100).toString();
@@ -25,13 +41,15 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       set: function(string_val){
         var int_val = +string_val * 100;
-        this.setDataValue('num_bedrooms', int_val);
+        this.setDataValue('numBathrooms', int_val);
       },
       get: function(int_val){
         var string_val = (int_val / 100).toString();
         return string_val;
       }
     },
+    secondaryDesignator: DataTypes.STRING,
+    secondaryDescriptor: DataTypes.STRING,
     streetNumber: DataTypes.STRING,
     route: DataTypes.STRING,
     neighborhood: DataTypes.STRING,

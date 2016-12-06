@@ -22,6 +22,8 @@ module.exports = {
       county: Sequelize.STRING,
       state: Sequelize.STRING,
       zipcode: Sequelize.STRING,
+      secondaryDesignator: Sequelize.STRING,
+      secondaryDescriptor: Sequelize.STRING,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -144,10 +144,14 @@ exports.validateLogin = function(req, res, next){
 
 exports.validateAndSaveAddress = function(req, res){
 
-  var home_type = req.body.home_type
-  ,   num_bedrooms = req.body.num_bedrooms
-  ,   num_bathrooms = req.body.num_bathrooms
-  ,   street_number = req.body.street_number
+  var homeType = req.body.homeType
+  ,   homeSize = req.body.homeSize
+  ,   builtIn = req.body.builtIn
+  ,   numBedrooms = req.body.numBedrooms
+  ,   numBathrooms = req.body.numBathrooms
+  ,   secondaryDescriptor = req.body.secondaryDescriptor
+  ,   secondaryDesignator = req.body.secondaryDesignator
+  ,   streetNumber = req.body.streetNumber
   ,   address = req.body.address
   ,   route = req.body.route
   ,   neighborhood = req.body.neighborhood
@@ -157,16 +161,15 @@ exports.validateAndSaveAddress = function(req, res){
   ,   zipcode = req.body.zipcode
   ,   options = typeof(res.locals) !== 'undefined' ? res.locals : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'basic-home-information.hbs'
-  ,   suc_url = typeof(options.suc_url) === 'string' ? options.suc_view : '/homeowners/advanced-home-information'
-  ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "homeowner"
+  ,   suc_url = typeof(options.suc_url) === 'string' ? options.suc_url : '/homeowners/advanced-home-information'
 
-  var err_msgs = retrieveErrorMsgs(['address', 'home_type', 'street_number', 'standard'])
+  var err_msgs = retrieveErrorMsgs(['address', 'street_number', 'standard'])
   var messages;
 
-
   //TODO: add some more validators
-  req.checkBody('street_number', err_msgs.street_number.empty ).notEmpty();
-  //TODO: map street address to address if the error exists
+  req.checkBody('builtIn', "Please tell us approx when your home was built.").notEmpty().isInt({ min: 1850, max: 2017, allow_leading_zeroes: false });
+  req.checkBody('homeSize', "Please tell us the approx size of your home.").notEmpty().isInt({ min: 0, max: 500000, allow_leading_zeroes: false });
+  req.checkBody('streetNumber', err_msgs.street_number.empty ).notEmpty();
   req.checkBody('address', err_msgs.address.empty ).notEmpty();
 
   if(address &&
@@ -181,12 +184,12 @@ exports.validateAndSaveAddress = function(req, res){
 
   var errViewData = {
     googleMaps: conf.get("apis.googleMaps"),
-    home_type: home_type,
-    num_bedrooms: num_bedrooms,
-    num_bathrooms: num_bathrooms,
+    homeType: homeType,
+    numBedrooms: numBedrooms,
+    numBathrooms: numBathrooms,
     address: address,
     neighborhood: neighborhood,
-    street_number: street_number,
+    streetNumber: streetNumber,
     route: route,
     city: city,
     county: county,
@@ -195,7 +198,6 @@ exports.validateAndSaveAddress = function(req, res){
     csrfToken: req.body._csrf
   };
 
-  //TODO: write to DB
   if(req.validationErrors() || messages){
     res.render(err_view, {
       includeMap: true,
@@ -205,16 +207,20 @@ exports.validateAndSaveAddress = function(req, res){
   }
   else {
     models["home"].create({
-      homeType: home_type,
-      numBedrooms: num_bedrooms,
-      numBathrooms: num_bathrooms,
-      streetNumber: street_number,
+      homeType: homeType,
+      numBedrooms: numBedrooms,
+      numBathrooms: numBathrooms,
+      streetNumber: streetNumber,
       route: route,
       neighborhood: neighborhood,
       city: city,
       county: county,
       state: state,
-      zipcode: zipcode
+      zipcode: zipcode,
+      builtIn: builtIn,
+      homeSize: homeSize,
+      secondaryDesignator: secondaryDesignator,
+      secondaryDescriptor: secondaryDescriptor
     }).then(function(home){
       return models["listing"].create({
         homeId: home.id,
@@ -223,11 +229,7 @@ exports.validateAndSaveAddress = function(req, res){
     }).then(function(listing){
       res.redirect(suc_url);
     }).catch(function(e){
-      res.render(err_view, {
-        includeMap: true,
-        data: errViewData,
-        messages: merge(arrangeValidationErrors(req.validationErrors()), messages)
-      })
+      console.log("error: ", e)
     })
   }
 }
