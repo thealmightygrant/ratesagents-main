@@ -1,1 +1,156 @@
-<h3 class="center small-t-room very-small-b-room">Your Home Information</h3>
+<h3 class="center small-t-room">Your Home Information</h3>
+<h4 class="center small-b-room">Step 2 of 3</h4>
+<div class="row">
+  <div class="col s12 m8 l6">
+    <form method="post" class="signup-form" action="/homeowners/advanced-home-information">
+      <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
+      <ul class="collapsible" data-collapsible="expandable">
+        <li>
+          <div class="collapsible-header">Backyard</div>
+          <div class="collapsible-body">
+            <div class="input-field">
+              <label for="backyard_size">Approx. area (in sq ft): </label>
+              <input type="number" id="backyard_size" name="backyard_size" value="{{#if data.backyard_size}}{{data.backyard_size}}{{/if}}" />
+            </div>
+            <p class="inline-input">
+              <input type="checkbox" id="backyard_private" name="backyard_private" />
+              <label for="backyard_private">Private?</label>
+            </p>
+            <p class="inline-input">
+              <input type="checkbox" id="backyard_swingset" name="backyard_swingset" />
+              <label for="backyard_swingset">Swingset?</label>
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Garage</div>
+          <div class="collapsible-body">
+            <div class="input-field">
+              <label for="garage_size">Approx. area (in sq ft): </label>
+              <input type="number" id="garage_size" name="garage_size" value="{{#if data.garage_size}}{{data.garage_size}}{{/if}}" />
+            </div>
+            <p class="inline-input">
+              <input type="checkbox" id="garage_private" name="garage_private" />
+              <label for="garage_private">Private?</label>
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Storage</div>
+          <div class="collapsible-body">
+            <div class="input-field">
+              <label for="storage_size">Approx. area (in sq ft): </label>
+              <input type="number" id="storage_size" name="storage_size" value="{{#if data.storage_size}}{{data.storage_size}}{{/if}}" />
+            </div>
+            <p class="inline-input">
+              <input type="checkbox" id="storage_private" name="storage_private" />
+              <label for="storage_private">Private?</label>
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Driveway or External Parking</div>
+          <div class="collapsible-body">
+            <div class="input-field">
+              <label for="parking_size">Approx. area (in sq ft): </label>
+              <input type="number" id="parking_size" name="parking_size" value="{{#if data.parking_size}}{{data.parking_size}}{{/if}}" />
+            </div>
+            <p class="inline-input">
+              <input type="checkbox" id="parking_private" name="parking_private" />
+              <label for="parking_private">Private?</label>
+            </p>
+            <p class="inline-input">
+              <input type="checkbox" id="parking_covered" name="parking_covered" />
+              <label for="parking_covered">Covered?</label>
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Spa</div>
+          <div class="collapsible-body">
+            <div class="input-field">
+              <label for="spa_size">Approx. area (sq ft): </label>
+              <input type="number" id="spa_size" name="spa_size" value="{{#if data.spa_size}}{{data.spa_size}}{{/if}}" />
+            </div>
+            <p class="inline-input">
+              <input type="checkbox" id="spa_private" />
+              <label for="spa_private">Private?</label>
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Pool</div>
+          <div class="collapsible-body">
+            <div class="input-field">
+              <label for="pool_size">Approx. area (sq ft): </label>
+              <input type="number" id="pool_size" name="pool_size" value="{{#if data.pool_size}}{{data.pool_size}}{{/if}}" />
+            </div>
+            <p class="inline-input">
+              <input type="checkbox" id="pool_private" />
+              <label for="pool_private">Private?</label>
+            </p>
+            <p class="inline-input">
+              <input type="checkbox" id="pool_heated" />
+              <label for="pool_heated">Heated?</label>
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Air Conditioner</div>
+          <div class="collapsible-body">
+            <p class="inline-input">
+              <input type="checkbox" id="ac_private" />
+              <label for="ac_private">Private?</label>
+            </p>
+            <p class="inline-input">
+              <input type="checkbox" id="ac_central" name="ac_central" />
+              <label for="ac_central">Central</label>
+            </p>
+            <p class="inline-input">
+              <input type="checkbox" id="ac_swampcooler" name="ac_swampcooler" />
+              <label for="ac_swampcooler">Swamp Cooler</label>
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Heater</div>
+          <div class="collapsible-body">
+            <p class="inline-input">
+              <input type="checkbox" id="heater_central" />
+              <label for="heater_central">Central?</label>
+            </p>
+            <p class="inline-input">
+              <input type="checkbox" id="heater_private" />
+              <label for="heater_private">Private?</label>
+            </p>
+            <p class="inline-input">
+              <input name="heater_type" type="radio" id="heater_boiler" />
+              <label for="heater_boiler">Boiler</label>
+            </p>
+            <p class="inline-input">
+              <input name="heater_type" type="radio" id="heater_gasfurnace" />
+              <label for="heater_gasfurnace">Gas Furnace</label>
+            </p>
+            <p class="inline-input">
+              <input name="heater_type" type="radio" id="heater_oilfurnace" />
+              <label for="heater_oilfurnace">Oil Furnace</label>
+            </p>
+            <p class="inline-input">
+              <input name="heater_type" type="radio" id="heater_heatpump" />
+              <label for="heater_heatpump">Heat Pump</label>
+            </p>
+            <p class="inline-input">
+              <input name="heater_type" type="radio" id="heater_radiantfloorheat" />
+              <label for="heater_radiantfloorheat">Radiant Floor Heat</label>
+            </p>
+          </div>
+        </li>
+      </ul>
+      <div class="input-field">
+        <button class="btn waves-effect waves-light" type="submit">Next</button>
+      </div>
+    </form>
+  </div>
+  <div class="col s12 m6 small-t-room" id="map">
+  </div>
+</div>

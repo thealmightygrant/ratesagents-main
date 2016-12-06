@@ -157,14 +157,14 @@ exports.validateAndSaveAddress = function(req, res){
   ,   zipcode = req.body.zipcode
   ,   options = typeof(res.locals) !== 'undefined' ? res.locals : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'basic-home-information.hbs'
-  ,   suc_view = typeof(options.suc_view) === 'string' ? options.suc_view : 'advanced-home-information.hbs'
+  ,   suc_url = typeof(options.suc_url) === 'string' ? options.suc_view : '/homeowners/advanced-home-information'
   ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "homeowner"
 
   var err_msgs = retrieveErrorMsgs(['address', 'home_type', 'street_number', 'standard'])
   var messages;
 
 
-  //validators
+  //TODO: add some more validators
   req.checkBody('street_number', err_msgs.street_number.empty ).notEmpty();
   //TODO: map street address to address if the error exists
   req.checkBody('address', err_msgs.address.empty ).notEmpty();
@@ -221,7 +221,7 @@ exports.validateAndSaveAddress = function(req, res){
         homeownerId: req.session.passport.user.id
       })
     }).then(function(listing){
-      res.render(suc_view);
+      res.redirect(suc_url);
     }).catch(function(e){
       res.render(err_view, {
         includeMap: true,

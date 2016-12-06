@@ -166,13 +166,11 @@ textarea.materialize-textarea {
   }
 }
 
-//sticky footer
-body {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-  }
+.collapsible-body .input-field {
+  margin-right: 2rem;
+  margin-left: 2rem;
+}
 
-main {
-  flex: 1 0 auto;
+.collapsible-body p.inline-input {
+  padding: 0.5rem 2rem;
 }

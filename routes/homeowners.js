@@ -111,7 +111,7 @@ router.get('/advanced-home-information'
 router.post('/basic-home-information'
             , function(req, res, next){
               res.locals.err_view = 'basic-home-information.hbs'
-              res.locals.suc_view = 'advanced-home-information.hbs'
+              res.locals.suc_url = '/homeowners/advanced-home-information'
               next();
             }
             , user_utils.validateAndSaveAddress)
