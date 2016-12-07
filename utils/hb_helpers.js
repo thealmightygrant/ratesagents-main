@@ -13,6 +13,38 @@ exports.ifEquals = function ifEquals(item1, item2, options){
   }
 }
 
+exports.inputField = function inputField(options){
+  var name = options.hash.name || ""
+  ,   labelVal = options.hash.labelVal || ""
+  ,   msg = options.hash.msg || ""
+  ,   data = options.hash.data || ""
+  ,   type = options.hash.type || ""
+  ,   field;
+
+  field = '<div class="input-field">' +
+    '<label for="' + name + '" data-error="' + msg + '">' + labelVal + '</label>' +
+    '<input type="' + type + '" id="' + name + '" value="' + data + '" />' +
+    '</div>';
+
+  return new HBars.SafeString(field);
+}
+
+exports.inlineInput = function inlineInput(options){
+  var name = options.hash.name || ""
+  ,   labelVal = options.hash.labelVal || ""
+  ,   msg = options.hash.msg || ""
+  ,   data = options.hash.data || ""
+  ,   type = options.hash.type || ""
+  ,   field;
+
+  field = '<p class="inline-input">' +
+    '<input type="' + type + '" id="' + name + '" value="' + data + '" />' +
+    '<label for="' + name + '" data-error="' + msg + '">' + labelVal + '</label>' +
+    '</p>';
+
+  return new HBars.SafeString(field);
+}
+
 exports.socialTags = function socialTags(options) {
   var tags = options.hash.socialData ? options.hash.socialData : {};
   if(!tags.url) tags.url = "https://ratesandagents.com/" + tags.pageName;

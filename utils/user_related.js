@@ -1,7 +1,4 @@
-var ra_utils = require('./utils')
-,   data_promises = require('./data_promises')
-,   Promise = require("bluebird")
-,   conf = require("../config")
+var conf = require("../config")
 ,   merge = require('lodash.merge')
 ,   models = require('../models/index')
 
@@ -62,7 +59,7 @@ function retrieveErrorMsgs(desired_atts, des_err_msgs){
 
 function arrangeValidationErrors(errors){
   var updatedErrors = {};
-  errors.forEach(function(val, idx, arr){
+  errors.forEach(function(val){
     updatedErrors[val.param] = val.msg;
   })
   return updatedErrors;
@@ -70,11 +67,9 @@ function arrangeValidationErrors(errors){
 
 exports.validateRegister = function(req, res, next){
 
-  var name = req.body.name
-  ,   email = req.body.email
+  var email = req.body.email
   ,   first_name = req.body.first_name
   ,   last_name = req.body.last_name
-  ,   password = req.body.password
   ,   options = typeof(res.locals) !== 'undefined' ? res.locals : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login.hbs'
   ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
@@ -117,7 +112,6 @@ exports.validateRegister = function(req, res, next){
 
 exports.validateLogin = function(req, res, next){
   var email = req.body.email
-  ,   password = req.body.password
   ,   options = typeof(res.locals) !== 'undefined' ? res.locals : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login.hbs'
   ,   err_msgs = retrieveErrorMsgs(['email', 'password']);
@@ -222,20 +216,22 @@ exports.validateAndSaveAddress = function(req, res){
       secondaryDesignator: secondaryDesignator,
       secondaryDescriptor: secondaryDescriptor
     }).then(function(home){
+      req.session.home = {id: home.id}
       return models["listing"].create({
         homeId: home.id,
         homeownerId: req.session.passport.user.id
       })
     }).then(function(listing){
+      req.session.listing = {id: listing.id}
       res.redirect(suc_url);
     }).catch(function(e){
-      console.log("error: ", e)
+      console.error("error: ", e)
     })
   }
 }
 
 exports.validateAndSaveHomeDetails = function(req, res){
-
+  console.log(session);
 }
 
 exports.isLoggedIn = function isLoggedIn(req, res, next) {

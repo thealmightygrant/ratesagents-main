@@ -1,162 +1,91 @@
 <h3 class="center small-t-room">Your Home Information</h3>
 <h4 class="center small-b-room">Step 2 of 3</h4>
-<div class="row">
-  <div class="col s12 m8 l6">
-    <form method="post" class="signup-form" action="/homeowners/advanced-home-information">
-      <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
+<form method="post" class="signup-form" action="/homeowners/advanced-home-information">
+  <!-- TODO: refector into some partials, this is ridiculous -->
+  <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
+  <div class="row">
+  <div class="col push-m9 m3 push-s7 s5 inline input-field">
+        <button class="btn waves-effect waves-light" type="submit">Next</button>
+        </div>
+      </div>
+      <!-- TODO: not really possible with current setup -->
+  <!-- <div class="inline input-field"> -->
+  <!-- <a class="btn blue darken-2 waves-effect waves-light" href="/homeowners/basic-home-information">Back</a> --->
+  <!-- </div> -->
+  <div class="row">
+    <div class="col s12 m6 l5 offset-l1">
       <ul class="collapsible" data-collapsible="expandable">
         <li>
+          <!-- TODO: it would be pretty awesome to have some badges
+              on these collapsibles and to do accordion style -->
           <div class="collapsible-header">Backyard</div>
           <div class="collapsible-body">
-            <div class="input-field">
-              <label for="backyard_size">Approx. area (in sq ft): </label>
-              <input type="number" id="backyard_size" name="backyard_size" value="{{#if data.backyard_size}}{{data.backyard_size}}{{/if}}" />
-            </div>
-            <p class="inline-input">
-              <input type="checkbox" id="backyard_private" name="backyard_private" />
-              <label for="backyard_private">Private?</label>
-            </p>
-            <p class="inline-input">
-              <input type="checkbox" id="backyard_swingset" name="backyard_swingset" />
-              <label for="backyard_swingset">Swingset?</label>
-            </p>
-          </div>
+            {{{inputField name="backyard_size" type="number" msg=messages.backyard_size labelVal="Approx. area (in sq ft): " data=data.backyard_size}}}
+            {{{inlineInput name="backyard_private" type="checkbox" labelVal="Private" data=data.backyard_private}}}
+            {{{inlineInput name="backyard_swingset" type="checkbox" labelVal="Swingset" data=data.backyard_swingset}}}
         </li>
         <li>
           <div class="collapsible-header">Garage</div>
           <div class="collapsible-body">
-            <div class="input-field">
-              <label for="garage_size">Approx. area (in sq ft): </label>
-              <input type="number" id="garage_size" name="garage_size" value="{{#if data.garage_size}}{{data.garage_size}}{{/if}}" />
-            </div>
-            <p class="inline-input">
-              <input type="checkbox" id="garage_private" name="garage_private" />
-              <label for="garage_private">Private?</label>
-            </p>
+            {{{inputField name="garage_size" type="number" msg=messages.garage_size labelVal="Approx. area (in sq ft): " data=data.garage_size}}}
+            {{{inlineInput name="garage_private" type="checkbox" labelVal="Private" data=data.garage_private}}}
           </div>
         </li>
         <li>
           <div class="collapsible-header">Storage</div>
           <div class="collapsible-body">
-            <div class="input-field">
-              <label for="storage_size">Approx. area (in sq ft): </label>
-              <input type="number" id="storage_size" name="storage_size" value="{{#if data.storage_size}}{{data.storage_size}}{{/if}}" />
-            </div>
-            <p class="inline-input">
-              <input type="checkbox" id="storage_private" name="storage_private" />
-              <label for="storage_private">Private?</label>
-            </p>
+            {{{inputField name="storage_size" type="number" msg=messages.storage_size labelVal="Approx. area (in sq ft): " data=data.storage_size}}}
+            {{{inlineInput name="storage_private" type="checkbox" labelVal="Private" data=data.storage_private}}}
           </div>
         </li>
         <li>
           <div class="collapsible-header">Driveway or External Parking</div>
           <div class="collapsible-body">
-            <div class="input-field">
-              <label for="parking_size">Approx. area (in sq ft): </label>
-              <input type="number" id="parking_size" name="parking_size" value="{{#if data.parking_size}}{{data.parking_size}}{{/if}}" />
-            </div>
-            <p class="inline-input">
-              <input type="checkbox" id="parking_private" name="parking_private" />
-              <label for="parking_private">Private?</label>
-            </p>
-            <p class="inline-input">
-              <input type="checkbox" id="parking_covered" name="parking_covered" />
-              <label for="parking_covered">Covered?</label>
-            </p>
+            {{{inputField name="parking_size" type="number" msg=messages.parking_size labelVal="Approx. area (in sq ft): " data=data.parking_size}}}
+            {{{inlineInput name="parking_private" type="checkbox" labelVal="Private" data=data.parking_private}}}
+            {{{inlineInput name="parking_covered" type="checkbox" labelVal="Covered" data=data.parking_covered}}}
           </div>
         </li>
+      </ul>
+    </div>
+    <div class="col s12 m6 l5">
+      <ul class="collapsible" data-collapsible="expandable">
         <li>
           <div class="collapsible-header">Spa</div>
           <div class="collapsible-body">
-            <div class="input-field">
-              <label for="spa_size">Approx. area (sq ft): </label>
-              <input type="number" id="spa_size" name="spa_size" value="{{#if data.spa_size}}{{data.spa_size}}{{/if}}" />
-            </div>
-            <p class="inline-input">
-              <input type="checkbox" id="spa_private" />
-              <label for="spa_private">Private?</label>
-            </p>
+            {{{inputField name="spa_size" type="number" msg=messages.spa_size labelVal="Approx. area (in sq ft): " data=data.spa_size}}}
+            {{{inlineInput name="spa_private" type="checkbox" labelVal="Private" data=data.spa_private}}}
           </div>
         </li>
         <li>
           <div class="collapsible-header">Pool</div>
           <div class="collapsible-body">
-            <div class="input-field">
-              <label for="pool_size">Approx. area (sq ft): </label>
-              <input type="number" id="pool_size" name="pool_size" value="{{#if data.pool_size}}{{data.pool_size}}{{/if}}" />
-            </div>
-            <p class="inline-input">
-              <input type="checkbox" id="pool_private" />
-              <label for="pool_private">Private?</label>
-            </p>
-            <p class="inline-input">
-              <input type="checkbox" id="pool_heated" />
-              <label for="pool_heated">Heated?</label>
-            </p>
+            {{{inputField name="pool_size" type="number" msg=messages.pool_size labelVal="Approx. area (in sq ft): " data=data.pool_size}}}
+            {{{inlineInput name="pool_private" type="checkbox" labelVal="Private" data=data.pool_private}}}
+            {{{inlineInput name="pool_heated" type="checkbox" labelVal="Heated" data=data.pool_heated}}}
           </div>
         </li>
         <li>
-          <div class="collapsible-header">Air Conditioner</div>
+          <div class="collapsible-header">Air Conditioning</div>
           <div class="collapsible-body">
-            <p class="inline-input">
-              <input type="checkbox" id="ac_private" />
-              <label for="ac_private">Private?</label>
-            </p>
-            <p class="inline-input">
-              <input type="checkbox" id="ac_central" name="ac_central" />
-              <label for="ac_central">Central</label>
-            </p>
-            <p class="inline-input">
-              <input type="checkbox" id="ac_swampcooler" name="ac_swampcooler" />
-              <label for="ac_swampcooler">Swamp Cooler</label>
-            </p>
+            {{{inlineInput name="ac_private" type="checkbox" labelVal="Private" data=data.ac_private}}}
+            {{{inlineInput name="ac_central" type="checkbox" labelVal="Whole home" data=data.ac_central}}}
+            {{{inlineInput name="ac_swampcooler" type="checkbox" labelVal="Swamp Cooler" data=data.ac_swampcooler}}}
           </div>
         </li>
         <!-- TODO: all the appliances???? -->
         <!-- TODO: custom features? -->
         <li>
-          <div class="collapsible-header">Heater</div>
+          <div class="collapsible-header">Heating</div>
           <div class="collapsible-body">
-            <p class="inline-input">
-              <input type="checkbox" id="heater_central" />
-              <label for="heater_central">Central?</label>
-            </p>
-            <p class="inline-input">
-              <input type="checkbox" id="heater_private" />
-              <label for="heater_private">Private?</label>
-            </p>
-            <p class="inline-input">
-              <input name="heater_type" type="radio" id="heater_boiler" />
-              <label for="heater_boiler">Boiler</label>
-            </p>
-            <p class="inline-input">
-              <input name="heater_type" type="radio" id="heater_gasfurnace" />
-              <label for="heater_gasfurnace">Gas Furnace</label>
-            </p>
-            <p class="inline-input">
-              <input name="heater_type" type="radio" id="heater_oilfurnace" />
-              <label for="heater_oilfurnace">Oil Furnace</label>
-            </p>
-            <p class="inline-input">
-              <input name="heater_type" type="radio" id="heater_heatpump" />
-              <label for="heater_heatpump">Heat Pump</label>
-            </p>
-            <p class="inline-input">
-              <input name="heater_type" type="radio" id="heater_radiantfloorheat" />
-              <label for="heater_radiantfloorheat">Radiant Floor Heat</label>
-            </p>
+            {{{inlineInput name="heater_private" type="checkbox" labelVal="Private" data=data.heater_private}}}
+            {{{inlineInput name="heater_central" type="checkbox" labelVal="Whole home" data=data.heater_central}}}
+            {{{inlineInput name="heater_gas" type="checkbox" labelVal="Gas" data=data.heater_gas}}}
+            {{{inlineInput name="heater_oil" type="checkbox" labelVal="Oil" data=data.heater_oil}}}
+            {{{inlineInput name="heater_electric" type="checkbox" labelVal="Electric" data=data.heater_electric}}}
           </div>
         </li>
       </ul>
-      <!-- TODO: not really possible with current setup -->
-      <!-- <div class="inline input-field"> -->
-      <!-- <a class="btn blue darken-2 waves-effect waves-light" href="/homeowners/basic-home-information">Back</a> --->
-      <!-- </div> -->
-      <div class="inline input-field">
-        <button class="btn waves-effect waves-light" type="submit">Next</button>
-      </div>
-    </form>
+    </div>
   </div>
-  <div class="col s12 m6 small-t-room" id="map">
-  </div>
-</div>
+</form>
