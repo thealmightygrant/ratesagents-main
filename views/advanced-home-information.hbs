@@ -4,11 +4,11 @@
   <!-- TODO: refector into some partials, this is ridiculous -->
   <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
   <div class="row">
-  <div class="col push-m9 m3 push-s7 s5 inline input-field">
-        <button class="btn waves-effect waves-light" type="submit">Next</button>
-        </div>
-      </div>
-      <!-- TODO: not really possible with current setup -->
+    <div class="col push-m9 m3 push-s7 s5 inline input-field">
+      <button class="btn waves-effect waves-light" type="submit">Next</button>
+    </div>
+  </div>
+  <!-- TODO: not really possible with current setup -->
   <!-- <div class="inline input-field"> -->
   <!-- <a class="btn blue darken-2 waves-effect waves-light" href="/homeowners/basic-home-information">Back</a> --->
   <!-- </div> -->
@@ -17,31 +17,32 @@
       <ul class="collapsible" data-collapsible="expandable">
         <li>
           <!-- TODO: it would be pretty awesome to have some badges
-              on these collapsibles and to do accordion style -->
+          on these collapsibles and to do accordion style -->
           <div class="collapsible-header">Backyard</div>
           <div class="collapsible-body">
-            {{{inputField name="backyard_size" type="number" msg=messages.backyard_size labelVal="Approx. area (in sq ft): " data=data.backyard_size}}}
+            {{{sizeField name="backyard_size" type="number" msg=messages.backyard_size labelVal="Approx. area (in sq ft): " data=data.backyard_size}}}
             {{{inlineInput name="backyard_private" type="checkbox" labelVal="Private" data=data.backyard_private}}}
             {{{inlineInput name="backyard_swingset" type="checkbox" labelVal="Swingset" data=data.backyard_swingset}}}
+          </div>
         </li>
         <li>
           <div class="collapsible-header">Garage</div>
           <div class="collapsible-body">
-            {{{inputField name="garage_size" type="number" msg=messages.garage_size labelVal="Approx. area (in sq ft): " data=data.garage_size}}}
+            {{{sizeField name="garage_size" type="number" msg=messages.garage_size labelVal="Approx. area (in sq ft): " data=data.garage_size}}}
             {{{inlineInput name="garage_private" type="checkbox" labelVal="Private" data=data.garage_private}}}
           </div>
         </li>
         <li>
           <div class="collapsible-header">Storage</div>
           <div class="collapsible-body">
-            {{{inputField name="storage_size" type="number" msg=messages.storage_size labelVal="Approx. area (in sq ft): " data=data.storage_size}}}
+            {{{sizeField name="storage_size" type="number" msg=messages.storage_size labelVal="Approx. area (in sq ft): " data=data.storage_size}}}
             {{{inlineInput name="storage_private" type="checkbox" labelVal="Private" data=data.storage_private}}}
           </div>
         </li>
         <li>
           <div class="collapsible-header">Driveway or External Parking</div>
           <div class="collapsible-body">
-            {{{inputField name="parking_size" type="number" msg=messages.parking_size labelVal="Approx. area (in sq ft): " data=data.parking_size}}}
+            {{{sizeField name="parking_size" type="number" msg=messages.parking_size labelVal="Approx. area (in sq ft): " data=data.parking_size}}}
             {{{inlineInput name="parking_private" type="checkbox" labelVal="Private" data=data.parking_private}}}
             {{{inlineInput name="parking_covered" type="checkbox" labelVal="Covered" data=data.parking_covered}}}
           </div>
@@ -53,14 +54,14 @@
         <li>
           <div class="collapsible-header">Spa</div>
           <div class="collapsible-body">
-            {{{inputField name="spa_size" type="number" msg=messages.spa_size labelVal="Approx. area (in sq ft): " data=data.spa_size}}}
+            {{{sizeField name="spa_size" type="number" msg=messages.spa_size labelVal="Approx. area (in sq ft): " data=data.spa_size}}}
             {{{inlineInput name="spa_private" type="checkbox" labelVal="Private" data=data.spa_private}}}
           </div>
         </li>
         <li>
           <div class="collapsible-header">Pool</div>
           <div class="collapsible-body">
-            {{{inputField name="pool_size" type="number" msg=messages.pool_size labelVal="Approx. area (in sq ft): " data=data.pool_size}}}
+            {{{sizeField name="pool_size" type="number" msg=messages.pool_size labelVal="Approx. area (in sq ft): " data=data.pool_size}}}
             {{{inlineInput name="pool_private" type="checkbox" labelVal="Private" data=data.pool_private}}}
             {{{inlineInput name="pool_heated" type="checkbox" labelVal="Heated" data=data.pool_heated}}}
           </div>

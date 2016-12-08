@@ -9,11 +9,16 @@ module.exports = function(sequelize, DataTypes) {
     },
     title: DataTypes.STRING,
     description: DataTypes.TEXT,
+    //IDEA: any change in price, just copy all of it
+    //      and link to new Listing. requires a flag to show as inactive
+    //IDEA: change to some kind of price history?
     price: DataTypes.INTEGER,
     priceMin: DataTypes.INTEGER,
     closingDate: DataTypes.DATE,
-    closingDateMaxDays: DataTypes.INTEGER, //number of days past desiredClosingDate that are acceptable
-    closingDateMinDays: DataTypes.INTEGER //number of days before desiredClosingDate that sale is acceptable
+    //NOTE: number of days past desiredClosingDate that are acceptable
+    closingDateMaxDays: DataTypes.INTEGER,
+    //NOTE: number of days before desiredClosingDate that sale is acceptable
+    closingDateMinDays: DataTypes.INTEGER
   }, {
     freezeTableName: true
     , classMethods: {
@@ -23,6 +28,8 @@ module.exports = function(sequelize, DataTypes) {
         Listing.belongsTo(models.home);
         Listing.belongsTo(models.commission, {as: 'desiredCommission'})
         Listing.belongsTo(models.commission, {as: 'acceptedCommission'})
+        //Listing.belongsTo(models.marketing, {as: 'desiredMarketing'})
+        //Listing.belongsTo(models.marketing, {as: 'acceptedMarketing'})
         //Listing.belongsTo(models.auction) --> store redis id for bid referencing
       }
     }

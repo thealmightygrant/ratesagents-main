@@ -1,4 +1,5 @@
-var HBars = require('handlebars');
+var HBars = require('handlebars')
+,   merge = require('lodash.merge')
 
 exports.getDateNumeral = function getDateNumeral(){
   return '' + new Date().getTime();
@@ -13,17 +14,33 @@ exports.ifEquals = function ifEquals(item1, item2, options){
   }
 }
 
+exports.sizeField = function sizeField(options){
+  options.hash.type = "number"
+  options.hash.inputAttrs = merge(options.hash.inputAttrs,
+    {
+      min: "0",
+      step: "100"
+    })
+  return exports.inputField(options)
+}
+
 exports.inputField = function inputField(options){
   var name = options.hash.name || ""
   ,   labelVal = options.hash.labelVal || ""
   ,   msg = options.hash.msg || ""
   ,   data = options.hash.data || ""
-  ,   type = options.hash.type || ""
+  ,   type = options.hash.type || "text"
+  ,   inputAttrs = options.hash.inputAttrs || {}
+  ,   strAttrs = ""
   ,   field;
+
+  Object.keys(inputAttrs).forEach(function(attName){
+    strAttrs += " " + attName + '="' + inputAttrs[attName] + '"'
+  })
 
   field = '<div class="input-field">' +
     '<label for="' + name + '" data-error="' + msg + '">' + labelVal + '</label>' +
-    '<input type="' + type + '" id="' + name + '" value="' + data + '" />' +
+    '<input type="' + type + '" name="' + name + '" id="' + name + '" value="' + data + '" ' + strAttrs + '/>' +
     '</div>';
 
   return new HBars.SafeString(field);
@@ -34,11 +51,12 @@ exports.inlineInput = function inlineInput(options){
   ,   labelVal = options.hash.labelVal || ""
   ,   msg = options.hash.msg || ""
   ,   data = options.hash.data || ""
+  ,   checked = data ? "checked" : ""
   ,   type = options.hash.type || ""
   ,   field;
 
   field = '<p class="inline-input">' +
-    '<input type="' + type + '" id="' + name + '" value="' + data + '" />' +
+    '<input type="' + type + '" name="' + name + '" id="' + name + '" value="' + data + '" />' +
     '<label for="' + name + '" data-error="' + msg + '">' + labelVal + '</label>' +
     '</p>';
 

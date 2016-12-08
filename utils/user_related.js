@@ -1,6 +1,7 @@
 var conf = require("../config")
 ,   merge = require('lodash.merge')
 ,   models = require('../models/index')
+,   Promise = require("bluebird")
 
 var default_err_msgs = {
   first_name: {
@@ -34,29 +35,6 @@ var default_err_msgs = {
   }
 }
 
-function retrieveErrorMsgs(desired_atts, des_err_msgs){
-  var att, msg;
-  var err_msgs = {};
-
-  desired_atts.forEach(function(att){
-    err_msgs[att] = {}
-  });
-
-  if(typeof(des_err_msgs) !== 'undefined')
-  {
-    for (att in des_err_msgs) { err_msgs[att] = des_err_msgs[att]; }
-  }
-
-  for(att in default_err_msgs){
-    for(msg in default_err_msgs[att]){
-      if(err_msgs[att] && !err_msgs[att][msg])
-        err_msgs[att][msg] = default_err_msgs[att][msg];
-    }
-  }
-
-  return err_msgs;
-}
-
 function arrangeValidationErrors(errors){
   var updatedErrors = {};
   errors.forEach(function(val){
@@ -74,24 +52,22 @@ exports.validateRegister = function(req, res, next){
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login.hbs'
   ,   model_name = typeof(options.model_name) === 'string' ? options.model_name : "realtor"
 
-  var err_msgs = retrieveErrorMsgs(['first_name', 'last_name', 'email', 'password'])
-
   //validators
-  req.checkBody('first_name', err_msgs.first_name.empty ).notEmpty();
-  req.checkBody('last_name', err_msgs.last_name.empty ).notEmpty();
-  req.checkBody('email', err_msgs.email.empty ).notEmpty();
-  req.checkBody('password', err_msgs.password.empty ).notEmpty();
+  req.checkBody('first_name', default_err_msgs.first_name.empty ).notEmpty();
+  req.checkBody('last_name', default_err_msgs.last_name.empty ).notEmpty();
+  req.checkBody('email', default_err_msgs.email.empty ).notEmpty();
+  req.checkBody('password', default_err_msgs.password.empty ).notEmpty();
 
   //sanitizers
   req.sanitizeBody('email').normalizeEmail();
 
   if(!req.validationErrors()){
     //TODO: restrict password to certain characters?
-    req.checkBody('email', err_msgs.email.fake ).isEmail();
+    req.checkBody('email', default_err_msgs.email.fake ).isEmail();
   }
 
   if(!req.validationErrors()) {
-    req.checkBody('email', err_msgs.email.in_use).isEmailAvailable(model_name);
+    req.checkBody('email', default_err_msgs.email.in_use).isEmailAvailable(model_name);
   }
 
   req.asyncValidationErrors()
@@ -114,12 +90,11 @@ exports.validateLogin = function(req, res, next){
   var email = req.body.email
   ,   options = typeof(res.locals) !== 'undefined' ? res.locals : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login.hbs'
-  ,   err_msgs = retrieveErrorMsgs(['email', 'password']);
 
   //TODO: redirect to dashboard or something if already logged in, mayyybe
 
-  req.checkBody('email', err_msgs.email.empty ).notEmpty();
-  req.checkBody('password', err_msgs.password.empty ).notEmpty();
+  req.checkBody('email', default_err_msgs.email.empty ).notEmpty();
+  req.checkBody('password', default_err_msgs.password.empty ).notEmpty();
 
   if(req.validationErrors())
   {
@@ -136,7 +111,7 @@ exports.validateLogin = function(req, res, next){
   }
 }
 
-exports.validateAndSaveAddress = function(req, res){
+exports.validateAndSaveHome = function(req, res){
 
   var homeType = req.body.homeType
   ,   homeSize = req.body.homeSize
@@ -157,14 +132,13 @@ exports.validateAndSaveAddress = function(req, res){
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'basic-home-information.hbs'
   ,   suc_url = typeof(options.suc_url) === 'string' ? options.suc_url : '/homeowners/advanced-home-information'
 
-  var err_msgs = retrieveErrorMsgs(['address', 'street_number', 'standard'])
   var messages;
 
   //TODO: add some more validators
   req.checkBody('builtIn', "Please tell us approx when your home was built.").notEmpty().isInt({ min: 1850, max: 2017, allow_leading_zeroes: false });
   req.checkBody('homeSize', "Please tell us the approx size of your home.").notEmpty().isInt({ min: 0, max: 500000, allow_leading_zeroes: false });
-  req.checkBody('streetNumber', err_msgs.street_number.empty ).notEmpty();
-  req.checkBody('address', err_msgs.address.empty ).notEmpty();
+  req.checkBody('streetNumber', default_err_msgs.street_number.empty ).notEmpty();
+  req.checkBody('address', default_err_msgs.address.empty ).notEmpty();
 
   if(address &&
      (!route ||
@@ -225,13 +199,59 @@ exports.validateAndSaveAddress = function(req, res){
       req.session.listing = {id: listing.id}
       res.redirect(suc_url);
     }).catch(function(e){
+      //TODO: redirect properly on database write
       console.error("error: ", e)
     })
   }
 }
 
 exports.validateAndSaveHomeDetails = function(req, res){
-  console.log(session);
+  //NOTE: for each detail, create a new homeowner detail
+  var options = typeof(res.locals) !== 'undefined' ? res.locals : {}
+  ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'basic-home-information.hbs'
+  ,   suc_url = typeof(options.suc_url) === 'string' ? options.suc_url : '/homeowners/advanced-home-information'
+  ,   form_data = req.body
+  ,   parsed_data = {}
+
+  //HACK: materialize is only useful for this prototype :(
+  Object.keys(form_data).forEach(function(key){
+    var s = key.split('_');
+    if(s[1] === 'csrf'){
+      return;
+    }
+    else if(s[1] === 'size'){
+      //numbers
+      if(form_data[key]){
+        parsed_data[s[0]] = parsed_data[s[0]] || {}
+        parsed_data[s[0]]['size'] = form_data[key];
+        //TODO: validate as numbers here
+      }
+    }
+    else {
+      //checkboxes onlyyyyy
+      parsed_data[s[0]] = parsed_data[s[0]] || {}
+      //NOTE: there's got to be a better way then space separated values...
+      parsed_data[s[0]]['text'] = parsed_data[s[0]]['text'] ? parsed_data[s[0]]['text'] + s[1] + " " : s[1] + " "
+    }
+  })
+
+  //TODO: find and update...or create
+  //SEE: http://stackoverflow.com/questions/18304504/create-or-update-sequelize
+  var modelsCreated = Object.keys(parsed_data).map(function(key){
+    return models["homeDetail"].create({
+      homeId: req.session.home.id,
+      name: key,
+      size: parsed_data[key]['size'] || "",
+      features: parsed_data[key]['text'] || ""
+    })
+  })
+
+  Promise.all(modelsCreated).then(function(){
+    res.redirect(suc_url);
+  }).catch(function(e){
+    //TODO: redirect properly on database write
+    console.error("error: ", e)
+  })
 }
 
 exports.isLoggedIn = function isLoggedIn(req, res, next) {

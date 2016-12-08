@@ -38,11 +38,6 @@ module.exports = function(sequelize, DataTypes) {
     tier3Commission: percentageType('tier3Commission')
   }, {
     freezeTableName: true
-    , classMethods: {
-      associate: function(models) {
-        Commission.belongsTo(models.listing);
-      }
-    }
   });
 
   return Commission;
