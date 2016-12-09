@@ -58,6 +58,9 @@ exports.validateRegister = function(req, res, next){
   req.checkBody('email', default_err_msgs.email.empty ).notEmpty();
   req.checkBody('password', default_err_msgs.password.empty ).notEmpty();
 
+//TODO: remove when openned to public
+  req.checkBody('email', "Sorry, but only the founders have accounts for now." ).isInternalEmail()
+
   //sanitizers
   req.sanitizeBody('email').normalizeEmail();
 
@@ -95,6 +98,9 @@ exports.validateLogin = function(req, res, next){
 
   req.checkBody('email', default_err_msgs.email.empty ).notEmpty();
   req.checkBody('password', default_err_msgs.password.empty ).notEmpty();
+
+  //TODO: remove when openned to public
+  req.checkBody('email', "Sorry, but only the founders can login for now." ).isInternalEmail()
 
   if(req.validationErrors())
   {
@@ -236,6 +242,7 @@ exports.validateAndSaveHomeDetails = function(req, res){
   })
 
   //TODO: find and update...or create
+  //      can find in db based on name and home id
   //SEE: http://stackoverflow.com/questions/18304504/create-or-update-sequelize
   var modelsCreated = Object.keys(parsed_data).map(function(key){
     return models["homeDetail"].create({

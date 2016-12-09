@@ -94,10 +94,7 @@ passport.deserializeUser(strategies.deserializer);
 
 //validator (from GH page for express-validator)
 app.use(expressValidator({
-  customValidators:{
-    isEmailAvailable: validators.isEmailAvailable
-    , isUsernameAvailable: validators.isUsernameAvailable
-  }
+  customValidators: validators
   , errorFormatter: function(param, msg, value){
     var namespace = param.split('.')
     ,   root = namespace.shift()

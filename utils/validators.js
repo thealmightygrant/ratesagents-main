@@ -29,3 +29,9 @@ exports.isUsernameAvailable = function(username, model_name) {
 exports.isEmailAvailable = function(email, model_name) {
   return isValueInUse("email", email, model_name);
 }
+
+exports.isInternalEmail = function(email) {
+  //later on we can make this email.indexOf("ratesandagents.com") !== -1
+  return (email === "grant@ratesandagents.com") ||
+          (email === "casey@ratesandagents.com")
+}
