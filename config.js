@@ -60,6 +60,10 @@ var conf = convict({
     dialect: {
       format: ["postgres"],
       default: "postgres"
+    },
+    loggin: {
+      format: Boolean,
+      default: true
     }
   },
   auth: {
