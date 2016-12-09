@@ -61,7 +61,7 @@ var conf = convict({
       format: ["postgres"],
       default: "postgres"
     },
-    loggin: {
+    logging: {
       format: Boolean,
       default: true
     }
