@@ -1,0 +1,53 @@
+<h3 class="center small-t-room">Your Home Information</h3>
+<h4 class="center small-b-room">Step 2 of 3</h4>
+<form method="post" class="signup-form" action="/homeowners/advanced-home-information">
+  <!-- TODO: refector into some partials, this is ridiculous -->
+  <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
+  <div class="row">
+    <div class="col push-m9 m3 push-s7 s5 inline input-field">
+      <button class="btn waves-effect waves-light" type="submit">Next</button>
+    </div>
+  </div>
+  <!-- TODO: not really possible with current setup -->
+  <!-- <div class="inline input-field"> -->
+  <!-- <a class="btn blue darken-2 waves-effect waves-light" href="/homeowners/basic-home-information">Back</a> --->
+  <!-- </div> -->
+  <div class="row">
+    <div class="col s12 m6 l5 offset-l1">
+      <ul class="collapsible" data-collapsible="expandable">
+        <li>
+          <!-- TODO: it would be pretty awesome to have some badges
+          on these collapsibles and to do accordion style -->
+          <div class="collapsible-header">% over sale price - tiered commission</div>
+          <div class="collapsible-body">
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">% of sale price - tiered commission</div>
+          <div class="collapsible-body">
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Single Rate Commission</div>
+          <div class="collapsible-body">
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Flat Fee</div>
+          <div class="collapsible-body">
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col s12 m6 l5">
+      <div class="row">
+        <!-- TODO: make these two easier to use -->
+        <div class="col s12 m6">
+          {{{numberField name="listing_price" label="Listing Price: " msg=messages.listing_price min="10000" step="100" default="300000" data=data.listing_price}}}
+        </div>
+        <div class="col s12 m6">
+          {{{numberField name="min_sale_price" label="Min Acceptable Sale Price: " msg=messages.min_sale_price min="10000" step="100" default="300000" data=data.listing_price}}}
+        </div>
+    </div>
+  </div>
+</form>

@@ -1,11 +1,26 @@
 var HBars = require('handlebars')
 ,   merge = require('lodash.merge')
 
-exports.getDateNumeral = function getDateNumeral(){
+module.exports = {
+  getDateNumeral: getDateNumeral
+  , ifEquals: ifEquals
+  , str: str  //Where the fuck is this used?? and why does it exist?
+
+  , numberField: numberField
+
+  , inlineRange: inlineRange
+  , inlineCheckbox: inlineCheckbox
+
+  , socialTags: socialTags
+
+  , navLinks: navLinks
+}
+
+function getDateNumeral(){
   return '' + new Date().getTime();
 }
 
-exports.ifEquals = function ifEquals(item1, item2, options){
+function ifEquals(item1, item2, options){
   if(item1 === item2){
     return options.fn(this);
   }
@@ -14,56 +29,131 @@ exports.ifEquals = function ifEquals(item1, item2, options){
   }
 }
 
-exports.sizeField = function sizeField(options){
-  options.hash.type = "number"
-  options.hash.inputAttrs = merge(options.hash.inputAttrs,
-    {
-      min: "0",
-      step: "100"
-    })
-  return exports.inputField(options)
+function str(str1, str2){
+  return str1 + str2;
 }
 
-exports.inputField = function inputField(options){
-  var name = options.hash.name || ""
-  ,   labelVal = options.hash.labelVal || ""
-  ,   msg = options.hash.msg || ""
-  ,   data = options.hash.data || ""
-  ,   type = options.hash.type || "text"
-  ,   inputAttrs = options.hash.inputAttrs || {}
-  ,   strAttrs = ""
-  ,   field;
+function numberField(options){
+  var numberOptions = {
+    input: {
+      attrs: {
+        type: "number"
+        , min: options.hash.min || "0"
+        , name: options.hash.name
+        , id: options.hash.name
+        , max: options.hash.max
+        , step: options.hash.step || "100"
+        , value: options.hash.data || options.hash.default
+      }
+    }
+    , className: options.hash.className || ""
+    , label: {
+      attrs: {
+        for: options.hash.name
+        , "data-error": options.hash.msg
+      }
+      , value: options.hash.label || ""
+    }
+  }
 
-  Object.keys(inputAttrs).forEach(function(attName){
-    strAttrs += " " + attName + '="' + inputAttrs[attName] + '"'
+  //QUESTION: remove merge to speed things up a bit?
+  return inputField(merge(options, numberOptions))
+}
+
+//NOTE: not very DRY, might be able to merge via
+//      another intermediary fnc with numberField
+function inlineCheckbox(options){
+  var checkboxOptions = {
+    input: {
+      attrs: {
+        type: "checkbox"
+        , name: options.hash.name
+        , id: options.hash.name
+        , checked: options.hash.data
+      }
+    }
+    , className: options.hash.className || ""
+    , label: {
+      attrs: {
+        for: options.hash.name
+        , "data-error": options.hash.msg
+      }
+      , value: options.hash.label || ""
+    }
+  }
+
+  console.log(checkboxOptions)
+
+  //QUESTION: remove merge to speed things up a bit?
+  return inlineInput(merge(options, checkboxOptions))
+}
+
+//NOTE: not very DRY, might be able to merge via
+//      another intermediary fnc with numberField
+function inlineRange(options){
+  var rangeOptions = {
+    input: {
+      attrs: {
+        type: "range"
+        , min: options.hash.min || "0"
+        , name: options.hash.name
+        , id: options.hash.name
+        , max: options.hash.max || "10000000"
+        , step: options.hash.step || "100"
+        , value: options.hash.data || options.hash.default
+      }
+    }
+    , className: options.hash.className || "range-field"
+    , label: {
+      attrs: {
+        for: options.hash.name
+        , "data-error": options.hash.msg
+      }
+      , value: options.hash.label || ""
+    }
+  }
+
+  //QUESTION: remove merge to speed things up a bit?
+  return inlineInput(merge(options, rangeOptions))
+}
+
+function attrsTransformer(attrsObj){
+  var strAttrs = ""
+  Object.keys(attrsObj).forEach(function(attName){
+    if(attrsObj[attName])
+      strAttrs += " " + attName + '="' + attrsObj[attName] + '"'
   })
-
-  field = '<div class="input-field">' +
-    '<label for="' + name + '" data-error="' + msg + '">' + labelVal + '</label>' +
-    '<input type="' + type + '" name="' + name + '" id="' + name + '" value="' + data + '" ' + strAttrs + '/>' +
-    '</div>';
-
-  return new HBars.SafeString(field);
+  return strAttrs;
 }
 
-exports.inlineInput = function inlineInput(options){
-  var name = options.hash.name || ""
-  ,   labelVal = options.hash.labelVal || ""
-  ,   msg = options.hash.msg || ""
-  ,   data = options.hash.data || ""
-  ,   checked = data ? "checked" : ""
-  ,   type = options.hash.type || ""
-  ,   field;
-
-  field = '<p class="inline-input">' +
-    '<input type="' + type + '" name="' + name + '" id="' + name + '" value="' + data + '" />' +
-    '<label for="' + name + '" data-error="' + msg + '">' + labelVal + '</label>' +
-    '</p>';
-
-  return new HBars.SafeString(field);
+function baseInput(options){
+  var inputStrAttrs = attrsTransformer(options.input.attrs)
+  ,   labelStrAttrs = attrsTransformer(options.label.attrs)
+  ,   field = '<' + options.tagType + ' class="' + options.baseClassName + ' ' + options.className + '">' +
+        '<input ' + inputStrAttrs + '/>' +
+        '<label ' + labelStrAttrs + '>' + options.label.value + '</label>' +
+        '</' + options.tagType + '>';
+  return field;
 }
 
-exports.socialTags = function socialTags(options) {
+function inputField(options){
+  var fieldOptions = {
+    tagType: "div",
+    baseClassName: "input-field"
+  }
+  return new HBars.SafeString(baseInput(merge(options, fieldOptions)));
+}
+
+
+function inlineInput(options){
+  var inlineOptions = {
+    tagType: "p",
+    baseClassName: "inline-input"
+  }
+  return new HBars.SafeString(baseInput(merge(options, inlineOptions)))
+}
+
+function socialTags(options) {
   var tags = options.hash.socialData ? options.hash.socialData : {};
   if(!tags.url) tags.url = "https://ratesandagents.com/" + tags.pageName;
   if(!tags.siteName) tags.siteName = "Rates and Agents";
@@ -90,11 +180,8 @@ exports.socialTags = function socialTags(options) {
   return new HBars.SafeString(socialTags);
 }
 
-//TODO: fuck this function, this should be removed eventually
-exports.str = function str(str1, str2){
-  return str1 + str2;
-}
 
+//TODO: as Linus says, everything below here doesn't have a good flavor, reafactor it please
 function createClassedLink(href, value, options){
   if(!options) options = {};
   var anchorClassStr = options.anchorClassName ? ' class="' + options.anchorClassName + '"' : '';
@@ -119,7 +206,6 @@ function createHtmlLinks(dataArr, options){
 }
 
 function createDropdownLink(dropdownName, href, value){
-  console.log("value: ", value)
   return '<li><a class="dropdown-button" data-constrainwidth="false" ' + (href ? 'href="' + href + '" ' : '') + 'data-activates="' + dropdownName + '" data-hover="true" data-beloworigin="true">' + value + '</a></li>'
 }
 
@@ -133,7 +219,7 @@ function tabLink(href, value, options){
   return createClassedLink(href, value, options)
 }
 
-exports.navLinks = function navLinks(options) {
+function navLinks(options) {
   var navData = options.hash.navData || {}
   ,   tabData = options.hash.tabData || []
   ,   navType = options.hash.navType

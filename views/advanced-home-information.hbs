@@ -20,31 +20,31 @@
           on these collapsibles and to do accordion style -->
           <div class="collapsible-header">Backyard</div>
           <div class="collapsible-body">
-            {{{sizeField name="backyard_size" type="number" msg=messages.backyard_size labelVal="Approx. area (in sq ft): " data=data.backyard_size}}}
-            {{{inlineInput name="backyard_private" type="checkbox" labelVal="Private" data=data.backyard_private}}}
-            {{{inlineInput name="backyard_swingset" type="checkbox" labelVal="Swingset" data=data.backyard_swingset}}}
+            {{{numberField name="backyard_size" msg=messages.backyard_size label="Approx. area (in sq ft): " data=data.backyard_size}}}
+            {{{inlineCheckbox name="backyard_private" label="Private" data=data.backyard_private}}}
+            {{{inlineCheckbox name="backyard_swingset" label="Swingset" data=data.backyard_swingset}}}
           </div>
         </li>
         <li>
           <div class="collapsible-header">Garage</div>
           <div class="collapsible-body">
-            {{{sizeField name="garage_size" type="number" msg=messages.garage_size labelVal="Approx. area (in sq ft): " data=data.garage_size}}}
-            {{{inlineInput name="garage_private" type="checkbox" labelVal="Private" data=data.garage_private}}}
+            {{{numberField name="garage_size" msg=messages.garage_size label="Approx. area (in sq ft): " data=data.garage_size}}}
+            {{{inlineCheckbox name="garage_private" label="Private" data=data.garage_private}}}
           </div>
         </li>
         <li>
           <div class="collapsible-header">Storage</div>
           <div class="collapsible-body">
-            {{{sizeField name="storage_size" type="number" msg=messages.storage_size labelVal="Approx. area (in sq ft): " data=data.storage_size}}}
-            {{{inlineInput name="storage_private" type="checkbox" labelVal="Private" data=data.storage_private}}}
+            {{{numberField name="storage_size" msg=messages.storage_size label="Approx. area (in sq ft): " data=data.storage_size}}}
+            {{{inlineCheckbox name="storage_private" label="Private" data=data.storage_private}}}
           </div>
         </li>
         <li>
           <div class="collapsible-header">Driveway or External Parking</div>
           <div class="collapsible-body">
-            {{{sizeField name="parking_size" type="number" msg=messages.parking_size labelVal="Approx. area (in sq ft): " data=data.parking_size}}}
-            {{{inlineInput name="parking_private" type="checkbox" labelVal="Private" data=data.parking_private}}}
-            {{{inlineInput name="parking_covered" type="checkbox" labelVal="Covered" data=data.parking_covered}}}
+            {{{numberField name="parking_size" msg=messages.parking_size label="Approx. area (in sq ft): " data=data.parking_size}}}
+            {{{inlineCheckbox name="parking_private"  label="Private" data=data.parking_private}}}
+            {{{inlineCheckbox name="parking_covered"  label="Covered" data=data.parking_covered}}}
           </div>
         </li>
       </ul>
@@ -54,24 +54,24 @@
         <li>
           <div class="collapsible-header">Spa</div>
           <div class="collapsible-body">
-            {{{sizeField name="spa_size" type="number" msg=messages.spa_size labelVal="Approx. area (in sq ft): " data=data.spa_size}}}
-            {{{inlineInput name="spa_private" type="checkbox" labelVal="Private" data=data.spa_private}}}
+            {{{numberField name="spa_size" msg=messages.spa_size label="Approx. area (in sq ft): " data=data.spa_size}}}
+            {{{inlineCheckbox name="spa_private"  label="Private" data=data.spa_private}}}
           </div>
         </li>
         <li>
           <div class="collapsible-header">Pool</div>
           <div class="collapsible-body">
-            {{{sizeField name="pool_size" type="number" msg=messages.pool_size labelVal="Approx. area (in sq ft): " data=data.pool_size}}}
-            {{{inlineInput name="pool_private" type="checkbox" labelVal="Private" data=data.pool_private}}}
-            {{{inlineInput name="pool_heated" type="checkbox" labelVal="Heated" data=data.pool_heated}}}
+            {{{numberField name="pool_size" msg=messages.pool_size label="Approx. area (in sq ft): " data=data.pool_size}}}
+            {{{inlineCheckbox name="pool_private"  label="Private" data=data.pool_private}}}
+            {{{inlineCheckbox name="pool_heated"  label="Heated" data=data.pool_heated}}}
           </div>
         </li>
         <li>
           <div class="collapsible-header">Air Conditioning</div>
           <div class="collapsible-body">
-            {{{inlineInput name="ac_private" type="checkbox" labelVal="Private" data=data.ac_private}}}
-            {{{inlineInput name="ac_central" type="checkbox" labelVal="Whole home" data=data.ac_central}}}
-            {{{inlineInput name="ac_swampcooler" type="checkbox" labelVal="Swamp Cooler" data=data.ac_swampcooler}}}
+            {{{inlineCheckbox name="ac_private"  label="Private" data=data.ac_private}}}
+            {{{inlineCheckbox name="ac_central"  label="Whole home" data=data.ac_central}}}
+            {{{inlineCheckbox name="ac_swampcooler"  label="Swamp Cooler" data=data.ac_swampcooler}}}
           </div>
         </li>
         <!-- TODO: all the appliances???? -->
@@ -79,11 +79,11 @@
         <li>
           <div class="collapsible-header">Heating</div>
           <div class="collapsible-body">
-            {{{inlineInput name="heater_private" type="checkbox" labelVal="Private" data=data.heater_private}}}
-            {{{inlineInput name="heater_central" type="checkbox" labelVal="Whole home" data=data.heater_central}}}
-            {{{inlineInput name="heater_gas" type="checkbox" labelVal="Gas" data=data.heater_gas}}}
-            {{{inlineInput name="heater_oil" type="checkbox" labelVal="Oil" data=data.heater_oil}}}
-            {{{inlineInput name="heater_electric" type="checkbox" labelVal="Electric" data=data.heater_electric}}}
+            {{{inlineCheckbox name="heater_private"  label="Private" data=data.heater_private}}}
+            {{{inlineCheckbox name="heater_central"  label="Whole home" data=data.heater_central}}}
+            {{{inlineCheckbox name="heater_gas"  label="Gas" data=data.heater_gas}}}
+            {{{inlineCheckbox name="heater_oil"  label="Oil" data=data.heater_oil}}}
+            {{{inlineCheckbox name="heater_electric"  label="Electric" data=data.heater_electric}}}
           </div>
         </li>
       </ul>

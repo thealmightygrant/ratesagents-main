@@ -108,13 +108,13 @@ router.get('/advanced-home-information'
              res.render('advanced-home-information.hbs', prd);
            })
 
-router.get('/desired-realtor'
+router.get('/listing-commission-information'
            , user_utils.isLoggedIn
            , function(req, res){
              var prd = merge(res.locals
                              , conf.get('pages.advanced-home-information')
                              , { data: { csrfToken: req.csrfToken() }})
-             res.render('advanced-home-information.hbs', prd);
+             res.render('listing-commission-information.hbs', prd);
            })
 
 router.post('/basic-home-information'
@@ -130,7 +130,7 @@ router.post('/advanced-home-information'
             , user_utils.isLoggedIn
             , function(req, res, next){
               res.locals.err_view = 'advanced-home-information.hbs'
-              res.locals.suc_url = '/homeowners/desired-realtor'
+              res.locals.suc_url = '/homeowners/listing-commission-information'
               next();
             }
             , user_utils.validateAndSaveHomeDetails)

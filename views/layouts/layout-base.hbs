@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
   {{> page/head socialData=this.socialData}}
 
   <body>
@@ -12,12 +12,14 @@
         {{{body}}}
       </main>
 
-      <!-- TODO: add a similar partial for footers -->
+      <!-- TODO: add a partial for footers -->
       <footer class="footer">
         <p>© 2016 Rates and Agents LLC</p>
       </footer>
-
     </div>
+    <script type="text/javascript" src="/js/vendor/jquery-2.1.1.min.js?tcb={{getDateNumeral}}"></script>
+    <script type="text/javascript" src="/js/vendor/materialize.min.js?tcb={{getDateNumeral}}"></script>
+    <script type="text/javascript" src="/js/main.js?tcb={{getDateNumeral}}"></script>
     {{#if includeMap}}
       <script src="https://maps.googleapis.com/maps/api/js?key={{data.googleMaps.apiKey}}&libraries=places&callback=initMap" async defer></script>
     {{/if}}
