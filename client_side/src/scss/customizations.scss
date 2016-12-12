@@ -141,6 +141,10 @@ $very-small-room: 0.75em;
   }
 }
 
+.ra-slider {
+  margin: 2rem 0;
+}
+
 
 //special purpose for form error msgs
 input:not([type]),
@@ -173,4 +177,8 @@ textarea.materialize-textarea {
 
 .collapsible-body p.inline-input {
   padding: 0.5rem 2rem;
+}
+
+.collapsible-body {
+  @extend .grey, .lighten-4;
 }

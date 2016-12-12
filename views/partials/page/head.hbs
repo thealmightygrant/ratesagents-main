@@ -4,8 +4,22 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <link rel="stylesheet" href="/css/main.css?tcb={{getDateNumeral}}" />
 
+  <link rel="stylesheet" href="/css/main.css?tcb={{getDateNumeral}}" />
+  <link rel="stylesheet" href="/css/vendor/nouislider.min.css?tcb={{getDateNumeral}}" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+  <script>
+   WebFontConfig = {
+     google: { families: ['Roboto', 'Material Icons']}
+   };
+
+   (function(d) {
+     var wf = d.createElement('script'), s = d.scripts[0];
+     wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js';
+     s.parentNode.insertBefore(wf, s);
+   })(document);
+  </script>
   <!-- TODO serve fonts locally? -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">

@@ -8,6 +8,7 @@ module.exports = {
 
   , numberField: numberField
 
+  , sliderBlock: sliderBlock
   , inlineRange: inlineRange
   , inlineCheckbox: inlineCheckbox
 
@@ -46,6 +47,7 @@ function numberField(options){
         , value: options.hash.data || options.hash.default
       }
     }
+    , overwriteClass: (options.hash.overwriteClass === "true") || false
     , className: options.hash.className || ""
     , label: {
       attrs: {
@@ -61,7 +63,7 @@ function numberField(options){
 }
 
 //NOTE: not very DRY, might be able to merge via
-//      another intermediary fnc with numberField
+//      another intermediary fnc with other fields
 function inlineCheckbox(options){
   var checkboxOptions = {
     input: {
@@ -72,6 +74,7 @@ function inlineCheckbox(options){
         , checked: options.hash.data
       }
     }
+    , overwriteClass: (options.hash.overwriteClass === "true") || false
     , className: options.hash.className || ""
     , label: {
       attrs: {
@@ -81,9 +84,6 @@ function inlineCheckbox(options){
       , value: options.hash.label || ""
     }
   }
-
-  console.log(checkboxOptions)
-
   //QUESTION: remove merge to speed things up a bit?
   return inlineInput(merge(options, checkboxOptions))
 }
@@ -103,6 +103,7 @@ function inlineRange(options){
         , value: options.hash.data || options.hash.default
       }
     }
+    , overwriteClass: (options.hash.overwriteClass === "true") || false
     , className: options.hash.className || "range-field"
     , label: {
       attrs: {
@@ -117,6 +118,29 @@ function inlineRange(options){
   return inlineInput(merge(options, rangeOptions))
 }
 
+function sliderBlock(options){
+  var rangeOptions = {
+    input: {
+      attrs: {
+        type: "hidden"
+        , name: options.hash.name
+        , max: options.hash.max || "1000000"
+        , min: options.hash.min || "0"
+        , step: options.hash.step || "100"
+        , id: options.hash.name
+        , value: options.hash.data || options.hash.default
+      }
+    }
+    , overwriteClass: (options.hash.overwriteClass === "true") || false
+    , className: options.hash.className || "ra-slider"
+    , label: { attrs: {} }
+  }
+
+  console.log(inputField(merge(options, rangeOptions)))
+  //QUESTION: remove merge to speed things up a bit?
+  return inputField(merge(options, rangeOptions))
+}
+
 function attrsTransformer(attrsObj){
   var strAttrs = ""
   Object.keys(attrsObj).forEach(function(attName){
@@ -129,9 +153,10 @@ function attrsTransformer(attrsObj){
 function baseInput(options){
   var inputStrAttrs = attrsTransformer(options.input.attrs)
   ,   labelStrAttrs = attrsTransformer(options.label.attrs)
-  ,   field = '<' + options.tagType + ' class="' + options.baseClassName + ' ' + options.className + '">' +
+  ,   catClassName = options.overwriteClass ? "" : (options.baseClassName + ' ')
+  ,   field = '<' + options.tagType + ' class="' + catClassName + options.className + '">' +
         '<input ' + inputStrAttrs + '/>' +
-        '<label ' + labelStrAttrs + '>' + options.label.value + '</label>' +
+        (labelStrAttrs ? '<label ' + labelStrAttrs + '>' + options.label.value + '</label>' : "") +
         '</' + options.tagType + '>';
   return field;
 }
