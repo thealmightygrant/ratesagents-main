@@ -31,6 +31,7 @@
       var tradCommission = $("#trad_commission")
       var flatFee = $("#flat_fee")
       var donutChart = document.getElementById("commission_donut_chart");
+      var lineChart = document.getElementById("commission_line_chart")
       var regDonutChart = document.getElementById("reg_commission_donut_chart");
 
       function calculatedCommission(){
@@ -50,6 +51,10 @@
         return (listingPrice.val() - buyPrice.val()) - realtorFee - miscFee
       }
 
+      function tieredCommission(){
+        //switch statement?
+      }
+
       var calculatedRealtorFee = calculatedCommission()
       ,   defaultRealtorFee = defaultCommission()
       ,   miscFee = getMiscFee()
@@ -64,49 +69,13 @@
         defaultNetProfit = getHomeownerProfit(defaultRealtorFee, miscFee);
 
         regDonutChart.data.datasets[0].data = [defaultNetProfit.toFixed(2), defaultRealtorFee.toFixed(2), miscFee.toFixed(2)];
-        // var regCtx = regDonutChart.chart.ctx;
-        // var regWidth = regDonutChart.chart.width;
-        // var regHeight = regDonutChart.chart.height;
-        // var regText = "$" + defaultNetProfit.toFixed(2)
-        // regCtx.fillText(regText,
-        //                 Math.round((regWidth - regCtx.measureText(regText).width) / 2),
-        //                 regHeight / 2);
-        // regCtx.save();
         regDonutChart.update();
 
         myDonutChart.data.datasets[0].data = [calculatedNetProfit.toFixed(2), calculatedRealtorFee.toFixed(2), miscFee.toFixed(2)];
-        // var myCtx = regDonutChart.chart.ctx;
-        // var myWidth = regDonutChart.chart.width;
-        // var myHeight = regDonutChart.chart.height;
-        // var myText = "$" + defaultNetProfit.toFixed(2)
-        // regCtx.fillText(regText,
-        //                 Math.round((regWidth - regCtx.measureText(regText).width) / 2),
-        //                 regHeight / 2);
         myDonutChart.update();
       })
 
-      // Chart.pluginService.register({
-      //   beforeDraw: function(chart) {
-      //     var width = chart.chart.width,
-      //         height = chart.chart.height,
-      //         ctx = chart.chart.ctx;
-
-      //     ctx.restore();
-      //     var fontSize = (height / 114).toFixed(2);
-      //     ctx.font = fontSize + "em sans-serif";
-      //     ctx.textBaseline = "middle";
-
-      //     var text = "75%",
-      //         textX = Math.round((width - ctx.measureText(text).width) / 2),
-      //         textY = height / 2;
-
-      //     ctx.fillText(text, textX, textY);
-      //     ctx.save();
-      //   }
-      // });
-
-
-      var chartData = function chartData(inputData){
+      function donutChartData(inputData){
         //sanitize data
         var sanData = inputData.map(function(datum){
           return datum.toFixed(2);
@@ -148,11 +117,12 @@
 
           var text;
           //TODO: better conversion for home profit
-          if(chart.chart.canvas.id.indexOf("reg_commission") !== -1)
+          if(chart.chart.canvas.id.indexOf("reg_commission_donut") !== -1)
             text = "$" + getHomeownerProfit(defaultRealtorFee, miscFee).toFixed(0).toString().replace(/[0-9](?=(?:[0-9]{3})+(?![0-9]))/, "$&,");
-          else
+          else if(chart.chart.canvas.id.indexOf("commission_donut") !== -1)
             text = "$" + getHomeownerProfit(calculatedRealtorFee, miscFee).toFixed(0).toString().replace(/[0-9](?=(?:[0-9]{3})+(?![0-9]))/, "$&,");
-          console.log("text: ", text)
+          if(!text)
+            return
           var textX = Math.round((width - ctx.measureText(text).width) / 2)
           //assumes 14px font size
           var textY = Math.round((height + (fontSize * 12) / 2) / 2);
@@ -162,10 +132,19 @@
         }
       });
 
+      var myCommissionLineChart = new Chart(lineChart, {
+        type: 'line',
+        data: {
+          labels: ["January", "February", "March", "April", "May", "June", "July"],
+          datasets: [{
+            data: [65, 59, 80, 81, 56, 55, 40]
+          }]
+        }
+      })
 
       var myDonutChart = new Chart(donutChart, {
         type: 'doughnut',
-        data: chartData([calculatedNetProfit, calculatedRealtorFee, miscFee]),
+        data: donutChartData([calculatedNetProfit, calculatedRealtorFee, miscFee]),
         options: {
           animation:{
             animateScale: true
@@ -181,7 +160,7 @@
 
       var regDonutChart = new Chart(regDonutChart, {
         type: 'doughnut',
-        data: chartData([defaultNetProfit, defaultRealtorFee, miscFee]),
+        data: donutChartData([defaultNetProfit, defaultRealtorFee, miscFee]),
         options: {
           animation:{
             animateScale: true
