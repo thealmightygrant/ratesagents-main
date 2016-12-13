@@ -9,7 +9,7 @@
     "autoprefix-css": "postcss --use autoprefixer --autoprefixer.browsers '> 5%, ie 9' client_side/dist/css/main.css -d client_side/dist/css",
     "build-css-prod": "npm run compile-css-prod && npm run autoprefix-css",
     "compress-images": "imagemin client_side/src/images/* -o client_side/dist/images",
-    "compress-js": "uglifyjs client_side/src/js/*.js -nm -o client_side/dist/js/main.js",
+    "compress-js": "uglifyjs client_side/src/js/*.js --no-mangle -o client_side/dist/js/main.js",
     "copy-vendor-css": "cp -rf client_side/src/css/vendor client_side/dist/css/",
     "copy-vendor-js": "cp -rf client_side/src/js/vendor client_side/dist/js/",
     "copy-all-js": "cp -rf client_side/src/js/vendor client_side/dist/js/; cp client_side/src/js/main.js client_side/dist/js/",

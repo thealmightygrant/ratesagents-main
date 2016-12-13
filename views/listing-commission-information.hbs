@@ -4,7 +4,7 @@
     <p>Please input your desired commission structure. This is not a contract, but it is an expectation that your selected realtor will have access to and that realtor's will be able to see to tailor their commission bid for you.</p>
   </div>
 </div>
-<form method="post" class="signup-form" action="/homeowners/advanced-home-information">
+<form method="post" id="commission-form" action="/homeowners/listing-commission-information">
   <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
   <div class="row">
     <div class="col s12 m8">
@@ -12,18 +12,49 @@
         <div class="col s12 m5 l4 xl3">
           <!-- NEED: flat fee (if any), tier 0, tier 1, tier 2 price, tier 3 price + commissions for each -->
           <!-- TODO: make these text fields??  -->
-          {{{numberField name="listing_price" default="400000" msg=messages.listing_price label="Home Price: " data=data.listing_price}}}
-          {{{numberField name="min_sale_price" default="370000" msg=messages.min_sale_price label="Minimum Acceptable Sale Price: " data=data.min_sale_price}}}
+          <div class="row">
+            <div class="col s6">
+              {{{numberField name="buy_price" default="370000" msg=messages.buy_price label="Buy Price: " data=data.buy_price}}}
+            </div>
+            <div class="col s6">
+              {{{numberField name="buy_year" min="1900" default="1985" max="2017" msg=messages.buy_year label="Year Bought: " data=data.buy_year}}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s6">
+              {{{numberField name="listing_price" default="400000" msg=messages.listing_price label="Listing Price: " data=data.listing_price}}}
+            </div>
+            <div class="col s6">
+              {{{numberField name="min_sale_price" default="370000" msg=messages.min_sale_price label="MAS Price: " data=data.min_sale_price}}}
+            </div>
+          </div>
           <!-- NOTE: maybe make this a dropdown instead? -->
-          {{{numberField name="flat_fee" default="5000" msg=messages.flat_fee label="Flat Fee: " data=data.flat_fee}}}
-          {{{numberField name="trad_commission" default="4.0" msg=messages.trad_commission label="Commission: " data=data.trad_commission}}}
+          <div class="row">
+            <div class="col s6">
+              {{{numberField name="flat_fee" default="5000" msg=messages.flat_fee label="Flat Fee: " data=data.flat_fee}}}
+            </div>
+            <div class="col s6">
+              {{{numberField name="trad_commission" step="0.1" default="4.0" msg=messages.trad_commission label="Commission: " data=data.trad_commission}}}
+            </div>
+          </div>
+          <p>* There are some closing costs in addition to a realtor's fees when selling a home, including your share of property taxes for the year, attorney fees, and title fees. See <a href="http://www.realtor.com/advice/sell/sellers-must-pay-closing-costs-too/">here</a> for more details.</p>
         </div>
         <div class="col s12 m7 l8 xl9">
           <ul class="tabs">
             <li class="tab"><a href="#tab1">Tab 1</a></li>
             <li class="tab"><a href="#tab2">Tab 2</a></li>
           </ul>
-          <div id="tab1">Tab 1</div>
+          <div id="tab1">
+            <div class="row">
+              <div class="col s6">
+            <!-- have to adjust size of canvas with css? might be easier to try d3?? -->
+                <canvas class="small-t-room" id="commission_donut_chart"></canvas>
+              </div>
+              <div class="col s6">
+                <canvas class="small-t-room" id="reg_commission_donut_chart"></canvas>
+              </div>
+            </div>
+          </div>
           <div id="tab2">Tab 2</div>
         </div>
       </div>
