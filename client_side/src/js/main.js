@@ -24,156 +24,277 @@
     //})
 
 
+    if(window.Chart) {
+      var commissionCalculator = (function() {
+        var listingPriceNode = $("#listing_price")
+        var minSalePriceNode = $("#min_sale_price")
+        var buyPriceNode = $("#buy_price")
+        var tradCommissionNode = $("#trad_commission")
+        var flatFeeNode = $("#flat_fee")
+        var donutChart = document.getElementById("commission_donut_chart");
+        var lineChart = document.getElementById("commission_line_chart")
+        var regDonutChart = document.getElementById("reg_commission_donut_chart");
 
-    var commissionCalculator = (function() {
-      var listingPrice = $("#listing_price")
-      var buyPrice = $("#buy_price")
-      var tradCommission = $("#trad_commission")
-      var flatFee = $("#flat_fee")
-      var donutChart = document.getElementById("commission_donut_chart");
-      var lineChart = document.getElementById("commission_line_chart")
-      var regDonutChart = document.getElementById("reg_commission_donut_chart");
+        function calculatedCommission(listingPrice, tradCommission, flatFee){
+          //TODO: validate?
+          return ((tradCommission / 100.0) * listingPrice) - flatFee;
+        }
 
-      function calculatedCommission(){
-        //TODO: validate?
-        return ((tradCommission.val() / 100.0) * listingPrice.val()) - flatFee.val();
-      }
+        function defaultCommission(listingPrice){
+          return 0.06 * listingPrice;
+        }
 
-      function defaultCommission(){
-        return 0.06 * listingPrice.val();
-      }
+        function getMiscFee(listingPrice){
+          return 0.02 * listingPrice;
+        }
 
-      function getMiscFee(){
-        return 0.02 * listingPrice.val();
-      }
+        function getHomeownerProfit(listingPrice, buyPrice, realtorFee, miscFee){
+          return (listingPrice - buyPrice) - realtorFee - miscFee
+        }
 
-      function getHomeownerProfit(realtorFee, miscFee){
-        return (listingPrice.val() - buyPrice.val()) - realtorFee - miscFee
-      }
+        function genSalesPrices(listingPrice, minSalePrice){
+          var minChartPrice = 1.0 * minSalePrice;  //inclusive of min chart price
+          var maxChartPrice = 1.1 * listingPrice;  //won't quite reach max chart price
+          var numPrices = 10.0;
+          var stepSize = ( maxChartPrice - minChartPrice ) / numPrices;
 
-      function tieredCommission(){
-        //switch statement?
-      }
+          var price, i;
+          var prices = new Array(numPrices);
+          for(i = 0, price = minChartPrice; i < numPrices; price += stepSize, i+=1){
+            prices[i] = price.toFixed(0)
+          }
+          return prices;
+        }
 
-      var calculatedRealtorFee = calculatedCommission()
-      ,   defaultRealtorFee = defaultCommission()
-      ,   miscFee = getMiscFee()
-      ,   calculatedNetProfit = getHomeownerProfit(calculatedRealtorFee, miscFee)
-      ,   defaultNetProfit = getHomeownerProfit(defaultRealtorFee, miscFee)
+        function genGrossProfits(salesPrices, buyPrice){
+          return salesPrices.map(function(listPrice){
+            return (listPrice - buyPrice).toFixed(0);
+          })
+        }
 
-      $("#commission-form").change(function(){
-        calculatedRealtorFee = calculatedCommission();
-        defaultRealtorFee = defaultCommission();
-        miscFee = getMiscFee();
-        calculatedNetProfit = getHomeownerProfit(calculatedRealtorFee, miscFee);
-        defaultNetProfit = getHomeownerProfit(defaultRealtorFee, miscFee);
+        function genRealtorFees(salesPrices, tradCommission, flatFee){
+          return salesPrices.map(function(listPrice){
+            return calculatedCommission(listPrice, tradCommission, flatFee);
+          })
+        }
 
-        regDonutChart.data.datasets[0].data = [defaultNetProfit.toFixed(2), defaultRealtorFee.toFixed(2), miscFee.toFixed(2)];
-        regDonutChart.update();
+        function genHomeownerProfits(salesPrices, buyPrice, realtorFee, miscFee){
+          return salesPrices.map(function(listPrice){
+            return getHomeownerProfit(listPrice, buyPrice, realtorFee, miscFee);
+          })
+        }
 
-        myDonutChart.data.datasets[0].data = [calculatedNetProfit.toFixed(2), calculatedRealtorFee.toFixed(2), miscFee.toFixed(2)];
-        myDonutChart.update();
-      })
+        var calculatedRealtorFee = calculatedCommission(listingPriceNode.val(),
+                                                        tradCommissionNode.val(),
+                                                        flatFeeNode.val())
+        ,   defaultRealtorFee = defaultCommission(listingPriceNode.val())
+        ,   calculatedMiscFee = getMiscFee(listingPriceNode.val())
+        ,   calculatedNetProfit = getHomeownerProfit(listingPriceNode.val(),
+                                                     buyPriceNode.val(),
+                                                     calculatedRealtorFee,
+                                                     calculatedMiscFee)
+        ,   defaultNetProfit = getHomeownerProfit(listingPriceNode.val(),
+                                                  buyPriceNode.val(),
+                                                  defaultRealtorFee,
+                                                  calculatedMiscFee)
+        ,   displayedSalesPrices = genSalesPrices(listingPriceNode.val(),
+                                                  minSalePriceNode.val())
+        ,   displayedHomeownerProfits = genHomeownerProfits(displayedSalesPrices,
+                                                            buyPriceNode.val(),
+                                                            calculatedRealtorFee,
+                                                            calculatedMiscFee)
+        ,   displayedRealtorFees = genRealtorFees(displayedSalesPrices,
+                                                   tradCommissionNode.val(),
+                                                  flatFeeNode.val())
+        ,   displayedGrossProfits = genGrossProfits(displayedSalesPrices,
+                                                   buyPriceNode.val())
 
-      function donutChartData(inputData){
-        //sanitize data
-        var sanData = inputData.map(function(datum){
-          return datum.toFixed(2);
+        $("#commission-form").change(function(){
+          calculatedRealtorFee = calculatedCommission(listingPriceNode.val(),
+                                                      tradCommissionNode.val(),
+                                                      flatFeeNode.val())
+          defaultRealtorFee = defaultCommission(listingPriceNode.val())
+          calculatedMiscFee = getMiscFee(listingPriceNode.val());
+          calculatedNetProfit = getHomeownerProfit(listingPriceNode.val(),
+                                                   buyPriceNode.val(),
+                                                   calculatedRealtorFee, calculatedMiscFee);
+          defaultNetProfit = getHomeownerProfit(listingPriceNode.val(),
+                                                buyPriceNode.val(),
+                                                defaultRealtorFee, calculatedMiscFee);
+          displayedSalesPrices = genSalesPrices(listingPriceNode.val(),
+                                                minSalePriceNode.val())
+          displayedHomeownerProfits = genHomeownerProfits(displayedSalesPrices,
+                                                          buyPriceNode.val(),
+                                                          calculatedRealtorFee,
+                                                          calculatedMiscFee)
+          displayedRealtorFees = genRealtorFees(displayedSalesPrices,
+                                                    tradCommissionNode.val(),
+                                                    flatFeeNode.val())
+          displayedGrossProfits = genGrossProfits(displayedSalesPrices,
+                                                  buyPriceNode.val())
+
+          myCommissionLineChart.labels = displayedSalesPrices
+          myCommissionLineChart.data.datasets[0].data = displayedHomeownerProfits
+          myCommissionLineChart.data.datasets[1].data = displayedRealtorFees
+          myCommissionLineChart.data.datasets[2].data = displayedGrossProfits
+          myCommissionLineChart.update()
+
+          regDonutChart.data.datasets[0].data = [defaultNetProfit.toFixed(2), defaultRealtorFee.toFixed(2), calculatedMiscFee.toFixed(2)];
+          regDonutChart.update();
+
+          myDonutChart.data.datasets[0].data = [calculatedNetProfit.toFixed(2), calculatedRealtorFee.toFixed(2), calculatedMiscFee.toFixed(2)];
+          myDonutChart.update();
         })
 
-        return {
-          labels: [
-            "Homeowner",
-            "Realtor",
-            "Other Fees"
-          ],
-          datasets: [{
-            data: sanData,
-            backgroundColor: [
-              "#FF6384",
-              "#36A2EB",
-              "#FFCE56"
+        function donutChartData(inputData){
+          //sanitize data
+          var sanData = inputData.map(function(datum){
+            return datum.toFixed(2);
+          })
+
+          return {
+            labels: [
+              "Your Profit",
+              "Realtor Compensation",
+              "Other Fees"
             ],
-            hoverBackgroundColor: [
-              "#FF6384",
-              "#36A2EB",
-              "#FFCE56"
-            ]
-          }]
-        };
-      }
-
-      Chart.pluginService.register({
-        beforeDraw: function(chart) {
-          var width = chart.chart.width,
-              height = chart.chart.height,
-              ctx = chart.chart.ctx;
-
-          ctx.restore();
-          var fontSize = (height / 134).toFixed(0);
-          ctx.font = fontSize + "em sans-serif";
-          console.log("font size: ", fontSize);
-          ctx.textBaseline = "middle";
-
-          var text;
-          //TODO: better conversion for home profit
-          if(chart.chart.canvas.id.indexOf("reg_commission_donut") !== -1)
-            text = "$" + getHomeownerProfit(defaultRealtorFee, miscFee).toFixed(0).toString().replace(/[0-9](?=(?:[0-9]{3})+(?![0-9]))/, "$&,");
-          else if(chart.chart.canvas.id.indexOf("commission_donut") !== -1)
-            text = "$" + getHomeownerProfit(calculatedRealtorFee, miscFee).toFixed(0).toString().replace(/[0-9](?=(?:[0-9]{3})+(?![0-9]))/, "$&,");
-          if(!text)
-            return
-          var textX = Math.round((width - ctx.measureText(text).width) / 2)
-          //assumes 14px font size
-          var textY = Math.round((height + (fontSize * 12) / 2) / 2);
-
-          ctx.fillText(text, textX, textY);
-          ctx.save();
+            datasets: [{
+              data: sanData,
+              backgroundColor: [
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56"
+              ],
+              hoverBackgroundColor: [
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56"
+              ]
+            }]
+          };
         }
-      });
 
-      var myCommissionLineChart = new Chart(lineChart, {
-        type: 'line',
-        data: {
-          labels: ["January", "February", "March", "April", "May", "June", "July"],
-          datasets: [{
-            data: [65, 59, 80, 81, 56, 55, 40]
-          }]
-        }
-      })
+        Chart.pluginService.register({
+          beforeDraw: function(chart) {
+            var width = chart.chart.width,
+                height = chart.chart.height,
+                ctx = chart.chart.ctx,
+                legendHeight = chart.legend.height
 
-      var myDonutChart = new Chart(donutChart, {
-        type: 'doughnut',
-        data: donutChartData([calculatedNetProfit, calculatedRealtorFee, miscFee]),
-        options: {
-          animation:{
-            animateScale: true
-          },
-          cutoutPercentage: 70,
-          title: {
-            text: "Profit on Sale with Desired Commission*",
-            position: "bottom",
-            display: true
+            ctx.restore();
+            var fontSize = (height / 134).toFixed(0);
+            ctx.font = fontSize + "em sans-serif";
+            ctx.textBaseline = "middle";
+
+            var text;
+            //TODO: better conversion for home profit
+            if(chart.chart.canvas.id.indexOf("reg_commission_donut") !== -1)
+              text = "$" + defaultNetProfit.toFixed(0).toString().replace(/[0-9](?=(?:[0-9]{3})+(?![0-9]))/, "$&,");
+            else if(chart.chart.canvas.id.indexOf("commission_donut") !== -1)
+              text = "$" + calculatedNetProfit.toFixed(0).toString().replace(/[0-9](?=(?:[0-9]{3})+(?![0-9]))/, "$&,");
+            if(!text)
+              return
+            var textX = Math.round((width - ctx.measureText(text).width) / 2)
+            //assumes 14px font size
+            var textY = Math.round((height + legendHeight - (fontSize * 15)) / 2);
+
+            ctx.fillText(text, textX, textY);
+            ctx.save();
           }
-        }
-      });
+        });
 
-      var regDonutChart = new Chart(regDonutChart, {
-        type: 'doughnut',
-        data: donutChartData([defaultNetProfit, defaultRealtorFee, miscFee]),
-        options: {
-          animation:{
-            animateScale: true
+        //QUESTION: make tooltips fixed to corner of chart?
+        var myCommissionLineChart = new Chart(lineChart, {
+          type: 'line',
+          options: {
+            scales: {
+              yAxes: [{
+                stacked: true
+              }],
+              xAxes: [{
+                scaleLabel: {
+                  labelString: 'Sale Price',
+                  display: true
+                }
+              }]
+            },
+            hover: {
+              intersect: false,
+              mode: 'index'
+            },
+            legend: {
+              display: false
+            },
+            tooltips: {
+              callbacks: {
+                title: function(ttis){
+                  return "Sale Price: $" + ttis[0].xLabel.replace(/[0-9](?=(?:[0-9]{3})+(?![0-9]))/, "$&,")
+                },
+                label: function(tti, data){
+                  return data.datasets[tti.datasetIndex].label + ": $" + tti.yLabel.toString().replace(/[0-9](?=(?:[0-9]{3})+(?![0-9]))/, "$&,")
+                }
+              },
+              intersect: false,
+              mode: 'index',
+              position: 'nearest',
+              xPadding: 15,
+              yPadding: 12
+            }
           },
-          cutoutPercentage: 70,
-          title: {
-            text: "Profit on Sale with 6% Commission*",
-            position: "bottom",
-            display: true
+          data: {
+            labels: displayedSalesPrices,
+            datasets: [{
+              data: displayedHomeownerProfits,
+              borderColor: "#FF6384",
+              //backgroundColor: "#FF6384",
+              label: "Your Profits"
+            },{
+              data: displayedRealtorFees,
+              borderColor: "#36A2EB",
+              //backgroundColor: "rgba(0, 0, 200, 0.5)",
+              label: "Realtor Compensation"
+            },{
+              data: displayedGrossProfits,
+              borderColor: "#FFCE56",
+              //backgroundColor: "#FFCE56",
+              label: "Total Profit from Sale"
+            }]
           }
-        }
-      });
-    })()
+        })
+
+        var myDonutChart = new Chart(donutChart, {
+          type: 'doughnut',
+          data: donutChartData([calculatedNetProfit, calculatedRealtorFee, calculatedMiscFee]),
+          options: {
+            animation:{
+              animateScale: true
+            },
+            cutoutPercentage: 70,
+            title: {
+              text: "Homeowner Profit on Sale with Desired Commission*",
+              position: "bottom",
+              display: true
+            }
+          }
+        });
+
+        var regDonutChart = new Chart(regDonutChart, {
+          type: 'doughnut',
+          data: donutChartData([defaultNetProfit, defaultRealtorFee, calculatedMiscFee]),
+          options: {
+            animation:{
+              animateScale: true
+            },
+            cutoutPercentage: 70,
+            title: {
+              text: "Homeowner Profit on Sale with Standard 6% Commission*",
+              position: "bottom",
+              display: true
+            }
+          }
+        });
+      })()
+    }
 
   }); // end of document ready
 })(jQuery); // end of jQuery name space

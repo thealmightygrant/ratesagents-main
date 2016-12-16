@@ -113,7 +113,9 @@ router.get('/listing-commission-information'
            , function(req, res){
              var prd = merge(res.locals
                              , conf.get('pages.advanced-home-information')
-                             , { data: { csrfToken: req.csrfToken() }})
+                             , { data: { csrfToken: req.csrfToken() },
+                                 includeChart: true
+                               })
              res.render('listing-commission-information.hbs', prd);
            })
 
