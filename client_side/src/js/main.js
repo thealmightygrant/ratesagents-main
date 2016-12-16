@@ -211,12 +211,6 @@
             scales: {
               yAxes: [{
                 stacked: true
-              }],
-              xAxes: [{
-                scaleLabel: {
-                  labelString: 'Sale Price',
-                  display: true
-                }
               }]
             },
             hover: {
@@ -275,6 +269,15 @@
               text: "Homeowner Profit on Sale with Desired Commission*",
               position: "bottom",
               display: true
+            },
+            tooltips: {
+              callbacks: {
+                label: function(tti, data){
+                  return data.labels[tti.index] + ": $" + data.datasets[tti.datasetIndex].data[tti.index].toString().replace(/[0-9](?=(?:[0-9]{3})+(?![0-9]))/, "$&,")
+                }
+              },
+              xPadding: 15,
+              yPadding: 12
             }
           }
         });
@@ -291,6 +294,15 @@
               text: "Homeowner Profit on Sale with Standard 6% Commission*",
               position: "bottom",
               display: true
+            },
+            tooltips: {
+              callbacks: {
+                label: function(tti, data){
+                  return data.labels[tti.index] + ": $" + data.datasets[tti.datasetIndex].data[tti.index].toString().replace(/[0-9](?=(?:[0-9]{3})+(?![0-9]))/, "$&,")
+                }
+              },
+              xPadding: 15,
+              yPadding: 12
             }
           }
         });
