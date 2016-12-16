@@ -23,7 +23,7 @@
     //  $(e.currentTarget).val(curVal.toString().replace(/[0-9](?=(?:[0-9]{3})+(?![0-9]))/, "$&,"))
     //})
 
-
+    //TODO: not very DRY, refactor pleeeeeeeease
     if(window.Chart) {
       var commissionCalculator = (function() {
         var listingPriceNode = $("#listing_price")
@@ -36,8 +36,10 @@
         var regDonutChart = document.getElementById("reg_commission_donut_chart");
 
         function calculatedCommission(listingPrice, tradCommission, flatFee){
-          //TODO: validate?
-          return ((tradCommission / 100.0) * listingPrice) - flatFee;
+          //TODO: validate all inputs?
+          if(typeof flatFee !== 'number')
+            flatFee = +flatFee;
+          return ((tradCommission / 100.0) * listingPrice) + flatFee;
         }
 
         function defaultCommission(listingPrice){
@@ -128,14 +130,14 @@
                                                           calculatedRealtorFee,
                                                           calculatedMiscFee)
           displayedRealtorFees = genRealtorFees(displayedSalesPrices,
-                                                    tradCommissionNode.val(),
-                                                    flatFeeNode.val())
+                                                tradCommissionNode.val(),
+                                                flatFeeNode.val())
           displayedGrossProfits = genGrossProfits(displayedSalesPrices,
                                                   buyPriceNode.val())
 
           myCommissionLineChart.labels = displayedSalesPrices
-          myCommissionLineChart.data.datasets[0].data = displayedHomeownerProfits
-          myCommissionLineChart.data.datasets[1].data = displayedRealtorFees
+          myCommissionLineChart.data.datasets[0].data = displayedRealtorFees
+          myCommissionLineChart.data.datasets[1].data = displayedHomeownerProfits
           myCommissionLineChart.data.datasets[2].data = displayedGrossProfits
           myCommissionLineChart.update()
 
@@ -244,15 +246,15 @@
           data: {
             labels: displayedSalesPrices,
             datasets: [{
-              data: displayedHomeownerProfits,
-              borderColor: "#FF6384",
-              //backgroundColor: "#FF6384",
-              label: "Your Profits"
-            },{
               data: displayedRealtorFees,
               borderColor: "#36A2EB",
               //backgroundColor: "rgba(0, 0, 200, 0.5)",
               label: "Realtor Compensation"
+            },{
+              data: displayedHomeownerProfits,
+              borderColor: "#FF6384",
+              //backgroundColor: "#FF6384",
+              label: "Your Profits"
             },{
               data: displayedGrossProfits,
               borderColor: "#FFCE56",
