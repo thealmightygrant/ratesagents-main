@@ -27,7 +27,6 @@
     if(window.Chart) {
       var commissionCalculator = (function() {
         var listingPriceNode = $("#listing_price")
-        var minSalePriceNode = $("#min_sale_price")
         var buyPriceNode = $("#buy_price")
         var tradCommissionNode = $("#trad_commission")
         var flatFeeNode = $("#flat_fee")
@@ -100,7 +99,7 @@
                                                   defaultRealtorFee,
                                                   calculatedMiscFee)
         ,   displayedSalesPrices = genSalesPrices(listingPriceNode.val(),
-                                                  minSalePriceNode.val())
+                                                  0.9 * listingPriceNode.val())
         ,   displayedHomeownerProfits = genHomeownerProfits(displayedSalesPrices,
                                                             buyPriceNode.val(),
                                                             calculatedRealtorFee,
@@ -124,7 +123,7 @@
                                                 buyPriceNode.val(),
                                                 defaultRealtorFee, calculatedMiscFee);
           displayedSalesPrices = genSalesPrices(listingPriceNode.val(),
-                                                minSalePriceNode.val())
+                                                0.9 * listingPriceNode.val())
           displayedHomeownerProfits = genHomeownerProfits(displayedSalesPrices,
                                                           buyPriceNode.val(),
                                                           calculatedRealtorFee,
