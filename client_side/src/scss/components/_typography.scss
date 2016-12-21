@@ -31,6 +31,10 @@ h1, h2, h3, h4, h5, h6 {
   font-family: $heading-font-stack;
 	font-weight: $heading-weight;
 	line-height: 1.1;
+
+  &.light {
+    font-weight: 200;
+  }
 }
 
 // Header Styles
@@ -44,11 +48,13 @@ h6 { font-size: $h6-fontsize; line-height: 110%; margin: ($h6-fontsize / 2) 0 ($
 
 // Text Styles
 em { font-style: italic; }
-strong { font-weight: 500; }
+strong { font-weight: 700; }
+b { font-weight: 700; }
 small { font-size: 75%; }
 .light { font-weight: 300; }
 .thin { font-weight: 200; }
 .logo { font-family: $logo-font-stack; }
+.smallcaps { font-family: $body-font-stack; text-transform: uppercase; font-weight: normal; }
 
 .flow-text{
   font-weight: 300;

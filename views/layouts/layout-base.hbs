@@ -7,16 +7,16 @@
       {{> page/nav}}
     </header>
 
-    <div class="container">
-      <main>
-        {{{body}}}
-      </main>
+    <main>
+      {{{body}}}
+    </main>
 
       <!-- TODO: add a partial for footers -->
-      <footer class="footer">
+    <footer class="footer black grey-text text-lighten-2">
+      <div class="section container">
         <p>© 2016 Rates and Agents LLC</p>
-      </footer>
-    </div>
+      </div>
+    </footer>
     <!-- TODO: bundle to cut down on server calls -->
     <script type="text/javascript" src="/js/vendor/jquery-2.1.1.min.js?tcb={{getDateNumeral}}"></script>
     <script type="text/javascript" src="/js/vendor/nouislider.min.js?tcb={{getDateNumeral}}"></script>
