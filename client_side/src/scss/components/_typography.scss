@@ -7,23 +7,29 @@ html{
   line-height: 1.5;
 
   @media only screen and (min-width: 0) {
-    font-size: 14px;
+    font-size: $base-fontsize-small;
   }
 
   @media only screen and (min-width: $medium-screen) {
-    font-size: 14.5px;
+    font-size: $base-fontsize-medium;
   }
 
   @media only screen and (min-width: $large-screen) {
-    font-size: 15px;
+    font-size: $base-fontsize-large;
   }
 
-  font-family: "Roboto", sans-serif;
+  @media only screen and (min-width: $extra-large-screen) {
+    font-size: $base-fontsize-extra-large;
+  }
+
+  font-family: $body-font-stack;
   font-weight: normal;
-  color: $off-black;
+  color: $primary-font-color;
 }
+
 h1, h2, h3, h4, h5, h6 {
-	font-weight: 400;
+  font-family: $heading-font-stack;
+	font-weight: $heading-weight;
 	line-height: 1.1;
 }
 
@@ -42,7 +48,7 @@ strong { font-weight: 500; }
 small { font-size: 75%; }
 .light { font-weight: 300; }
 .thin { font-weight: 200; }
-
+.logo { font-family: $logo-font-stack; }
 
 .flow-text{
   font-weight: 300;

@@ -1,21 +1,21 @@
 .container {
   margin: 0 auto;
-  max-width: 1280px;
-  width: 92%;
+  max-width: 1140px;
+  width: $small-container-width;
 }
 @media #{$medium-and-up} {
   .container {
-    width: 92%;
+    width: $medium-container-width;
   }
 }
 @media #{$large-and-up} {
   .container {
-    width: 88%;
+    width: $large-container-width;
   }
 }
 @media #{$extra-large-and-up} {
   .container {
-    width: 85%;
+    width: $extra-large-container-width;
   }
 }
 

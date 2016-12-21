@@ -4,8 +4,10 @@ var express = require('express')
 ,   conf = require('../config')
 
 router.get('/', function(req, res){
-  var prd = merge(conf.get('pages.main-sales-nav'),
-                  conf.get('pages.main-sales'))
+  var prd = merge(res.locals,
+                  conf.get('pages.main-sales-nav'),
+                  conf.get('pages.main-sales'),
+                  { includeChart: true })
   res.render('main-sales.hbs', prd);
 });
 

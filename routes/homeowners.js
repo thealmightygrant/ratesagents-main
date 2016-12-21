@@ -99,6 +99,59 @@ router.get('/basic-home-information'
              res.render('basic-home-information.hbs', prd);
            })
 
+router.post('/basic-home-information'
+            , user_utils.isLoggedIn
+            , function(req, res, next){
+              res.locals.err_view = 'basic-home-information.hbs'
+              res.locals.suc_url = '/homeowners/listing-commission-information'
+              next();
+            }
+            , user_utils.validateAndSaveHome)
+
+
+router.get('/listing-commission-information'
+           , user_utils.isLoggedIn
+           , function(req, res){
+             var prd = merge(res.locals
+                             , conf.get('pages.listing-commission-information')
+                             , { data: { csrfToken: req.csrfToken() }
+                                 , includeChart: true }
+                            )
+             res.render('listing-commission-information.hbs', prd);
+           })
+
+router.post('/listing-commission-information'
+            , user_utils.isLoggedIn
+            , function(req, res, next){
+              res.locals.err_view = 'listing-commission-information.hbs'
+              res.locals.suc_url = '/homeowners/start-auction'
+              next();
+            }
+            , user_utils.validateAndSaveHome)
+
+router.get('/sale-date-information'
+           , user_utils.isLoggedIn
+           , function(req, res){
+             var prd = merge(res.locals
+                             , conf.get('pages.sale-date-information')
+                             , { data: { csrfToken: req.csrfToken() }}
+                            )
+             res.render('sale-date-information.hbs', prd);
+           })
+
+
+router.get('/auction-information'
+           , user_utils.isLoggedIn
+           , function(req, res){
+             var prd = merge(res.locals
+                             , conf.get('pages.auction-information')
+                             , { data: { csrfToken: req.csrfToken() }}
+                            )
+             res.render('auction-information.hbs', prd);
+           })
+
+
+
 router.get('/advanced-home-information'
            , user_utils.isLoggedIn
            , function(req, res){
@@ -108,33 +161,13 @@ router.get('/advanced-home-information'
              res.render('advanced-home-information.hbs', prd);
            })
 
-router.get('/listing-commission-information'
-           , user_utils.isLoggedIn
-           , function(req, res){
-             var prd = merge(res.locals
-                             , conf.get('pages.advanced-home-information')
-                             , { data: { csrfToken: req.csrfToken() },
-                                 includeChart: true
-                               })
-             res.render('listing-commission-information.hbs', prd);
-           })
-
-router.post('/basic-home-information'
-            , user_utils.isLoggedIn
-            , function(req, res, next){
-              res.locals.err_view = 'basic-home-information.hbs'
-              res.locals.suc_url = '/homeowners/advanced-home-information'
-              next();
-            }
-            , user_utils.validateAndSaveHome)
-
-router.post('/advanced-home-information'
-            , user_utils.isLoggedIn
-            , function(req, res, next){
-              res.locals.err_view = 'advanced-home-information.hbs'
-              res.locals.suc_url = '/homeowners/listing-commission-information'
-              next();
-            }
-            , user_utils.validateAndSaveHomeDetails)
+// router.post('/advanced-home-information'
+//             , user_utils.isLoggedIn
+//             , function(req, res, next){
+//               res.locals.err_view = 'advanced-home-information.hbs'
+//               res.locals.suc_url = '/homeowners/listing-commission-information'
+//               next();
+//             }
+//             , user_utils.validateAndSaveHomeDetails)
 
 module.exports = router;

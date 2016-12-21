@@ -33,8 +33,6 @@
 
   li {
     float: none;
-    line-height: $sidenav-item-height;
-
     &.active { background-color: rgba(0,0,0,.05); }
   }
 
@@ -42,9 +40,8 @@
     color: $sidenav-font-color;
     display: block;
     font-size: $sidenav-font-size;
-    font-weight: 500;
+    font-weight: 400;
     height: $sidenav-item-height;
-    line-height: $sidenav-item-height;
     padding: 0 ($sidenav-padding * 2);
 
     &:hover { background-color: rgba(0,0,0,.05);}
@@ -61,6 +58,10 @@
     &.btn:hover,
     &.btn-large:hover { background-color: lighten($button-raised-background, 5%); }
     &.btn-floating:hover { background-color: $button-raised-background; }
+
+    &.indent {
+      margin-left: 0.75rem;
+    }
   }
 
   li > a > i,
@@ -76,6 +77,12 @@
 
   .divider {
     margin: ($sidenav-padding / 2) 0 0 0;
+    background-color: $primary-background-color-darker;
+  }
+
+  .logo {
+    color: $primary-font-color;
+    font-size: $sidenav-font-size * 1.2;
   }
 
   .subheader {
@@ -85,10 +92,10 @@
 
     cursor: initial;
     pointer-events: none;
-    color: rgba(0,0,0,.54);
-    font-size: $sidenav-font-size;
-    font-weight: 500;
-    line-height: $sidenav-item-height;
+    color: rgba(0,0,0,.64);
+    font-size: $sidenav-font-size * 1.2;
+    font-family: $sidenav-font-stack;
+    font-weight: $sidenav-font-weight;
   }
 
   .userView {
@@ -187,7 +194,7 @@
 
 .side-nav .collapsible-body > ul:not(.collapsible) > li.active,
 .side-nav.fixed .collapsible-body > ul:not(.collapsible) > li.active {
-  background-color: $primary-color;
+  background-color: $primary-background-color;
   a {
     color: $sidenav-bg-color;
   }

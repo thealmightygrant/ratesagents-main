@@ -101,7 +101,7 @@ a {
 blockquote {
   margin: 20px 0;
   padding-left: 1.5rem;
-  border-left: 5px solid $primary-color;
+  border-left: 5px solid $primary-background-color;
 }
 
 // Icon Styles
@@ -160,7 +160,7 @@ video.responsive-video {
 
     &.active a { color: #fff; }
 
-    &.active { background-color: $primary-color; }
+    &.active { background-color: $primary-background-color; }
 
     &.disabled a {
       cursor: default;
@@ -583,7 +583,7 @@ td, th{
 // Made less specific to allow easier overriding
 .secondary-content {
   float: right;
-  color: $secondary-color;
+  color: $secondary-background-color;
 }
 .collapsible .collection {
   margin: 0;

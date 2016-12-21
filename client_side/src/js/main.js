@@ -2,13 +2,23 @@
   $(function(){
 
     //init side nav
-    $('.button-collapse').sideNav();
+    $('.button-collapse').sideNav({
+      edge: 'right'
+    });
 
     //init tabs
     $('ul.tabs').tabs();
 
     //init selects
     $('select').material_select();
+
+    $('.datepicker').pickadate({
+      selectMonths: true, // Creates a dropdown to control month
+      min: true,   //today
+      formatSubmit: 'mm/dd/yyyy',
+      format: 'mmm d, yyyy',
+      selectYears: 4 // Creates a dropdown of 15 years to control year
+    });
 
     //init collapsible
     //onOpen(el)  QUESTION: element or event?

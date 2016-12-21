@@ -5,7 +5,10 @@ module.exports = {
   getDateNumeral: getDateNumeral
   , ifEquals: ifEquals
   , str: str  //Where the fuck is this used?? and why does it exist?
+  , and: and
 
+  , textField: textField
+  , dateField: dateField
   , numberField: numberField
 
   , sliderBlock: sliderBlock
@@ -34,6 +37,69 @@ function str(str1, str2){
   return str1 + str2;
 }
 
+function and(item1, item2){
+  if(item1 && item2)
+    return true;
+  else
+    return false;
+}
+
+function dateField(options){
+  var dateOptions = {
+    input: {
+      attrs: {
+        type: "date"
+        , name: options.hash.name
+        , id: options.hash.name
+        , class: options.hash.inputClass || "datepicker"
+        , value: options.hash.data || options.hash.default
+        , placeholder: options.hash.placeholder || "your date"
+      }
+    }
+    , overwriteClass: (options.hash.overwriteClass === "true")
+    , className: options.hash.className || ""
+    , label: {
+      attrs: {
+        for: options.hash.name
+        , "data-error": options.hash.msg
+      }
+      , first: (options.hash.labelFirst === "true")
+      , value: options.hash.label || ""
+    }
+  }
+
+  //QUESTION: remove merge to speed things up a bit?
+  return inputField(merge(options, dateOptions))
+}
+
+function textField(options){
+  var textOptions = {
+    input: {
+      attrs: {
+        type: "text"
+        , name: options.hash.name
+        , id: options.hash.name
+        , placeholder: options.hash.placeholder
+        , class: options.hash.inputClass
+        , value: options.hash.data || options.hash.default
+      }
+    }
+    , overwriteClass: (options.hash.overwriteClass === "true")
+    , className: options.hash.className || ""
+    , label: {
+      attrs: {
+        for: options.hash.name
+        , "data-error": options.hash.msg
+      }
+      , first: (options.hash.labelFirst === "true")
+      , value: options.hash.label || ""
+    }
+  }
+
+  //QUESTION: remove merge to speed things up a bit?
+  return inputField(merge(options, textOptions))
+}
+
 function numberField(options){
   var numberOptions = {
     input: {
@@ -42,18 +108,21 @@ function numberField(options){
         , min: options.hash.min || "0"
         , name: options.hash.name
         , id: options.hash.name
+        , placeholder: options.hash.placeholder
+        , class: options.hash.inputClass
         , max: options.hash.max
         , step: options.hash.step || "100"
         , value: options.hash.data || options.hash.default
       }
     }
-    , overwriteClass: (options.hash.overwriteClass === "true") || false
+    , overwriteClass: (options.hash.overwriteClass === "true")
     , className: options.hash.className || ""
     , label: {
       attrs: {
         for: options.hash.name
         , "data-error": options.hash.msg
       }
+      , first: (options.hash.labelFirst === "true")
       , value: options.hash.label || ""
     }
   }
@@ -71,16 +140,18 @@ function inlineCheckbox(options){
         type: "checkbox"
         , name: options.hash.name
         , id: options.hash.name
+        , class: options.hash.inputClass
         , checked: options.hash.data
       }
     }
-    , overwriteClass: (options.hash.overwriteClass === "true") || false
+    , overwriteClass: (options.hash.overwriteClass === "true")
     , className: options.hash.className || ""
     , label: {
       attrs: {
         for: options.hash.name
         , "data-error": options.hash.msg
       }
+      , first: (options.hash.labelFirst === "true")
       , value: options.hash.label || ""
     }
   }
@@ -98,18 +169,20 @@ function inlineRange(options){
         , min: options.hash.min || "0"
         , name: options.hash.name
         , id: options.hash.name
+        , class: options.inputClass
         , max: options.hash.max || "10000000"
         , step: options.hash.step || "100"
         , value: options.hash.data || options.hash.default
       }
     }
-    , overwriteClass: (options.hash.overwriteClass === "true") || false
+    , overwriteClass: (options.hash.overwriteClass === "true")
     , className: options.hash.className || "range-field"
     , label: {
       attrs: {
         for: options.hash.name
         , "data-error": options.hash.msg
       }
+      , first: (options.hash.labelFirst === "true")
       , value: options.hash.label || ""
     }
   }
@@ -126,17 +199,17 @@ function sliderBlock(options){
         , name: options.hash.name
         , max: options.hash.max || "1000000"
         , min: options.hash.min || "0"
+        , class: options.inputClass
         , step: options.hash.step || "100"
         , id: options.hash.name
         , value: options.hash.data || options.hash.default
       }
     }
-    , overwriteClass: (options.hash.overwriteClass === "true") || false
+    , overwriteClass: (options.hash.overwriteClass === "true")
     , className: options.hash.className || "ra-slider"
     , label: { attrs: {} }
   }
 
-  console.log(inputField(merge(options, rangeOptions)))
   //QUESTION: remove merge to speed things up a bit?
   return inputField(merge(options, rangeOptions))
 }
@@ -153,10 +226,13 @@ function attrsTransformer(attrsObj){
 function baseInput(options){
   var inputStrAttrs = attrsTransformer(options.input.attrs)
   ,   labelStrAttrs = attrsTransformer(options.label.attrs)
+  ,   labelStr = '<label ' + labelStrAttrs + '>' + options.label.value + '</label>'
   ,   catClassName = options.overwriteClass ? "" : (options.baseClassName + ' ')
-  ,   field = '<' + options.tagType + ' class="' + catClassName + options.className + '">' +
+
+  var field = '<' + options.tagType + ' class="' + catClassName + options.className + '">' +
+        ((labelStrAttrs && options.label.first) ? labelStr : "") +
         '<input ' + inputStrAttrs + '/>' +
-        (labelStrAttrs ? '<label ' + labelStrAttrs + '>' + options.label.value + '</label>' : "") +
+        ((labelStrAttrs && !options.label.first) ? labelStr : "") +
         '</' + options.tagType + '>';
   return field;
 }
@@ -217,7 +293,7 @@ function createClassedLink(href, value, options){
 function createHtmlLinks(dataArr, options){
   var options = options ? options : {};
   return dataArr.reduce(function(prev, cur, ind, arr){
-    var link = createClassedLink(cur.href, cur.value, cur.options)
+    var link = createClassedLink(cur.href, cur.value, {anchorClassName: "indent"})
     if(prev.length === 0){
       return '<ul ' + (options.groupId ? 'id="' + options.groupId + '" ': '') + (options.groupClassName ? 'class="' + options.groupClassName + '" ': '') + '>' + link;
     }
@@ -271,7 +347,7 @@ function navLinks(options) {
     break;
   case 'mobile-main-nav':
     navElements = navElements +
-      '<li><a href="/">Rates and Agents</a></li>' +
+      '<li><a class="logo center" href="/">Rates and Agents</a></li>' +
       '<li><div class="divider"></div></li>';
     Object.keys(navData).forEach(function(key, index){
       if(navData[key].linkData && navData[key].linkData.length){

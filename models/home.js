@@ -25,7 +25,7 @@ module.exports = function(sequelize, DataTypes) {
         return int_val.toString();
       }
     },    //e.g. 2000 sq ft
-    homeType: DataTypes.ENUM('house', 'condo', 'townhome'),
+    homeType: DataTypes.ENUM('house', 'condo', 'townhome', 'land'),
     numBedrooms: {
       type: DataTypes.INTEGER,
       set: function(string_val){
