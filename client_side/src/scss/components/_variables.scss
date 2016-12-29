@@ -33,6 +33,8 @@
 // _color
 // ==========================================================================
 
+$logo-color: color("grey", "darken-4");
+
 $primary-background-color: color("grey", "lighten-4");
 $primary-background-color-lighter: color("grey", "lighten-5");
 $primary-background-color-darker: color("grey", "lighten-3");
@@ -41,7 +43,7 @@ $primary-font-color: color("grey", "darken-4");
 $secondary-background-color: color("light-blue", "darken-3");
 $secondary-background-color-lighter: color("light-blue", "darken-2");
 $secondary-background-color-darker: color("light-blue", "darken-4");
-$secondary-font-color: color("grey", "base");
+$secondary-font-color: color("grey", "lighten-3");
 
 $success-color: color("green", "darken-1");
 $error-color: color("red", "darken-1");
@@ -55,7 +57,7 @@ $progress-bar-color: $secondary-background-color;
 
 // _typography
 // ==========================================================================
-$logo-font-stack: "Libre Baskerville", Baskerville, Baskerville Old Face, Hoefler Text, Garamond, Times New Roman,serif;
+$logo-font-stack: "Libre Baskerville", Baskerville, Baskerville Old Face, Hoefler Text, Garamond, Times New Roman, serif;
 $heading-font-stack: "Raleway", "Verdana", "Lucida Grande", "Gill Sans", "Arial", "Helvetica", sans-serif;
 $body-font-stack: "Open Sans", "Arial", "Helvetica", sans-serif;
 
@@ -76,17 +78,17 @@ $button-font-size: 1.3rem;
 // _global
 // ==========================================================================
 
-$small-container-width: 90%;
-$medium-container-width: 90%;
-$large-container-width: 90%;
-$extra-large-container-width: 90%;
+$small-container-width: 88%;
+$medium-container-width: 88%;
+$large-container-width: 80%;
+$extra-large-container-width: 70%;
 
 // Media Query Ranges
-$small-screen-up: 601px;
+$small-screen-up: 651px;
 $medium-screen-up: 993px;
 $large-screen-up: 1381px;
 $extra-large-screen-up: 1601px;
-$small-screen: 600px;
+$small-screen: 650px;
 $medium-screen: 992px;
 $large-screen: 1380px;
 $extra-large-screen: 1600px;
@@ -244,10 +246,10 @@ $switch-radius: 15px ;
 // 13. Navigation Bar
 // ==========================================================================
 
-$navbar-height: 76px;
+$navbar-height: 50px;
 $navbar-height-mobile: 64px;
 $navbar-font-size: 1rem;
-$navbar-font-color: $primary-font-color;
+$navbar-font-color: $secondary-background-color-lighter;
 $navbar-background-color: $primary-background-color;
 $navbar-brand-font-size: $h4-fontsize;
 
@@ -259,7 +261,7 @@ $sidenav-font-stack: $heading-font-stack;
 $sidenav-font-color: $primary-font-color;
 $sidenav-bg-color: $primary-background-color-lighter;
 $sidenav-padding: 1.1rem;
-$sidenav-item-height: 48px;
+$sidenav-item-height: 54px;
 $sidenav-font-weight: $heading-weight;
 
 // 15. Photo Slider
@@ -278,9 +280,11 @@ $spinner-default-color: $secondary-background-color;
 // 17. Tabs
 // ==========================================================================
 
-$tabs-underline-color: $primary-background-color-lighter;
-$tabs-text-color: $primary-background-color;
-$tabs-bg-color: $primary-font-color;
+$tab-font-color: $primary-font-color;
+$tab-font-color-hover: $secondary-background-color;
+$tab-font-color-disabled: rgba($tab-font-color, 0.7);
+$tab-indicator-color: $secondary-background-color;
+$tab-bg-color: transparent;
 
 
 // 18. Tables

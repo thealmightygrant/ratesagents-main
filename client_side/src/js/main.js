@@ -3,7 +3,10 @@
 
     //init side nav
     $('.button-collapse').sideNav({
-      edge: 'right'
+      //TODO: update breakpoint for sidenav should be at small, not medium...
+      edge: 'right',
+      menuWidth: 350,
+      closeOnClick: true
     });
 
     //init tabs

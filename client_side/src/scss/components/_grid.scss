@@ -3,26 +3,6 @@
   max-width: 1140px;
   width: $small-container-width;
 }
-@media #{$medium-and-up} {
-  .container {
-    width: $medium-container-width;
-  }
-}
-@media #{$large-and-up} {
-  .container {
-    width: $large-container-width;
-  }
-}
-@media #{$extra-large-and-up} {
-  .container {
-    width: $extra-large-container-width;
-  }
-}
-
-.container .row {
-  margin-left: (-1 * $gutter-width / 2);
-  margin-right: (-1 * $gutter-width / 2);
-}
 
 .section {
   padding-top: 1rem;
@@ -39,11 +19,14 @@
   }
 }
 
+.container .row {
+  margin-left: (-1 * $gutter-width / 2);
+  margin-right: (-1 * $gutter-width / 2);
+}
 
 .row {
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 20px;
 
   // Clear floating children
   &:after {
@@ -55,7 +38,7 @@
   .col {
     float: left;
     box-sizing: border-box;
-    padding: 0 $gutter-width / 2;
+    padding-right: $gutter-width / 2;
     min-height: 1px;
 
     &[class*="push-"],
@@ -178,5 +161,50 @@
         $i: $i + 1;
       }
     }
+  }
+}
+
+@media #{$small-and-down} {
+  .col.hero-img {
+    position: relative;
+    width: 500px !important;
+    height: 400px;
+    left: -4% !important;
+  }
+}
+
+@media #{$medium-and-up} {
+  .container {
+    width: $medium-container-width;
+  }
+
+  .section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .row {
+     position: relative;
+  }
+
+  .col.hero-img {
+    // TODO: find a better method for "hero images"...
+    // add background-img: url("/images/something.jpg") to inline style
+    min-height: 700px;
+    width: 900px !important;
+    position: absolute;
+    left: 44.333333% !important;
+    top: -30%;  //NOTE: -18% should be the top, depends on various margins and padding
+    z-index: -1;
+  }
+}
+@media #{$large-and-up} {
+  .container {
+    width: $large-container-width;
+  }
+}
+@media #{$extra-large-and-up} {
+  .container {
+    width: $extra-large-container-width;
   }
 }

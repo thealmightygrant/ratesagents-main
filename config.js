@@ -1,3 +1,5 @@
+"use strict";
+
 var glob = require('glob')
 var convict = require('convict')
 
@@ -93,10 +95,11 @@ var conf = convict({
   }
 });
 
-var env = conf.get('env');
+const pageFiles = glob.sync("./config/pages/*.json") || []
+const env = conf.get('env');
+conf.loadFile(pageFiles.concat('./config/' + env + '.json'))
 
-var page_files = glob.sync("./config/pages/*.json") || []
-conf.loadFile(page_files.concat('./config/' + env + '.json'))
-conf.validate({strict: true})
+const validateOpts = env !== 'production' ? {strict: true} : {}
+conf.validate(validateOpts)
 
 module.exports = conf;

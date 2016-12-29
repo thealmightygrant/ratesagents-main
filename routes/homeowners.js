@@ -1,7 +1,6 @@
 var express = require('express')
 ,   passport = require('passport')
 ,   router  = express.Router()
-,   data_promises = require('../utils/data_promises')
 ,   user_utils = require('../utils/user_related')
 ,   middleware = require('../utils/middleware')
 ,   conf = require('../config')

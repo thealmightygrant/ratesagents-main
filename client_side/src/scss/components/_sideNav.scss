@@ -44,8 +44,6 @@
     height: $sidenav-item-height;
     padding: 0 ($sidenav-padding * 2);
 
-    &:hover { background-color: rgba(0,0,0,.05);}
-
     &.btn, &.btn-large, &.btn-flat, &.btn-floating {
       margin: 10px 15px;
     }
@@ -70,9 +68,34 @@
     float: left;
     height: $sidenav-item-height;
     line-height: $sidenav-item-height;
-    margin: 0 ($sidenav-padding * 2) 0 0;
+    //useful for icons inside sidenav, not for top
+    /* margin: 0 ($sidenav-padding * 2) 0 0; */
     width: $sidenav-item-height / 2;
-    color: rgba(0,0,0,.54);
+  }
+
+  .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 4px 24px;
+  }
+
+  .bottom-cta {
+    position: fixed;
+    bottom: 60px;
+    width: 100%;
+
+    .bottom-link {
+      width: 100%;
+      text-align: center;
+      text-transform: uppercase;
+      background-color: $disabled-background-color;
+      padding-bottom: 10px;
+      &:last-child {
+        background-color: $secondary-background-color;
+        a { color: $secondary-font-color; }
+      }
+    }
   }
 
   .divider {

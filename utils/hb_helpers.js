@@ -1,5 +1,7 @@
-var HBars = require('handlebars')
-,   merge = require('lodash.merge')
+"use strict";
+
+const HBars = require('handlebars')
+  ,   merge = require('lodash.merge')
 
 module.exports = {
   getDateNumeral: getDateNumeral
@@ -281,19 +283,10 @@ function socialTags(options) {
   return new HBars.SafeString(socialTags);
 }
 
-
-//TODO: as Linus says, everything below here doesn't have a good flavor, reafactor it please
-function createClassedLink(href, value, options){
-  if(!options) options = {};
-  var anchorClassStr = options.anchorClassName ? ' class="' + options.anchorClassName + '"' : '';
-  var listItemClassStr = options.liClassName ? ' class="' + options.liClassName + '"' : '';
-  return '<li' + listItemClassStr + '><a href="' + href + '"' + anchorClassStr + '>' + value + '</a></li>';
-}
-
-function createHtmlLinks(dataArr, options){
+function sidenavBar(dataArr, options){
   var options = options ? options : {};
   return dataArr.reduce(function(prev, cur, ind, arr){
-    var link = createClassedLink(cur.href, cur.value, {anchorClassName: "indent"})
+    var link = liLink(cur.href, cur.value, {anchorClassName: "indent"})
     if(prev.length === 0){
       return '<ul ' + (options.groupId ? 'id="' + options.groupId + '" ': '') + (options.groupClassName ? 'class="' + options.groupClassName + '" ': '') + '>' + link;
     }
@@ -306,18 +299,41 @@ function createHtmlLinks(dataArr, options){
   }, '')
 }
 
-function createDropdownLink(dropdownName, href, value){
-  return '<li><a class="dropdown-button" data-constrainwidth="false" ' + (href ? 'href="' + href + '" ' : '') + 'data-activates="' + dropdownName + '" data-hover="true" data-beloworigin="true">' + value + '</a></li>'
+function sidenavSubheader(title, content){
+  return '<li><a class="subheader">' + title + '</a></li>' + content;
 }
 
-function slideoutLink(title, content){
-  return '<li><a class="subheader">' + title + '</a></li>' + content;
+function liLink(href, value, options){
+  if(!options) options = {};
+  var anchorClassStr = options.anchorClassName ? ' class="' + options.anchorClassName + '"' : '';
+  var listItemClassStr = options.liClassName ? ' class="' + options.liClassName + '"' : '';
+  return '<li' + listItemClassStr + '><a href="' + href + '"' + anchorClassStr + '>' + value + '</a></li>';
+}
+
+function dropdownLink(dropdownName, href, value){
+  return '<li><a class="dropdown-button" data-constrainwidth="false" ' + (href ? 'href="' + href + '" ' : '') + 'data-activates="' + dropdownName + '" data-hover="true" data-beloworigin="true">' + value + '</a></li>'
 }
 
 function tabLink(href, value, options){
   if(!options) options = {};
-  options.liClassName = "tab"
-  return createClassedLink(href, value, options)
+  options.liClassName = (typeof options.liClassName === 'string') ? options.liClassName + " tab" : "tab";
+  return liLink(href, value, options)
+}
+
+function dropdownGroup(dataArr, options){
+  var options = options ? options : {};
+  return dataArr.reduce(function(prev, cur, ind, arr){
+    var link = liLink(cur.href, cur.value, {anchorClassName: "indent"})
+    if(prev.length === 0){
+      return '<ul ' + (options.groupId ? 'id="' + options.groupId + '" ': '') + (options.groupClassName ? 'class="' + options.groupClassName + '" ': '') + '>' + link;
+    }
+    else if(ind === (arr.length - 1)){
+      return prev + link + '</ul>'
+    }
+    else {
+      return prev + link;
+    }
+  }, '')
 }
 
 function navLinks(options) {
@@ -332,35 +348,46 @@ function navLinks(options) {
     Object.keys(navData).forEach(function(key){
       if(navData[key].linkData && navData[key].linkData.length){
         navElements = navElements +
-          createDropdownLink(key + '-dropdown-link', navData[key].href, navData[key].value);
+          dropdownLink(key + '-dropdown-link', navData[key].href, navData[key].value);
         childElements = childElements +
-          createHtmlLinks(navData[key].linkData, {
+          dropdownGroup(navData[key].linkData, {
             groupId: (key + '-dropdown-link'),
             groupClassName: 'dropdown-content'
           })
       }
       else {
         navElements = navElements +
-          createClassedLink(navData[key].href, navData[key].value);
+          liLink(navData[key].href, navData[key].value);
       }
     })
     break;
   case 'mobile-main-nav':
     navElements = navElements +
-      '<li><a class="logo center" href="/">Rates and Agents</a></li>' +
+      '<li><a class="logo" href="/">Rates and Agents</a><a class="close" href="#!"><i class="material-icons">close</i></a></li>' +
       '<li><div class="divider"></div></li>';
-    Object.keys(navData).forEach(function(key, index){
-      if(navData[key].linkData && navData[key].linkData.length){
+    Object.keys(tabData).forEach(function(key, index){
+      let curDatum = tabData[key];
+      if(curDatum.linkData && curDatum.linkData.length){
         navElements +=
-          slideoutLink(navData[key].value, createHtmlLinks(navData[key].linkData))
+          sidenavSubheader(curDatum.value, sidenavBar(curDatum.linkData))
       }
       else {
         navElements = navElements +
-          createClassedLink(navData[key].href, navData[key].value)
+          liLink(curDatum.href, curDatum.value)
       }
-      if(index < navData.length)
+      if(index < tabData.length)
         navElements = navElements + '<li><div class="divider"></div></li>'
     })
+
+    navElements = navElements +
+      '<div class="bottom-cta">';
+    Object.keys(navData).forEach(function(key){
+      let curDatum = navData[key];
+      navElements = navElements +
+        liLink(curDatum.href, curDatum.value, {liClassName: 'bottom-link'})
+    });
+    navElements = navElements + '</div>';
+
     break;
   case 'tabs':
     tabData.forEach(function(tab, index){
