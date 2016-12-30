@@ -118,6 +118,13 @@ $very-small-room: 0.75rem;
   background-color: #f1f7fb;
 }
 
+.small-divider {
+  @extend .divider;
+  height: 2px;
+  width: 15%;
+  background-color: #f1f7fb;
+}
+
 //for card titles
 .card .card-image .card-title {
   bottom: -1.5em;
@@ -185,6 +192,18 @@ textarea.materialize-textarea {
 
 .extra-info {
   font-size: 12px;
+}
+
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.content {
+  flex: 1;
 }
 
 .bathroom-tiles {

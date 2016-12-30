@@ -11,12 +11,16 @@
           "value": "How it Works"
         },
         {
+          "href": "/pricing",
+          "value": "Pricing"
+        },
+        {
           "href": "/homeowner-details",
-          "value": "Homeowners"
+          "value": "Homeowner Tools"
         },
         {
           "href": "/realtor-details",
-          "value": "Realtors"
+          "value": "Realtor Resources"
         }
       ],
       "navData": {

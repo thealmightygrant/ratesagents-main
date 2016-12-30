@@ -12,4 +12,13 @@ router.get('/', function(req, res){
   res.render('main-sales.hbs', prd);
 });
 
+router.get('/sign-in', function(req, res){
+  var prd = merge(res.locals
+                  , conf.get('pages.main-sales-nav')
+                  , conf.get('pages.main-sign-in')
+                 )
+  res.render('main-sign-in.hbs', prd);
+});
+
+
 module.exports = router;

@@ -279,3 +279,17 @@ button.btn-floating {
 .btn-block {
   display: block;
 }
+
+@media only screen and (max-width: $small-screen) {
+  .btn-full-length {
+    width: 100%;
+    text-align: left;
+  }
+}
+
+@media only screen and (min-width: $small-screen-up)  {
+  .btn-full-length {
+    min-width: 270px;
+    text-align: left;
+  }
+}

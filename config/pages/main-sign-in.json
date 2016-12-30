@@ -1,0 +1,12 @@
+{
+  "pages": {
+    "main-sign-in": {
+      "socialData": {
+        "pageName": ""
+        , "description": "Get more options when selling your home. Choose a lower commission rate, more experience, or the best reviewed realtors. Sign up for free!"
+        //, "image": "/images/bat-country.jpg"
+        , "title": "Let Realtors fight to Represent Your Home."
+      }
+    }
+  }
+}
