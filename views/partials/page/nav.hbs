@@ -1,7 +1,8 @@
-<nav {{#if tabData}}class="nav-extended"{{/if}}>
+{{#if (or tabData or navData)}}
+  <nav {{#if tabData}}class="nav-extended"{{/if}}>
   <div class="nav-wrapper">
     <a href="/"><img class="brand-icon responsive-img" src="/images/ra-icon.png" /></a>
-    <a href="#" class=logo brand-logo"><span class="biginate">R</span>ates & <span class="biginate">A</span>gents</a>
+    <a href="#" class="logo"><span class="biginate">R</span>ates & <span class="biginate">A</span>gents</a>
     <a href="#" data-activates="mobile-nav" class="right button-collapse"><i class="material-icons">menu</i></a>
     <ul class="side-nav" id="mobile-nav">
       {{{navLinks navData=this.navData tabData=this.tabData navType="mobile-main-nav"}}}
@@ -15,4 +16,5 @@
       </ul>
     {{/if}}
   </div>
-</nav>
+  </nav>
+{{/if}}

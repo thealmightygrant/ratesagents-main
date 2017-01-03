@@ -7,6 +7,7 @@ module.exports = {
   getDateNumeral: getDateNumeral
   , ifEquals: ifEquals
   , str: str  //Where the fuck is this used?? and why does it exist?
+  , or: or
   , and: and
 
   , textField: textField
@@ -41,6 +42,13 @@ function str(str1, str2){
 
 function and(item1, item2){
   if(item1 && item2)
+    return true;
+  else
+    return false;
+}
+
+function or(item1, item2){
+  if(item1 || item2)
     return true;
   else
     return false;

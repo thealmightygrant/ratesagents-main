@@ -22,6 +22,15 @@
     "watch": "nodemon -e scss,js,hbs --watch client_side/src --watch views --watch utils --watch config --watch app.js -x \"npm run compile-css-dev && npm run compress-js && node app\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "engines": {
+    "node": ">=7.0.0",
+    "yarn": "^0.17.0"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "!win32"
+  ],
   "author": "Grant Sherrick",
   "license": "ISC",
   "devDependencies": {

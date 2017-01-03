@@ -1,21 +1,20 @@
-var passport = require('passport')
-,   LocalStrategy = require('passport-local').Strategy
-,   FacebookStrategy = require('passport-facebook').Strategy
-,   data_promises = require('./data_promises')
-,   auth_promises = require('./auth_promises')
-,   conf = require('../config.js')
-,   config_auth = conf.get('auth')
+const LocalStrategy = require('passport-local').Strategy
+,     FacebookStrategy = require('passport-facebook').Strategy
+,     retrieveUserViaId = require('./model_promises').retrieveUserViaId
+,     authPromises = require('./auth_promises')
+,     conf = require('../config.js')
+,     configAuth = conf.get('auth')
 
-function localLogin(model_name, req, username, password, done){
-  return auth_promises.localLoginVerify(req, username, password, model_name).asCallback(done, {spread: true});
+function localLogin(modelName, req, username, password, done){
+  return authPromises.localLoginVerify(req, username, password, modelName).asCallback(done, {spread: true});
 }
 
-function localRegister(model_name, req, username, password, done){
-  return auth_promises.localRegisterVerify(req, username, password, model_name).asCallback(done, {spread: true});
+function localRegister(modelName, req, username, password, done){
+  return authPromises.localRegisterVerify(req, username, password, modelName).asCallback(done, {spread: true});
 }
 
-function facebookLogin(model_name, token, refreshToken, profile, done){
-  return auth_promises.facebookLoginVerify(token, refreshToken, profile, model_name).asCallback(done);
+function facebookLogin(modelName, token, refreshToken, profile, done){
+  return authPromises.facebookLoginVerify(token, refreshToken, profile, modelName).asCallback(done);
 }
 
 exports.serializer = function serializer(user, done){
@@ -24,8 +23,8 @@ exports.serializer = function serializer(user, done){
 }
 
 exports.deserializer = function deserializer(user, done){
-  var model_name = user.userType === 'homeowner' ? 'homeowner' : 'realtor';
-  data_promises.retrieveUserById(user.id, model_name).asCallback(done);
+  const modelName = user.userType === 'homeowner' ? 'homeowner' : 'realtor';
+  retrieveUserViaId(user.id, modelName).asCallback(done);
 }
 
 exports.realtorLocalLogin = new LocalStrategy(
@@ -61,17 +60,17 @@ exports.homeownerLocalRegister = new LocalStrategy(
   localRegister.bind(null, "homeowner"));
 
 exports.realtorFacebookLogin = new FacebookStrategy({
-  clientID        : config_auth.facebookAuth.clientID,
-  clientSecret    : config_auth.facebookAuth.clientSecret,
-  callbackURL     : config_auth.facebookAuth.realtorCallbackURL,
+  clientID        : configAuth.facebookAuth.clientID,
+  clientSecret    : configAuth.facebookAuth.clientSecret,
+  callbackURL     : configAuth.facebookAuth.realtorCallbackURL,
   enableProof     : true,
   profileFields: ['id', 'displayName', 'email', 'first_name', 'last_name', 'middle_name']
 }, facebookLogin.bind(null, "realtor"));
 
 exports.homeownerFacebookLogin = new FacebookStrategy({
-  clientID        : config_auth.facebookAuth.clientID,
-  clientSecret    : config_auth.facebookAuth.clientSecret,
-  callbackURL     : config_auth.facebookAuth.realtorCallbackURL,
+  clientID        : configAuth.facebookAuth.clientID,
+  clientSecret    : configAuth.facebookAuth.clientSecret,
+  callbackURL     : configAuth.facebookAuth.homeownerCallbackURL,
   enableProof     : true,
   profileFields: ['id', 'displayName', 'email', 'first_name', 'last_name', 'middle_name']
 }, facebookLogin.bind(null, "homeowner"));

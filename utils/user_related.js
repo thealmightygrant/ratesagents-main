@@ -1,9 +1,12 @@
-var conf = require("../config")
+const conf = require("../config")
 ,   merge = require('lodash.merge')
 ,   models = require('../models/index')
 ,   Promise = require("bluebird")
 
-var default_err_msgs = {
+
+//TODO: refactor this, the whole file has some issues
+
+const default_err_msgs = {
   first_name: {
     empty: 'Your first name can\'t be empty. What would we call you?'
   }
@@ -36,7 +39,7 @@ var default_err_msgs = {
 }
 
 function arrangeValidationErrors(errors){
-  var updatedErrors = {};
+  const updatedErrors = {};
   errors.forEach(function(val){
     updatedErrors[val.param] = val.msg;
   })
@@ -45,7 +48,7 @@ function arrangeValidationErrors(errors){
 
 exports.validateRegister = function(req, res, next){
 
-  var email = req.body.email
+  const email = req.body.email
   ,   first_name = req.body.first_name
   ,   last_name = req.body.last_name
   ,   options = typeof(res.locals) !== 'undefined' ? res.locals : {}
@@ -90,7 +93,7 @@ exports.validateRegister = function(req, res, next){
 }
 
 exports.validateLogin = function(req, res, next){
-  var email = req.body.email
+  const email = req.body.email
   ,   options = typeof(res.locals) !== 'undefined' ? res.locals : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'realtor-login.hbs'
 
@@ -119,7 +122,7 @@ exports.validateLogin = function(req, res, next){
 
 exports.validateAndSaveHome = function(req, res){
 
-  var homeType = req.body.homeType
+  const homeType = req.body.homeType
   ,   homeSize = req.body.homeSize
   ,   builtIn = req.body.builtIn
   ,   numBedrooms = req.body.numBedrooms
@@ -138,7 +141,7 @@ exports.validateAndSaveHome = function(req, res){
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'basic-home-information.hbs'
   ,   suc_url = typeof(options.suc_url) === 'string' ? options.suc_url : '/homeowners/advanced-home-information'
 
-  var messages;
+  let messages = null;
 
   //TODO: add some more validators
   req.checkBody('builtIn', "Please tell us approx when your home was built.").notEmpty().isInt({ min: 1850, max: 2017, allow_leading_zeroes: false });
@@ -156,7 +159,7 @@ exports.validateAndSaveHome = function(req, res){
     messages = {address: "Please try searching your address again."}
   }
 
-  var errViewData = {
+  const errViewData = {
     googleMaps: conf.get("apis.googleMaps"),
     homeType: homeType,
     numBedrooms: numBedrooms,
@@ -213,7 +216,7 @@ exports.validateAndSaveHome = function(req, res){
 
 exports.validateAndSaveHomeDetails = function(req, res){
   //NOTE: for each detail, create a new homeowner detail
-  var options = typeof(res.locals) !== 'undefined' ? res.locals : {}
+  const options = typeof(res.locals) !== 'undefined' ? res.locals : {}
   ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'basic-home-information.hbs'
   ,   suc_url = typeof(options.suc_url) === 'string' ? options.suc_url : '/homeowners/advanced-home-information'
   ,   form_data = req.body
@@ -221,7 +224,7 @@ exports.validateAndSaveHomeDetails = function(req, res){
 
   //HACK: materialize is only useful for this prototype :(
   Object.keys(form_data).forEach(function(key){
-    var s = key.split('_');
+    const s = key.split('_');
     if(s[1] === 'csrf'){
       return;
     }
@@ -244,7 +247,7 @@ exports.validateAndSaveHomeDetails = function(req, res){
   //TODO: find and update...or create
   //      can find in db based on name and home id
   //SEE: http://stackoverflow.com/questions/18304504/create-or-update-sequelize
-  var modelsCreated = Object.keys(parsed_data).map(function(key){
+  const modelsCreated = Object.keys(parsed_data).map(function(key){
     return models["homeDetail"].create({
       homeId: req.session.home.id,
       name: key,

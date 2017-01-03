@@ -1,27 +1,37 @@
-<div class="big-v-room section">
+<div class="big-t-room med-b-room section">
+  <h5 class="logo center"><span class="biginate">R</span>ates & <span class="biginate">A</span>gents</h5>
   <div class="row">
-    <h5 class="col center s12 m12">Login to your Rates and Agents Account</h5>
-    <div class="col s8 push-s2 m6 push-m3 divider very-small-v-room"></div>
-    <h6 class="col center s12 m8 push-m2">or login with <a href="/realtors/auth/facebook">Facebook</a></h6>
+    <div class="col s8 offset-s2 m6 offset-m3 l4 offset-l4 divider very-small-v-room"></div>
+    <div class="col s6 offset-s3">
+      <p class="center">Sign in with <a href="/homeowners/auth/facebook">Facebook</a> or use your email below.</p>
+    </div>
   </div>
-  <div class="row very-small-v-room">
-    <div class="col s12 m6 push-m3 xl6 push-xl3">
+  <div class="row small-t-room">
+    <div class="col s10 offset-s1 m6 offset-m3 l4 offset-l4">
       <!-- TODO: add a generic error catcher for server errors, etc -->
       <form method="post" class="login-form" action="/homeowners/login">
         <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
-        <div class="input-field shift-left-and-extend">
-          <i class="material-icons prefix">email</i>
-          <input type="text" name="email" class="validate {{#if messages.email}}invalid{{/if}}" data-error="{{#if messages.email}}{{messages.email}}{{/if}}" value="{{#if data.email}}{{data.email}}{{/if}}">
-          <label for="email" data-error="{{#if messages.email}}{{messages.email}}{{/if}}">Email Address</label>
-        </div>
-        <div class="input-field shift-left-and-extend">
-          <i class="material-icons prefix">vpn_key</i>
-          <!-- TODO: inline password strenght validation, use react -->
-          <input type="password" name="password" class="validate {{#if messages.password}}invalid{{/if}}">
-          <label for="password" data-error="{{#if messages.password}}{{messages.password}}{{/if}}">Password</label>
-        </div>
-        <div class="input-field very-small-v-room" style="margin-top: 1em;">
-          <button type="submit" class="btn btn-large full-width shift-left-and-extend waves-effect">Submit</button>
+        <div class="row">
+          <div class="col s12">
+            <div class="input-field">
+              <i class="very-small-t-room material-icons prefix">email</i>
+              <input type="text" name="email" class="validate {{#if messages.email}}invalid{{/if}}" data-error="{{#if messages.email}}{{messages.email}}{{/if}}" value="{{#if data.email}}{{data.email}}{{/if}}">
+              <label for="email" data-error="{{#if messages.email}}{{messages.email}}{{/if}}">Email Address</label>
+            </div>
+          </div>
+          <div class="col s12">
+            <div class="input-field">
+              <i class="very-small-t-room material-icons prefix">vpn_key</i>
+              <!-- TODO: inline password strenght validation, use react -->
+              <input type="password" name="password" class="validate {{#if messages.password}}invalid{{/if}}">
+              <label for="password" data-error="{{#if messages.password}}{{messages.password}}{{/if}}">Password</label>
+            </div>
+          </div>
+          <div class="col s11 offset-s1">
+            <div class="input-field small-v-room" style="padding-left: 0.75rem;">
+              <button type="submit" class="btn btn-large full-width waves-effect">Submit</button>
+            </div>
+          </div>
         </div>
       </form>
     </div>

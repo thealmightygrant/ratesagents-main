@@ -7,22 +7,22 @@ var express = require('express')
 ,   csrf_protection = require('csurf')()
 ,   merge = require('lodash.merge')
 
-// //external calls
-// //TODO: add location to scope
-// router.get('/auth/facebook'
-//            , passport.authenticate('homeowner-fb-login'
-//                                    , { session: false
-//                                        , scope : ['email']}));
+//external calls
+//TODO: add location to scope
+router.get('/auth/facebook'
+           , passport.authenticate('homeowner-fb-login'
+                                   , { session: false
+                                       , scope : ['email']}));
 
-// // handle the callback after facebook has authenticated the user
-// router.get('/auth/facebook/callback'
-//            , passport.authenticate('homeowner-fb-login', {
-//              failureRedirect : '/homeowners/login'
-//            })
-//            , function(req, res) {
-//              //TODO: info is in req.user[0].message
-//              res.redirect('/homeowners/dashboard')
-//            });
+// handle the callback after facebook has authenticated the user
+router.get('/auth/facebook/callback'
+           , passport.authenticate('homeowner-fb-login', {
+             failureRedirect : '/homeowners/login'
+           })
+           , function(req, res) {
+             //TODO: info is in req.user[0].message
+             res.redirect('/homeowners/dashboard')
+           });
 
 
 //TODO: add redirects from '/' to '/login' or '/dashboard' depending on login status

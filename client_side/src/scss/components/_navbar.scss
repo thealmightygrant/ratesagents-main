@@ -1,12 +1,4 @@
 nav {
-  &.nav-extended {
-    height: auto;
-
-    .nav-wrapper {
-      height: auto;
-    }
-  }
-
   color: $navbar-font-color;
   @extend .z-depth-1;
   background-color: $navbar-background-color;
@@ -192,7 +184,12 @@ nav {
   }
 
   .nav-extended {
+    height: auto;
     padding-top: 0.75rem;
+
+    .nav-wrapper {
+      height: auto;
+    }
   }
 
   .navbar-fixed {
