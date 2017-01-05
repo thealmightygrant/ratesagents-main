@@ -22,15 +22,17 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
       else{
         return retrieveUserViaFB(fbAccount, modelName)
           .then(function(user){
-            if(!user)
+            console.log("user: ", user)
+            if(!user){
+              //NOTE: this basically means an orphaned FB account, cleanest option might be to delete the FB account.
+              //TODO: an option here would be to create a new user...
               return false;
-            else
+            }
+            else {
               return user;
+            }
           })
       }
-    })
-    .catch(function(e){
-      throw e;
     })
 }
 

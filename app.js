@@ -31,25 +31,6 @@ app.set('view engine', 'hbs');
 
 app.use(helmet());
 
-//TODO: check into if this is required for fb auth
-//      if it is required, then use the 'cors' package and setup a whitelist
-//
-// var allowCrossDomain = function(req, res, next) {
-//   res.header('Access-Control-Allow-Credentials', true);
-//   res.header('Access-Control-Allow-Origin', req.headers.origin);
-//   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-//   // intercept OPTIONS method
-//   if ('OPTIONS' == req.method) {
-//     res.send(200);
-//   }
-//   else {
-//     next();
-//   }
-// };
-// app.use(allowCrossDomain);
-
 app.use(bodyParser.json());
 //TODO: extended determines type of querystring parsing, look into this once parsing qs's
 app.use(bodyParser.urlencoded({ extended: false }));

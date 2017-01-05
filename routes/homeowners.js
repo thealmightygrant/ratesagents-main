@@ -8,18 +8,19 @@ var express = require('express')
 ,   merge = require('lodash.merge')
 
 //external calls
-//TODO: add location to scope
+//TODO: handle already registered user....
 router.get('/auth/facebook'
            , passport.authenticate('homeowner-fb-login'
-                                   , { session: false
-                                       , scope : ['email']}));
+                                   , { scope : ['email'] }));
 
 // handle the callback after facebook has authenticated the user
 router.get('/auth/facebook/callback'
            , passport.authenticate('homeowner-fb-login', {
+             successRedirect : '/homeowners/dashboard',
              failureRedirect : '/homeowners/login'
            })
            , function(req, res) {
+             console.log("Authenticated!!!")
              //TODO: info is in req.user[0].message
              res.redirect('/homeowners/dashboard')
            });

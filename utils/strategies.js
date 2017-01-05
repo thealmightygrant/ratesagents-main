@@ -18,6 +18,7 @@ function facebookLogin(modelName, token, refreshToken, profile, done){
 }
 
 exports.serializer = function serializer(user, done){
+  console.log("user: ", user)
   //TODO: serialize whole user instead of doing db lookup?
   done(null, {id: user.id, userType: user.userType});
 }

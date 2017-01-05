@@ -1,84 +1,85 @@
-<div class="row">
-  <div class="col s12 m8">
-    <h3 class="very-small-r-room">Your Home Information</h3><h5>Step 1 of 3</h5>
-    <p>Please input your home information. This information will be used to inform prospective realtors about your home. This information will be confirmed through local tax records before your auction begins. Any falsification could result in the cancelation of your contract with your realtor.</p>
-  </div>
-</div>
-<form method="post" class="home-form" action="/homeowners/basic-home-information">
-  <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
-  <div class="row">
-    <div class="col m12 l8">
-      <div class="row">
-        <div class="col s12 m5 l4">
-          <div class="row">
-            <div class="col s6">
-              <div class="input-field">
-                <select name="homeType" id="homeType">
-                  <option value="house" {{#ifEquals data.homeType "house"}}selected{{/ifEquals}}>House</option>
-                  <option value="condo" {{#ifEquals data.homeType "condo"}}selected{{/ifEquals}}>Condo</option>
-                  <option value="townhome" {{#ifEquals data.homeType "townhome"}}selected{{/ifEquals}}>Townhome</option>
-                  <option value="land" {{#ifEquals data.homeType "land"}}selected{{/ifEquals}}>Land</option>
-                </select>
-                <label for="homeType">Type of home: </label>
+<div class="container">
+  <div class="section">
+    <div class="row">
+      <div class="col m12 l8">
+        <h3 class="very-small-r-room">Your Home Information</h3><h5>Step 1 of 3</h5>
+        <p>Please input your home information. This information will be used to inform prospective realtors about your home. This information will be confirmed through local tax records before your auction begins. Any falsification could result in the cancelation of your contract with your realtor.</p>
+        <form method="post" class="home-form" action="/homeowners/basic-home-information">
+          <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
+          <div class="row small-t-room">
+            <div class="col s12 m5 l4">
+              <div class="row">
+                <div class="col s6">
+                  <div class="input-field">
+                    <select name="homeType" id="homeType">
+                      <option value="house" {{#ifEquals data.homeType "house"}}selected{{/ifEquals}}>House</option>
+                      <option value="condo" {{#ifEquals data.homeType "condo"}}selected{{/ifEquals}}>Condo</option>
+                      <option value="townhome" {{#ifEquals data.homeType "townhome"}}selected{{/ifEquals}}>Townhome</option>
+                      <option value="land" {{#ifEquals data.homeType "land"}}selected{{/ifEquals}}>Land</option>
+                    </select>
+                    <label for="homeType">Type of home: </label>
+                  </div>
+                </div>
+                <div class="col s6">
+                  {{{numberField name="homeSize" max="500000" step="100" default="2000" label="Size (sq ft): " data=data.homeSize }}}
+                </div>
+                <div class="col s12">
+                  <div class="input-field">
+                    <input id="googAddress" name="address" placeholder="" class="controls validate {{#if messages.address}}invalid{{/if}}" value="{{#if data.address}}{{data.address}}{{/if}}" type="text">
+                    <label for="googAddress" id="googAddressMsgs" data-error="{{#if messages.address}}{{messages.address}}{{else}}{{#if messages.streetNumber}}{{messages.streetNumber}}{{/if}}{{/if}}">Your address: </label>
+                    <input type="hidden" id="streetNumber" name="streetNumber" value="{{#if data.streetNumber}}{{data.streetNumber}}{{/if}}"> <!-- the number of the house -->
+                    <input type="hidden" id="route" name="route" value="{{#if data.route}}{{data.route}}{{/if}}">
+                    <input type="hidden" id="city" name="city" value="{{#if data.city}}{{data.city}}{{/if}}"> <!-- locality -->
+                    <input type="hidden" id="neighborhood" name="neighborhood" value="{{#if data.neighborhood}}{{data.neighborhood}}{{/if}}">
+                    <input type="hidden" id="county" name="county" value="{{#if data.county}}{{data.county}}{{/if}}"> <!-- administrative_area_level_2 -->
+                    <input type="hidden" id="state" name="state" value="{{#if data.state}}{{data.state}}{{/if}}"> <!-- administrative_area_level_1 -->
+                    <input type="hidden" id="zipcode" name="zipcode" value="{{#if data.zipcode}}{{data.zipcode}}{{/if}}"> <!-- postal_code -->
+                  </div>
+                </div>
+                <div class="col s6">
+                  <div class="input-field">
+                    <select name="secondaryDesignator" id="secondaryDesignator">
+                      <option value="" disabled {{#unless data.secondaryDesignator}}selected{{/unless}}>APT, UNIT, ...</option>
+                      <option value="apt" {{#ifEquals data.secondaryDesignator "apt"}}selected{{/ifEquals}}>APT</option>
+                      <option value="unit" {{#ifEquals data.secondaryDesignator "unit"}}selected{{/ifEquals}}>UNIT</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col s6">
+                  <div class="input-field">
+                    <input type="text" name="secondaryDescriptor" id="secondaryDescriptor" value="{{#if data.secondaryDescriptor}}{{data.secondaryDescriptor}}{{/if}}"/>
+                    <label for="secondaryDescriptor">Number</label>
+                  </div>
+                </div>
+              </div>
+              <div class="input-field small-b-room">
+                <button class="btn waves-effect waves-light" type="submit">Next</button>
               </div>
             </div>
-            <div class="col s6">
-              {{{numberField name="homeSize" max="500000" step="100" default="2000" label="Size (sq ft): " data=data.homeSize }}}
-            </div>
-            <div class="col s12">
-              <div class="input-field">
-                <input id="googAddress" name="address" placeholder="" class="controls validate {{#if messages.address}}invalid{{/if}}" value="{{#if data.address}}{{data.address}}{{/if}}" type="text">
-                <label for="googAddress" id="googAddressMsgs" data-error="{{#if messages.address}}{{messages.address}}{{else}}{{#if messages.streetNumber}}{{messages.streetNumber}}{{/if}}{{/if}}">Your address: </label>
-                <input type="hidden" id="streetNumber" name="streetNumber" value="{{#if data.streetNumber}}{{data.streetNumber}}{{/if}}"> <!-- the number of the house -->
-                <input type="hidden" id="route" name="route" value="{{#if data.route}}{{data.route}}{{/if}}">
-                <input type="hidden" id="city" name="city" value="{{#if data.city}}{{data.city}}{{/if}}"> <!-- locality -->
-                <input type="hidden" id="neighborhood" name="neighborhood" value="{{#if data.neighborhood}}{{data.neighborhood}}{{/if}}">
-                <input type="hidden" id="county" name="county" value="{{#if data.county}}{{data.county}}{{/if}}"> <!-- administrative_area_level_2 -->
-                <input type="hidden" id="state" name="state" value="{{#if data.state}}{{data.state}}{{/if}}"> <!-- administrative_area_level_1 -->
-                <input type="hidden" id="zipcode" name="zipcode" value="{{#if data.zipcode}}{{data.zipcode}}{{/if}}"> <!-- postal_code -->
-              </div>
-            </div>
-            <div class="col s6">
-              <div class="input-field">
-                <select name="secondaryDesignator" id="secondaryDesignator">
-                  <option value="" disabled {{#unless data.secondaryDesignator}}selected{{/unless}}>APT, UNIT, ...</option>
-                  <option value="apt" {{#ifEquals data.secondaryDesignator "apt"}}selected{{/ifEquals}}>APT</option>
-                  <option value="unit" {{#ifEquals data.secondaryDesignator "unit"}}selected{{/ifEquals}}>UNIT</option>
-                </select>
-              </div>
-            </div>
-            <div class="col s6">
-              <div class="input-field">
-                <input type="text" name="secondaryDescriptor" id="secondaryDescriptor" value="{{#if data.secondaryDescriptor}}{{data.secondaryDescriptor}}{{/if}}"/>
-                <label for="secondaryDescriptor">Number</label>
+            <div class="col s12 m7 l8 small-b-room">
+              <div id="map">
               </div>
             </div>
           </div>
-          <div class="input-field">
-            <button class="btn waves-effect waves-light" type="submit">Next</button>
-          </div>
-        </div>
-        <div class="col s12 m7 l8">
-          <div class="small-l-room small-t-room" id="map">
-          </div>
-        </div>
+        </form>
+      </div>
+      <div class="col l4 med-t-room hide-on-med-and-down"></div>
+      <div class="col m12 l4">
+        <ul class="collapsible popout">
+          <li>
+            <div class="collapsible-header active">What counts when calculating home size?</div>
+            <div class="collapsible-body">
+              <p>According to the National Appraiser Roster, anything unfinished is not counted in this calculation. This includes your garage, unfinished bonus rooms, enclosed porches, and unfinished basements. Don't include stairs in your calculations either, but stair openings can be included in the upper floor. See <a href="http://nationalappraiserroster.com/Resources/Appraising101/UnderstandingMeasurementsRoomCounts/tabid/223/Default.aspx">here</a> for very detailed instructions. But, as they say in the article, square footage calculation is not as clear cut as it might seem at first glance.</p>
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header">Our Privacy Policy</div>
+            <div class="collapsible-body">
+              <p>We will never advertise or give away the information related to your home without first notifying you. Our goal at <b>Rates and Agents</b> is to get your home sold more quickly with less hassle. In this vein, we will make your home information available to potential home buyers while your listing is active. If at any time, you or your realtor declare a listing as "inactive" or "sold", then your home will no longer be available to be viewed by the general public.</p>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
-    <div class="col m12 l4">
-      <ul class="collapsible popout small-l-room">
-        <li>
-          <div class="collapsible-header active">What counts when calculating home size?</div>
-          <div class="collapsible-body">
-            <p>According to the National Appraiser Roster, anything unfinished is not counted in this calculation. This includes your garage, unfinished bonus rooms, enclosed porches, and unfinished basements. Don't include stairs in your calculations either, but stair openings can be included in the upper floor. See <a href="http://nationalappraiserroster.com/Resources/Appraising101/UnderstandingMeasurementsRoomCounts/tabid/223/Default.aspx">here</a> for very detailed instructions. But, as they say in the article, square footage calculation is not as clear cut as it might seem at first glance.</p>
-          </div>
-        </li>
-        <li>
-          <div class="collapsible-header">Our Privacy Policy</div>
-          <div class="collapsible-body">
-            <p>We will never advertise or give away the information related to your home without first notifying you. Our goal at <b>Rates and Agents</b> is to get your home sold more quickly with less hassle. In this vein, we will make your home information available to potential home buyers while your listing is active. If at any time, you or your realtor declare a listing as "inactive" or "sold", then your home will no longer be available to be viewed by the general public.</p>
-          </div>
-        </li>
-      </ul>
-    </div>
   </div>
-</form>
+</div>
