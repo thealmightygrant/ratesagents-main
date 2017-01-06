@@ -15,7 +15,7 @@ var conf = require('./config')
 var helpers = require('./utils/hb_helpers');
 var validators = require('./utils/validators');
 var strategies = require('./utils/strategies');
-var middleware = require('./utils/middleware');
+var utilWares = require('./middlewares/utils');
 var routes = require('./routes/index');
 var realtors = require('./routes/realtors');
 var homeowners = require('./routes/homeowners');
@@ -95,15 +95,15 @@ app.use(expressValidator({
 
 //TODO: add back in if needed
 //app.use(flash());
-app.use(middleware.addMessages);
+app.use(utilWares.addMessages);
 
 app.use('/', routes)
 app.use('/realtors', realtors)
 app.use('/homeowners', homeowners)
 
-app.use(middleware.logErrors);
-app.use(middleware.clientErrorHandler);
-app.use(middleware.errorHandler);
+app.use(utilWares.logErrors);
+app.use(utilWares.clientErrorHandler);
+app.use(utilWares.errorHandler);
 
 app.set('port', conf.get('port'));
 app.listen(conf.get('port'), onListening)

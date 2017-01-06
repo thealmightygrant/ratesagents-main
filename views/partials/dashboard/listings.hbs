@@ -1,24 +1,9 @@
-<div class="row">
-  <div class="col s6">
-    <div class="card small-h-room">
-      <!-- TODO: maybe add a wave effect here -->
-      <a href="#">
-      <div class="card-image">
-        <img class="activator hoverable" src="/images/home2.jpg">
-        <span class="card-title hoverable z-depth-2 blue darken-2">See an example home listing.</span>
-      </div>
-      </a>
-    </div>
-  </div>
-  <div class="col s6">
-    <div class="card">
-      <!-- TODO: maybe add a wave effect here -->
-      <a href="/homeowners/basic-home-information">
-        <div class="card-image">
-          <img class="activator hoverable" src="/images/home1.jpg">
-          <span class="card-title hoverable z-depth-2 blue darken-2">Create your searchable home listing.</span>
-        </div>
-      </a>
-    </div>
-  </div>
-</div>
+{{#switch data.listing-input-step}}
+  {{#case "address-and-home-type" break=true}}
+    {{> dashboard/address-and-home-type}}
+  {{/case}}
+  {{#case "listing-price-and-commission" break=true}}
+    {{> dashboard/listing-price-and-commission}}
+  {{/case}}
+  <!-- TODO: add default of some kind -->
+{{/switch}}

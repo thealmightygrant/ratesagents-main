@@ -1,11 +1,13 @@
 var express = require('express')
-,   passport = require('passport')
 ,   router  = express.Router()
-,   user_utils = require('../utils/user_related')
-,   middleware = require('../utils/middleware')
-,   conf = require('../config')
+,   passport = require('passport')
 ,   csrf_protection = require('csurf')()
 ,   merge = require('lodash.merge')
+,   conf = require('../config')
+,   inputValidationWares = require('../middlewares/input_validation')
+,   dashboardWares = require('../middlewares/dashboard')
+,   utilWares = require('../middlewares/utils')
+
 
 //external calls
 //TODO: handle already registered user....
@@ -48,8 +50,8 @@ router.post('/register'
               res.locals.err_view = 'homeowner-register.hbs';
               next();
             }
-            , user_utils.validateRegister
-            , middleware.authMiddlewareFactory('homeowner-local-register',
+            , inputValidationWares.validateRegister
+            , utilWares.authMiddlewareFactory('homeowner-local-register',
                                                '/homeowners/register',
                                                '/homeowners/dashboard'))
 
@@ -65,8 +67,8 @@ router.post('/login'
               res.locals.err_view = 'homeowner-login.hbs'
               next();
             }
-            , user_utils.validateLogin
-            , middleware.authMiddlewareFactory('homeowner-local-login',
+            , inputValidationWares.validateLogin
+            , utilWares.authMiddlewareFactory('homeowner-local-login',
                                                '/homeowners/login',
                                                '/homeowners/dashboard'))
 
@@ -77,97 +79,35 @@ router.use('/logout', function(req, res, next){
 })
 
 router.get('/dashboard'
-           , user_utils.isLoggedIn
+           , inputValidationWares.isLoggedIn
+           //TODO: add dashboard layout func
+           , dashboardWares.determineDashboardLayout
            , function(req, res){
              var prd = merge(res.locals
                              , conf.get('pages.homeowners-dashboard-nav')
                              , conf.get('pages.homeowners-dashboard')
+                             , res.locals.includeMap ? { data: { googleMaps: conf.get("apis.googleMaps") }} : {}
                              , { data: { csrfToken: req.csrfToken() }})
              res.render('homeowner-dashboard.hbs', prd);
            })
 
-router.get('/basic-home-information'
-           , user_utils.isLoggedIn
-           , function(req, res){
-             var prd = merge(res.locals
-                             , conf.get('pages.basic-home-information')
-                             , {
-                               data: { csrfToken: req.csrfToken(),
-                                       googleMaps: conf.get("apis.googleMaps") },
-                               includeMap: true
-                             })
-             res.render('basic-home-information.hbs', prd);
-           })
-
 router.post('/basic-home-information'
-            , user_utils.isLoggedIn
+            , inputValidationWares.isLoggedIn
             , function(req, res, next){
               res.locals.err_view = 'basic-home-information.hbs'
               res.locals.suc_url = '/homeowners/listing-commission-information'
               next();
             }
-            , user_utils.validateAndSaveHome)
+            , inputValidationWares.validateAndSaveHome)
 
-
-router.get('/listing-commission-information'
-           , user_utils.isLoggedIn
-           , function(req, res){
-             var prd = merge(res.locals
-                             , conf.get('pages.listing-commission-information')
-                             , { data: { csrfToken: req.csrfToken() }
-                                 , includeChart: true }
-                            )
-             res.render('listing-commission-information.hbs', prd);
-           })
 
 router.post('/listing-commission-information'
-            , user_utils.isLoggedIn
+            , inputValidationWares.isLoggedIn
             , function(req, res, next){
               res.locals.err_view = 'listing-commission-information.hbs'
               res.locals.suc_url = '/homeowners/start-auction'
               next();
             }
-            , user_utils.validateAndSaveHome)
-
-router.get('/sale-date-information'
-           , user_utils.isLoggedIn
-           , function(req, res){
-             var prd = merge(res.locals
-                             , conf.get('pages.sale-date-information')
-                             , { data: { csrfToken: req.csrfToken() }}
-                            )
-             res.render('sale-date-information.hbs', prd);
-           })
-
-
-router.get('/auction-information'
-           , user_utils.isLoggedIn
-           , function(req, res){
-             var prd = merge(res.locals
-                             , conf.get('pages.auction-information')
-                             , { data: { csrfToken: req.csrfToken() }}
-                            )
-             res.render('auction-information.hbs', prd);
-           })
-
-
-
-router.get('/advanced-home-information'
-           , user_utils.isLoggedIn
-           , function(req, res){
-             var prd = merge(res.locals
-                             , conf.get('pages.advanced-home-information')
-                             , { data: { csrfToken: req.csrfToken() }})
-             res.render('advanced-home-information.hbs', prd);
-           })
-
-// router.post('/advanced-home-information'
-//             , user_utils.isLoggedIn
-//             , function(req, res, next){
-//               res.locals.err_view = 'advanced-home-information.hbs'
-//               res.locals.suc_url = '/homeowners/listing-commission-information'
-//               next();
-//             }
-//             , user_utils.validateAndSaveHomeDetails)
+            , inputValidationWares.validateAndSaveHome)
 
 module.exports = router;

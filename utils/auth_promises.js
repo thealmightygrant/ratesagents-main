@@ -1,4 +1,3 @@
-const Promise = require("bluebird")
 const retrieveUserViaFB = require('./model_promises').retrieveUserViaFB
 ,     retrieveUserViaEmail = require('./model_promises').retrieveUserViaEmail
 ,     checkUserPassword = require('./model_promises').checkUserPassword
@@ -6,9 +5,14 @@ const retrieveUserViaFB = require('./model_promises').retrieveUserViaFB
 ,     createUserViaEmail = require('./model_promises').createUserViaEmail
 ,     createUserViaFB = require('./model_promises').createUserViaFB
 ,     createFBAccount = require('./model_promises').createFBAccount
-const models  = require('../models/index')
 
-exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, profile, modelName){
+module.exports = {
+  facebookLoginVerify: facebookLoginVerify,
+  localLoginVerify: localLoginVerify,
+  localRegisterVerify: localRegisterVerify
+}
+
+function facebookLoginVerify(token, refreshToken, profile, modelName){
   //NOTE: there's only a login because they can register or login via this endpoint
   return retrieveFBAccount(parseInt(profile.id))
     .then(function(fbAccount){
@@ -22,7 +26,6 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
       else{
         return retrieveUserViaFB(fbAccount, modelName)
           .then(function(user){
-            console.log("user: ", user)
             if(!user){
               //NOTE: this basically means an orphaned FB account, cleanest option might be to delete the FB account.
               //TODO: an option here would be to create a new user...
@@ -37,7 +40,7 @@ exports.facebookLoginVerify = function facebookLoginVerify(token, refreshToken, 
 }
 
 
-exports.localLoginVerify = function localLoginVerify(req, email, password, modelName){
+function localLoginVerify(req, email, password, modelName){
   const passthroughData = {email: email}
   return retrieveUserViaEmail(email, modelName)
     .then(function(user){
@@ -62,6 +65,6 @@ exports.localLoginVerify = function localLoginVerify(req, email, password, model
     })
 }
 
-exports.localRegisterVerify = function localRegisterVerify(req, email, password, modelName){
+function localRegisterVerify(req, email, password, modelName){
   return createUserViaEmail(email, password, modelName);
 }

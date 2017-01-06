@@ -1,7 +1,9 @@
 "use strict";
 
 const HBars = require('handlebars')
-  ,   merge = require('lodash.merge')
+,     merge = require('lodash.merge')
+
+//TODO: look into html minifier hbar helper
 
 module.exports = {
   getDateNumeral: getDateNumeral
@@ -9,6 +11,9 @@ module.exports = {
   , str: str  //Where the fuck is this used?? and why does it exist?
   , or: or
   , and: and
+  , switch: switcher
+  , case: caser
+  , default: defaulter
 
   , textField: textField
   , dateField: dateField
@@ -52,6 +57,39 @@ function or(item1, item2){
     return true;
   else
     return false;
+}
+
+
+//NOTE: implementation swiped from here: https://github.com/wycats/handlebars.js/issues/927
+function switcher(value, options) {
+  this._switch_value_ = value;
+  this._switch_break_ = false;
+  var html = options.fn(this);
+  delete this._switch_break_;
+  delete this._switch_value_;
+  return html;
+}
+
+function caser() {
+  var args = Array.prototype.slice.call(arguments);
+  var options = args.pop();
+  var caseValues = args;
+
+  if (this._switch_break_ || caseValues.indexOf(this._switch_value_) === -1) {
+    return '';
+  }
+  else {
+    if (options.hash.break === true) {
+      this._switch_break_ = true;
+    }
+    return options.fn(this);
+  }
+}
+
+function defaulter(options) {
+  if (!this._switch_break_) {
+    return options.fn(this);
+  }
 }
 
 function dateField(options){

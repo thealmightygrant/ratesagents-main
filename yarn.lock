@@ -2175,6 +2175,13 @@ gulplog@^1.0.0:
   dependencies:
     glogg "^1.0.0"
 
+handlebars-helper-minify@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/handlebars-helper-minify/-/handlebars-helper-minify-0.1.3.tgz#fc9f909e90cb8db03f5570bdf61c85609903389d"
+  dependencies:
+    html-minifier "~0.5.4"
+    lodash "~2.2.1"
+
 handlebars@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.0.5.tgz#92c6ed6bb164110c50d4d8d0fbddc70806c6f8e7"
@@ -2278,6 +2285,10 @@ hsts@1.0.0:
 html-comment-regex@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/html-comment-regex/-/html-comment-regex-1.1.1.tgz#668b93776eaae55ebde8f3ad464b307a4963625e"
+
+html-minifier@~0.5.4:
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/html-minifier/-/html-minifier-0.5.6.tgz#0f15b437c27b5ce9aa84a44ca2850880e9257996"
 
 htmlparser2@3.8.x:
   version "3.8.3"
@@ -3088,6 +3099,10 @@ lodash@4.16.2, lodash@4.16.x, lodash@^4.0.0, lodash@^4.10.0, lodash@^4.2.0, loda
 lodash@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-1.0.2.tgz#8f57560c83b59fc270bd3d561b690043430e2551"
+
+lodash@~2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-2.2.1.tgz#ca935fd14ab3c0c872abacf198b9cda501440867"
 
 lodash@~4.16.4:
   version "4.16.4"

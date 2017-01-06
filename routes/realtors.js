@@ -1,11 +1,11 @@
 var express = require('express')
-,   passport = require('passport')
 ,   router  = express.Router()
-,   user_utils = require('../utils/user_related')
-,   middleware = require('../utils/middleware')
-,   conf = require('../config')
+,   passport = require('passport')
 ,   csrf_protection = require('csurf')()
 ,   merge = require('lodash.merge')
+,   conf = require('../config')
+,   inputValidationWares = require('../middlewares/input_validation')
+,   utilWares = require('../middlewares/utils')
 
 // //TODO: add location to scope
 // router.get('/auth/facebook'
@@ -47,7 +47,7 @@ router.post('/register'
               res.locals.err_view = 'realtor-register';
               next();
             }
-            , user_utils.validateRegister
+            , inputValidationWares.validateRegister
             , passport.authenticate('realtor-local-register',
                                     { successRedirect: '/realtors/dashboard',
                                       failureRedirect: '/realtors/register',
@@ -66,8 +66,8 @@ router.post('/login'
               res.locals.err_view = 'realtor-login.hbs'
               next();
             }
-            , user_utils.validateLogin
-            , middleware.authMiddlewareFactory('realtor-local-login',
+            , inputValidationWares.validateLogin
+            , utilWares.authMiddlewareFactory('realtor-local-login',
                                                '/realtors/login',
                                                '/realtors/dashboard'))
 
@@ -76,23 +76,6 @@ router.use('/logout', function(req, res, next){
   req.logout();
   res.redirect('/');
 })
-
-
-router.get('/login', function(req, res){
-  res.render('realtor-login');
-});
-
-router.post('/login'
-            , function(req, res, next){
-                res.locals.error_view = 'realtor-login'
-                next();
-            }
-            , user_utils.validateLogin
-            , passport.authenticate('realtor-local-login',
-                                    { successRedirect: '/realtors/dashboard',
-                                      failureRedirect: '/realtors/login',
-                                      failureFlash: true }));
-
 //TODO: this should be a post
 router.use('/logout', function(req, res, next){
   req.logout();
@@ -100,12 +83,12 @@ router.use('/logout', function(req, res, next){
 })
 
 router.get('/dashboard'
-           , user_utils.isLoggedIn
+           , inputValidationWares.isLoggedIn
            , function(req, res){ res.render('realtor-dashboard'); })
 
 
 router.get('/profile/edit'
-           , user_utils.isLoggedIn
+           , inputValidationWares.isLoggedIn
            , function(req, res){
              var prd = merge(res.locals
                              , conf.get('pages.realtor-profile')
@@ -115,7 +98,7 @@ router.get('/profile/edit'
            })
 
 router.get('/profile/view'
-           , user_utils.isLoggedIn
+           , inputValidationWares.isLoggedIn
            , function(req, res){
              var prd = merge(res.locals
                              , conf.get('pages.realtor-profile'))
