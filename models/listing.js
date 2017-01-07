@@ -19,6 +19,8 @@ module.exports = function(sequelize, DataTypes) {
     closingDateMaxDays: DataTypes.INTEGER,
     //NOTE: number of days before desiredClosingDate that sale is acceptable
     closingDateMinDays: DataTypes.INTEGER
+    //TODO: add active / inactive
+    //active: DataTypes.BOOL
   }, {
     freezeTableName: true
     , classMethods: {

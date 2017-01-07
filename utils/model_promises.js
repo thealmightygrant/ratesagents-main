@@ -8,6 +8,8 @@ module.exports = {
   retrieveUserViaFB: retrieveUserViaFB,
   retrieveUserViaId: retrieveUserViaId,
   retrieveFBAccount: retrieveFBAccount,
+  retrieveListings: retrieveListings,
+  retrieveHomeViaId: retrieveHomeViaId,
   checkUserPassword: checkUserPassword,
   createFBAccount: createFBAccount,
   createUserViaFB: createUserViaFB,
@@ -83,13 +85,49 @@ function retrieveFBAccount(fb_id){
       }
     })
       .then(function(fbAccount) {
-        console.log("found fb account: ", fbAccount)
         if(fbAccount !== null)
           return fbAccount;
         else
           return false;
       })
       .catch(function(e){
+        e.message = 'database error: ' + e.message;
+        throw e;
+      })
+  }
+}
+
+function retrieveListings(user_id, model_name, options){
+  if(!user_id || !model_name)
+    return [];
+  else {
+    return models[model_name].findOne({
+      where: {
+        id: user_id
+      }
+    })
+      .then(function(user){
+        return user.getListings(options);
+      })
+      .catch(function(e){
+        e.message = 'database error: ' + e.message;
+        throw e;
+      })
+  }
+}
+
+function retrieveHomeViaId(home_id){
+  if(!home_id)
+    return null;
+  else {
+    return models["home"].findOne({
+      where: {
+        id: home_id
+      }
+    })
+      .then(function(home){
+        return home;
+      }).catch(function(e){
         e.message = 'database error: ' + e.message;
         throw e;
       })

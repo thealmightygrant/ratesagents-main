@@ -1,0 +1,94 @@
+<div class="container">
+  <div class="row">
+    <div class="col m12 l8">
+      <h3 class="very-small-r-room">Your Desired Realtor Commission</h3><h5>Step 2 of 3</h5>
+      <p>Please input your desired commission structure. This is not a contract, but it is an expectation that your selected realtor will have access to and that realtor's will be able to use as a guideline to tailor their commission bid to your expectations.</p>
+      <form method="post" id="commission-form" action="/homeowners/listing-commission-information">
+        <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
+        <div class="row small-t-room">
+          <div class="col s12 m5 l4">
+            <!-- NEED: flat fee (if any), tier 0, tier 1, tier 2 price, tier 3 price + commissions for each -->
+            <!-- TODO: make these text fields??  -->
+            <div class="row">
+              <div class="col s6">
+                {{{numberField name="buy_price" default="350000" msg=messages.buy_price label="Buy Price: " data=data.buy_price}}}
+              </div>
+              <div class="col s6">
+                {{{numberField name="listing_price" default="400000" msg=messages.listing_price label="Listing Price: " data=data.listing_price}}}
+              </div>
+            </div>
+            <!-- NOTE: maybe make this a dropdown instead? -->
+            <div class="row">
+              <div class="col s6">
+                {{{numberField name="flat_fee" default="5000" msg=messages.flat_fee label="Flat Fee: " data=data.flat_fee}}}
+              </div>
+              <div class="col s6">
+                {{{numberField name="trad_commission" step="0.1" default="4.0" msg=messages.trad_commission label="Commission: " data=data.trad_commission}}}
+              </div>
+            </div>
+            <p class="extra-info">* Other fees estimated at 2% of home price. These include homeowner's share of property taxes for the year, attorney fees, and title fees. See <a href="http://www.realtor.com/advice/sell/sellers-must-pay-closing-costs-too/">here</a> for more details.</p>
+            <div class="input-field small-b-room">
+              <button class="btn waves-effect waves-light" type="submit">Next</button>
+            </div>
+          </div>
+          <div class="col s12 m7 l8 small-b-room">
+            <ul class="tabs">
+              <li class="tab"><a href="#tab1">Commission Chart</a></li>
+              <li class="tab"><a href="#tab2">Profit Calculator</a></li>
+            </ul>
+            <div id="tab1">
+              <div class="row">
+                <div class="col xl10 offset-xl1 l12">
+                  <!-- have to adjust size of canvas with css? might be easier to try d3?? -->
+                  <canvas class="small-t-room" id="commission_line_chart"></canvas>
+                </div>
+              </div>
+            </div>
+            <div id="tab2">
+              <div class="row">
+                <div class="col xl6 l8 offset-l2 m12">
+                  <!-- have to adjust size of canvas with css? might be easier to try d3?? -->
+                  <canvas class="small-t-room" id="commission_donut_chart"></canvas>
+                </div>
+                <div class="col xl6 l8 offset-l2 m12">
+                  <canvas class="small-t-room" id="reg_commission_donut_chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col l4 med-t-room hide-on-med-and-down"></div>
+    <div class="col m12 l4">
+      <ul class="collapsible popout">
+        <!-- <li> -->
+             <!-- TODO: it would be pretty awesome to have some badges
+             on these collapsibles and to do accordion style -->
+        <!-- <div class="collapsible-header">Marginal Tiered Commission</div> -->
+        <!-- <div class="collapsible-body"> -->
+        <!-- <p>The most complicated, but often most rewarding pricing model for homeowners. This model provides a base commission for any price between the minimum and desired sales price of a home. The difference between the desired price and the second tier price earns an increased commission. At a third tier price the commission increases again. See <a href="#link-to-commission-FAQs">here</a> for more details.</p> -->
+        <!-- </div> -->
+        <!-- </li> -->
+        <!-- <li> -->
+        <!-- <div class="collapsible-header">Total Tiered Commission</div> -->
+        <!--  <div class="collapsible-body"> -->
+        <!--                 <p>The most lucrative pricing model for realtors and many times the most rewarding for homeowners because realtors will work harder for a higher sales price. In this instance, a base commission is earned for any price between the minimum and the desired sales price of a home. Any sales price over the second tier (even by $1) will earn the realtor an increased commission on the sale. At a third tier price the commission increases again. See <a href="#link-to-commission-FAQs">here</a> for more details.</p> -->
+          <!--  </div> -->
+          <!-- </li> -->
+        <li>
+          <div class="collapsible-header active">Single Rate Commission</div>
+          <div class="collapsible-body">
+            <p>This is the standard commission that a realtor receives. The commission will be split by the buying and selling agents, but it is negotiated on the selling side. This is an easy to understand option that is never a bad choice, but we do recommend tiered or flat fee commissions over it.</p>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header">Flat Fee</div>
+          <div class="collapsible-body">
+            <p>This is the fee that you will pay to your realtor regardless of the sales price of your home. If you have an easy to sell home or you do not want to pay the (often) larger fees associated with a commission, then this is probably the right option for you.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

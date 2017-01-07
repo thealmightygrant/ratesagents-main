@@ -6,8 +6,8 @@ var express = require('express')
 ,   conf = require('../config')
 ,   inputValidationWares = require('../middlewares/input_validation')
 ,   dashboardWares = require('../middlewares/dashboard')
+,   modelWares = require('../middlewares/model')
 ,   utilWares = require('../middlewares/utils')
-
 
 //external calls
 //TODO: handle already registered user....
@@ -82,6 +82,7 @@ router.get('/dashboard'
            , inputValidationWares.isLoggedIn
            //TODO: add dashboard layout func
            , dashboardWares.determineDashboardLayout
+           , dashboardWares.addIncludes
            , function(req, res){
              var prd = merge(res.locals
                              , conf.get('pages.homeowners-dashboard-nav')
@@ -94,20 +95,23 @@ router.get('/dashboard'
 router.post('/basic-home-information'
             , inputValidationWares.isLoggedIn
             , function(req, res, next){
-              res.locals.err_view = 'basic-home-information.hbs'
-              res.locals.suc_url = '/homeowners/listing-commission-information'
+              res.locals.err_view = 'homeowner-dashboard.hbs'
+              res.locals.suc_url = '/homeowners/dashboard'
               next();
             }
-            , inputValidationWares.validateAndSaveHome)
+            , inputValidationWares.validateHome
+            , modelWares.saveHome
+            , function(req, res){
+              res.redirect('/homeowners/dashboard');
+            })
 
-
-router.post('/listing-commission-information'
-            , inputValidationWares.isLoggedIn
-            , function(req, res, next){
-              res.locals.err_view = 'listing-commission-information.hbs'
-              res.locals.suc_url = '/homeowners/start-auction'
-              next();
-            }
-            , inputValidationWares.validateAndSaveHome)
+// router.post('/listing-commission-information'
+//             , inputValidationWares.isLoggedIn
+//             , function(req, res, next){
+//               res.locals.err_view = 'listing-commission-information.hbs'
+//               res.locals.suc_url = '/homeowners/start-auction'
+//               next();
+//             }
+//             , inputValidationWares.validateAndSaveHome)
 
 module.exports = router;

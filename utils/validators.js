@@ -2,6 +2,13 @@ var Promise = require("bluebird")
 ,   models = require('../models/index')
 
 
+module.exports = {
+  isUsernameAvailable: isUsernameAvailable,
+  isEmailAvailable: isEmailAvailable,
+  isInteralEmail: isInternalEmail,
+  isValidAddress: isValidAddress
+}
+
 function isValueInUse(field_name, value, model_name) {
   return new Promise(function(resolve, reject) {
     var field_object = {where: {}}
@@ -22,16 +29,27 @@ function isValueInUse(field_name, value, model_name) {
   });
 }
 
-exports.isUsernameAvailable = function(username, model_name) {
+function isUsernameAvailable(username, model_name) {
   return isValueInUse("username", username, model_name);
 }
 
-exports.isEmailAvailable = function(email, model_name) {
+function isEmailAvailable(email, model_name) {
   return isValueInUse("email", email, model_name);
 }
 
-exports.isInternalEmail = function(email) {
+function isInternalEmail(email) {
   //later on we can make this email.indexOf("ratesandagents.com") !== -1
   return (email === "grant@ratesandagents.com") ||
           (email === "casey@ratesandagents.com")
+}
+
+function isValidAddress(address) {
+  if(address.streetNumber &&
+     address.route &&
+     address.city &&
+     address.state &&
+     address.zipcode)
+    return true
+  else
+    return false
 }

@@ -3,12 +3,12 @@
     "homeowners-dashboard-nav": {
       "tabData": [
         {
-          "href": "#listing",
-          "value": "Your Listings"
+          "href": "#current-listing",
+          "value": "Current Listing"
         },
         {
-          "href": "#auction",
-          "value": "Your Auctions"
+          "href": "#all-listings",
+          "value": "All Listings"
         }
       ],
       "navData": {
