@@ -1,20 +1,29 @@
 {{#if (or tabData or navData)}}
   <nav {{#if tabData}}class="nav-extended"{{/if}}>
-  <div class="nav-wrapper">
-    <a href="/"><img class="brand-icon responsive-img" src="/images/ra-icon.png" /></a>
-    <a href="#" class="logo"><span class="biginate">R</span>ates & <span class="biginate">A</span>gents</a>
-    <a href="#" data-activates="mobile-nav" class="right button-collapse"><i class="material-icons">menu</i></a>
-    <ul class="side-nav" id="mobile-nav">
-      {{{navLinks navData=this.navData tabData=this.tabData navType="mobile-main-nav"}}}
-    </ul>
-    <ul class="right hide-on-small-only smallcaps very-small-r-room light-blue-text text-darken-3">
-      {{{navLinks navData=this.navData navType="main-nav"}}}
-    </ul>
-    {{#if tabData}}
-      <ul class="tabs hide-on-small-only">
-        {{{navLinks tabData=this.tabData navType="tabs"}}}
+    <div class="nav-wrapper">
+      <a href="/"><img class="brand-icon responsive-img" src="/images/ra-icon.png" /></a>
+      <a href="#" class="logo"><span class="biginate">R</span>ates & <span class="biginate">A</span>gents</a>
+      <a href="#" data-activates="mobile-nav" class="right button-collapse"><i class="material-icons">menu</i></a>
+      <ul class="side-nav" id="mobile-nav">
+        {{{navLinks navData=this.navData tabData=this.tabData navType="mobile-main-nav"}}}
       </ul>
-    {{/if}}
-  </div>
+      <ul class="right hide-on-small-only smallcaps very-small-r-room light-blue-text text-darken-3">
+        {{{navLinks navData=this.navData navType="main-nav"}}}
+      </ul>
+      {{#if tabData}}
+        <ul class="tabs hide-on-small-only{{#if secondaryTabData }} no-indicator{{/if}}">
+          {{{navLinks tabData=this.tabData navType="tabs"}}}
+        </ul>
+      {{/if}}
+    </div>
+  </nav>
+{{/if}}
+{{#if secondaryTabData}}
+  <nav class="secondary hide-on-small-only">
+    <div class="nav-wrapper">
+        <ul class="tabs">
+          {{{navLinks tabData=this.secondaryTabData activeTab=this.activeTab navType="tabs"}}}
+        </ul>
+    </div>
   </nav>
 {{/if}}

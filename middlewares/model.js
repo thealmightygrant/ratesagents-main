@@ -1,5 +1,6 @@
 const models = require('../models/index')
 ,     merge = require('lodash.merge')
+,     cloneDeep = require('lodash.clonedeep')
 ,     modelPromises = require('../utils/model_promises')
 
 module.exports = {
@@ -9,6 +10,8 @@ module.exports = {
 const dbErrorMsg = {mainError: "There has been a database issue. Please wait a few seconds and try submitting your info again. Thanks! "}
 
 function saveHome(req, res, next){
+  const sessionData = req.session.data;
+  const localData = res.locals.data;
   const rb = req.body;
   const err_view = res.locals.err_view;
 
@@ -31,20 +34,29 @@ function saveHome(req, res, next){
     return next();
   }
 
-  models["home"].create(homeData)
-    .then(function(home){
-      req.session.home = {id: home.id}
-      return models["listing"].create({
-        homeId: home.id,
-        homeownerId: req.session.passport.user.id
-      })
+  const homeCreator = models["home"].create(homeData);
+  const listingCreator = function(home){
+    sessionData.home = cloneDeep(home);
+    sessionData.home.address = cloneDeep(rb.address);
+
+    return models["listing"].create({
+      homeId: home.id,
+      homeownerId: req.session.passport.user.id
+    })
+  }
+
+  homeCreator
+    .then(listingCreator)
+    .then(function(listing){
+      sessionData.listing = cloneDeep(listing);
+      return next();
     }).catch(function(e){
-      console.error("error: ", e)
       res.render(err_view,
                  merge(res.locals, {
                    data: { home: homeData,
                            csrfToken: req.body._csrf },
                    messages: dbErrorMsg
-                 }))
+                 })
+                )
     })
 }

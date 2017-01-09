@@ -39,13 +39,13 @@
     //TODO: not very DRY, refactor pleeeeeeeease
     if(window.Chart) {
       var commissionCalculator = (function() {
-        var listingPriceNode = $("#listing_price")
-        var buyPriceNode = $("#buy_price")
-        var tradCommissionNode = $("#trad_commission")
-        var flatFeeNode = $("#flat_fee")
-        var donutChart = document.getElementById("commission_donut_chart");
-        var lineChart = document.getElementById("commission_line_chart")
-        var regDonutChart = document.getElementById("reg_commission_donut_chart");
+        var listingPriceNode = $("#price")
+        var buyPriceNode = $("#buyPrice")
+        var tradCommissionNode = $("#tier0Commission")
+        var flatFeeNode = $("#flatFee")
+        var donutChart = document.getElementById("commissionDonutChart");
+        var lineChart = document.getElementById("commissionLineChart")
+        var regDonutChart = document.getElementById("regCommissionDonutChart");
 
         function calculatedCommission(listingPrice, tradCommission, flatFee){
           //TODO: validate all inputs?

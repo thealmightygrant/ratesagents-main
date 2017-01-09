@@ -30,7 +30,7 @@ exports.addMessages = function addMessages(req, res, next){
   // Remove them so they're not displayed on subsequent renders.
   delete req.session.error;
   delete req.session.messages;
-  delete req.session.data;
+  req.session.data = {}
 
   next();
 }

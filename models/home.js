@@ -11,18 +11,12 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       set: function(string_val){
         this.setDataValue('builtIn', +string_val);
-      },
-      get: function(int_val){
-        return int_val.toString();
       }
     },     //e.g. 1999
     homeSize: {
       type: DataTypes.INTEGER,
       set: function(string_val){
         this.setDataValue('homeSize', +string_val);
-      },
-      get: function(int_val){
-        return int_val.toString();
       }
     },    //e.g. 2000 sq ft
     homeType: DataTypes.ENUM('house', 'condo', 'townhome', 'land'),
@@ -33,8 +27,8 @@ module.exports = function(sequelize, DataTypes) {
         this.setDataValue('numBedrooms', int_val);
       },
       get: function(int_val){
-        var string_val = (int_val / 100).toString();
-        return string_val;
+        var fixed_val = (int_val / 100).toFixed(2);
+        return fixed_val;
       }
     },
     numBathrooms: {
@@ -44,8 +38,8 @@ module.exports = function(sequelize, DataTypes) {
         this.setDataValue('numBathrooms', int_val);
       },
       get: function(int_val){
-        var string_val = (int_val / 100).toString();
-        return string_val;
+        var fixed_val = (int_val / 100).toFixed(2);
+        return fixed_val;
       }
     },
     secondaryDesignator: DataTypes.STRING,

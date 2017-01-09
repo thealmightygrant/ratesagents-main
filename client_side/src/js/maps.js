@@ -54,6 +54,15 @@ function initMap() {
     google.maps.event.trigger(autocomplete, 'place_changed');
   }
 
+
+  $('a[href=#address-and-home-type]').on('click', function() {
+    setTimeout(function(){
+      google.maps.event.trigger(map, 'resize');
+    }, 50);
+
+  });
+
+
   function handleAddress() {
     infowindow.close();
     marker.setVisible(false);

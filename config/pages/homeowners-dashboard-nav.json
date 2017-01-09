@@ -11,6 +11,16 @@
           "value": "All Listings"
         }
       ],
+      "secondaryTabData": [
+        {
+          "href": "#address-and-home-type",
+          "value": "Home and Address"
+        },
+        {
+          "href": "#listing-price-and-commission",
+          "value": "Desired Commission"
+        }
+      ],
       "navData": {
         "help": {
           "value": "Help",

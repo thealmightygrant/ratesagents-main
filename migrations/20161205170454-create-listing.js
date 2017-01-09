@@ -11,11 +11,13 @@ module.exports = {
       },
       title: Sequelize.STRING,
       description: Sequelize.TEXT,
+      buyPrice: Sequelize.INTEGER,
       price: Sequelize.INTEGER,
       priceMin: Sequelize.INTEGER,
       closingDate: Sequelize.DATE,
       closingDateMaxDays: Sequelize.INTEGER,
       closingDateMinDays: Sequelize.INTEGER,
+      active: Sequelize.BOOLEAN,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

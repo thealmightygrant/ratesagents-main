@@ -83,14 +83,7 @@ router.get('/dashboard'
            //TODO: add dashboard layout func
            , dashboardWares.determineDashboardLayout
            , dashboardWares.addIncludes
-           , function(req, res){
-             var prd = merge(res.locals
-                             , conf.get('pages.homeowners-dashboard-nav')
-                             , conf.get('pages.homeowners-dashboard')
-                             , res.locals.includeMap ? { data: { googleMaps: conf.get("apis.googleMaps") }} : {}
-                             , { data: { csrfToken: req.csrfToken() }})
-             res.render('homeowner-dashboard.hbs', prd);
-           })
+           , dashboardWares.renderData)
 
 router.post('/basic-home-information'
             , inputValidationWares.isLoggedIn
@@ -102,7 +95,8 @@ router.post('/basic-home-information'
             , inputValidationWares.validateHome
             , modelWares.saveHome
             , function(req, res){
-              res.redirect('/homeowners/dashboard');
+              console.log("redirecting maybeeeeee")
+              res.redirect('/homeowners/dashboard?listing-input-step=address-and-home-type');
             })
 
 // router.post('/listing-commission-information'

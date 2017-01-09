@@ -5,7 +5,7 @@ var Promise = require("bluebird")
 module.exports = {
   isUsernameAvailable: isUsernameAvailable,
   isEmailAvailable: isEmailAvailable,
-  isInteralEmail: isInternalEmail,
+  isInternalEmail: isInternalEmail,
   isValidAddress: isValidAddress
 }
 
@@ -43,12 +43,12 @@ function isInternalEmail(email) {
           (email === "casey@ratesandagents.com")
 }
 
-function isValidAddress(address) {
-  if(address.streetNumber &&
-     address.route &&
-     address.city &&
-     address.state &&
-     address.zipcode)
+function isValidAddress(home) {
+  if(home.streetNumber &&
+     home.route &&
+     home.city &&
+     home.state &&
+     home.zipcode)
     return true
   else
     return false

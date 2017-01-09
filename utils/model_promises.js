@@ -9,7 +9,7 @@ module.exports = {
   retrieveUserViaId: retrieveUserViaId,
   retrieveFBAccount: retrieveFBAccount,
   retrieveListings: retrieveListings,
-  retrieveHomeViaId: retrieveHomeViaId,
+  retrieveItemViaId: retrieveItemViaId,
   checkUserPassword: checkUserPassword,
   createFBAccount: createFBAccount,
   createUserViaFB: createUserViaFB,
@@ -57,23 +57,8 @@ function retrieveUserViaFB(fbAccount, model_name){
 }
 
 function retrieveUserViaId(user_id, model_name ){
-  return models[model_name].findOne({
-    where: {
-      id: user_id
-    }
-  })
-    .then(function(found_user) {
-      if(found_user !== null)
-        return found_user;
-      else
-        return false;
-    })
-    .catch(function(e){
-      e.message = 'database error: ' + e.message;
-      throw e;
-    })
+  return retrieveItemViaId(user_id, model_name);
 }
-
 
 function retrieveFBAccount(fb_id){
   if(!fb_id)
@@ -116,17 +101,17 @@ function retrieveListings(user_id, model_name, options){
   }
 }
 
-function retrieveHomeViaId(home_id){
-  if(!home_id)
+function retrieveItemViaId(id, model_name){
+  if(!id)
     return null;
   else {
-    return models["home"].findOne({
+    return models[model_name].findOne({
       where: {
-        id: home_id
+        id: id
       }
     })
-      .then(function(home){
-        return home;
+      .then(function(item){
+        return item;
       }).catch(function(e){
         e.message = 'database error: ' + e.message;
         throw e;

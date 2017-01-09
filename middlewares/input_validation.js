@@ -244,9 +244,7 @@ function validateAndSaveHomeDetails(req, res){
 }
 
 function isLoggedIn(req, res, next) {
-  console.log(req.session)
   if (req.isAuthenticated()){
-    console.log("Logged in!!")
     res.locals.user = {
       name: req.user.name
       , userType: req.user.userType
@@ -255,8 +253,5 @@ function isLoggedIn(req, res, next) {
     }
     return next();
   }
-  else {
-    console.log("Not Logged in!!")
-  }
-  return res.redirect('back');
+  return res.redirect('/sign-in');
 }

@@ -12,15 +12,16 @@ module.exports = function(sequelize, DataTypes) {
     //IDEA: any change in price, just copy all of it
     //      and link to new Listing. requires a flag to show as inactive
     //IDEA: change to some kind of price history?
+    buyPrice: DataTypes.INTEGER,
     price: DataTypes.INTEGER,
     priceMin: DataTypes.INTEGER,
     closingDate: DataTypes.DATE,
     //NOTE: number of days past desiredClosingDate that are acceptable
     closingDateMaxDays: DataTypes.INTEGER,
     //NOTE: number of days before desiredClosingDate that sale is acceptable
-    closingDateMinDays: DataTypes.INTEGER
+    closingDateMinDays: DataTypes.INTEGER,
     //TODO: add active / inactive
-    //active: DataTypes.BOOL
+    active: DataTypes.BOOLEAN
   }, {
     freezeTableName: true
     , classMethods: {

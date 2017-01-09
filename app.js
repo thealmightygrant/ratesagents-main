@@ -59,6 +59,8 @@ if (app.get('env') === 'production') {
 }
 
 // session
+//TODO: look into switching to Redis
+//NOTE: for now keep session size below 4093 bytes, see: https://github.com/expressjs/cookie-session
 app.use(cookieSession(sessOptions));
 
 // initialize passport

@@ -363,6 +363,7 @@ function dropdownLink(dropdownName, href, value){
 function tabLink(href, value, options){
   if(!options) options = {};
   options.liClassName = (typeof options.liClassName === 'string') ? options.liClassName + " tab" : "tab";
+  console.log("tab link: ", options)
   return liLink(href, value, options)
 }
 
@@ -386,6 +387,7 @@ function navLinks(options) {
   var navData = options.hash.navData || {}
   ,   tabData = options.hash.tabData || []
   ,   navType = options.hash.navType
+  ,   activeTab = options.hash.activeTab
   ,   navElements = ''
   ,   childElements = ''
 
@@ -437,10 +439,19 @@ function navLinks(options) {
     break;
   case 'tabs':
     tabData.forEach(function(tab, index){
+      let tabOptions = {};
+
+      if(activeTab && (tab.href === ('#' + activeTab))){
+        tabOptions = {anchorClassName: "active"}
+      }
+      else if(!activeTab && (index === 0)){
+        tabOptions = {anchorClassName: "active"}
+      }
       navElements = navElements +
-        tabLink(tab.href, tab.value, (index === 0 ? {anchorClassStr: "active"} : {}))
+        tabLink(tab.href, tab.value, tabOptions)
     })
     break;
   }
+  console.log(navElements)
   return new HBars.SafeString(navElements + childElements);
 }

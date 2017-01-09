@@ -1,9 +1,6 @@
-{{#switch listingInputStep}}
-  {{#case "address-and-home-type" break=true}}
-    {{> dashboard/address-and-home-type}}
-  {{/case}}
-  {{#case "listing-price-and-commission" break=true}}
-    {{> dashboard/listing-price-and-commission}}
-  {{/case}}
-  <!-- TODO: add default of some kind -->
-{{/switch}}
+<div id="address-and-home-type">
+  {{> dashboard/address-and-home-type}}
+</div>
+<div id="listing-price-and-commission">
+  {{> dashboard/listing-price-and-commission}}
+</div>

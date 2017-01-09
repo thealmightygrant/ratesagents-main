@@ -18,6 +18,12 @@
   /*   } */
   /* } */
 
+  &.no-indicator {
+    .indicator {
+      display: none;
+    }
+  }
+
   &.tabs-fixed-width {
     display: flex;
 
