@@ -95,9 +95,23 @@ router.post('/basic-home-information'
             , inputValidationWares.validateHome
             , modelWares.saveHome
             , function(req, res){
-              console.log("redirecting maybeeeeee")
               res.redirect('/homeowners/dashboard?listing-input-step=address-and-home-type');
             })
+
+router.post('/listing-commission-information'
+            , inputValidationWares.isLoggedIn
+            , function(req, res, next){
+              res.locals.err_view = 'homeowner-dashboard.hbs'
+              res.locals.suc_url = '/homeowners/dashboard'
+              next();
+            }
+            , inputValidationWares.validateHome
+            , modelWares.saveHome
+            , function(req, res){
+              res.redirect('/homeowners/dashboard?listing-input-step=address-and-home-type');
+            })
+
+
 
 // router.post('/listing-commission-information'
 //             , inputValidationWares.isLoggedIn

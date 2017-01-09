@@ -15,8 +15,8 @@ module.exports = {
       price: Sequelize.INTEGER,
       priceMin: Sequelize.INTEGER,
       closingDate: Sequelize.DATE,
-      closingDateMaxDays: Sequelize.INTEGER,
-      closingDateMinDays: Sequelize.INTEGER,
+      closingDateMax: Sequelize.DATE,
+      closingDateMin: Sequelize.DATE,
       active: Sequelize.BOOLEAN,
       createdAt: {
         allowNull: false,

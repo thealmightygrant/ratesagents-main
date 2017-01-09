@@ -18,7 +18,15 @@
         },
         {
           "href": "#listing-price-and-commission",
-          "value": "Desired Commission"
+          "value": "Commission"
+        },
+        {
+          "href": "#sale-date",
+          "value": "Sale Date"
+        },
+        {
+          "href": "#auction",
+          "value": "Auction"
         }
       ],
       "navData": {

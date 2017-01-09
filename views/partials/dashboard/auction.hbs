@@ -1,0 +1,105 @@
+<div class="container">
+  <div class="row">
+    <div class="col m12 l8">
+      <h3 class="very-small-r-room">Your Auction</h3>
+      <p>Please let us know when and how long you'd like for your auction to be. Then adjust any information related to your home.</p>
+      <form method="post" id="auction-setup-form" action="/homeowners/auction-information">
+        <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
+        <div class="row small-t-room">
+          <div class="col s12 m5 l4">
+            <!-- NEED: flat fee (if any), tier 0, tier 1, tier 2 price, tier 3 price + commissions for each -->
+            <!-- TODO: make these text fields??  -->
+            <div class="row">
+              <div class="col s12">
+                {{{numberField name="auction_length" default="14" msg=messages.auction_length label="Auction Length (in days): " data=data.auction_length}}}
+              </div>
+              <div class="col s12">
+                {{{dateField name="auction_start_date" msg=messages.auction_start_date label="Auction Start Date: " data=data.auction_start_date}}}
+              </div>
+            </div>
+            <p class="extra-info">* All auctions are started at 12AM Central Time and end at 11:59PM Central Time.</p>
+            <div class="input-field small-b-room">
+              <button class="btn waves-effect waves-light" type="submit">Next</button>
+            </div>
+          </div>
+          <div class="col s12 m7 l8 small-b-room">
+            <button class="submit btn">Submit Auction</button>
+            <a class="submit red darken-3 btn">Delete Auction</a>
+            <table class="bordered small-t-room">
+              <thead>
+                <tr>
+                  <th data-field="id">Your Listing Data:</th>
+                </tr>
+              </thead>
+              <!-- TODO: add href to each Edit button, prob should create hb helper -->
+              <tbody>
+                <tr>
+                  <td>Home Type: </td>
+                  <td>{{#if data.home.homeType}}{{data.homeType}}{{else}}Unknown{{/if}}</td>
+                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                </tr>
+                <tr>
+                  <td>Home Size: </td>
+                  <td>{{#if data.home.homeSize}}{{data.homeSize}}{{else}}Unknown{{/if}}</td>
+                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                </tr>
+                <tr>
+                  <td>Address: </td>
+                  <td>{{#if (and data.home.streetNumber data.home.route)}}{{data.home.streetNumber}} {{data.home.route}}, {{data.home.secondaryDesignator}} {{data.home.secondaryDescriptor}}{{else}}Unknown{{/if}}</td>
+                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                </tr>
+                <tr>
+                  <td>Realtor Fee: </td>
+                  <td>{{#if data.desiredCommission.flatFee}}${{data.desiredCommission.flatFee}}{{else}}Unknown{{/if}}</td>
+                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                </tr>
+                <tr>
+                  <td>Realtor Commission: </td>
+                  <td>{{#if data.desiredCommission.tier0Commission}}{{data.desiredCommission.tier0Commission}}%{{else}}Unknown{{/if}}</td>
+                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                </tr>
+                <tr>
+                  <td>Listing Price: </td>
+                  <td>{{#if data.listing.price}}{{data.listing.price}}${{else}}Unknown{{/if}}</td>
+                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                </tr>
+                <tr>
+                  <td>Desired Closing Date: </td>
+                  <td>{{#if data.listing.closingDate}}{{data.listing.closingDate}}{{else}}Unknown{{/if}}</td>
+                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                </tr>
+                <tr>
+                  <td>Earliest Closing Date: </td>
+                  <td>{{#if data.listing.closingDateMin}}{{data.listing.closingDateMin}}{{else}}Unknown{{/if}}</td>
+                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                </tr>
+                <tr>
+                  <td>Latest Closing Date: </td>
+                  <td>{{#if data.listing.closingDateMax}}{{data.listing.closingDateMax}}{{else}}Unknown{{/if}}</td>
+                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col l4 med-t-room hide-on-med-and-down"></div>
+    <div class="col m12 l4">
+      <ul class="collapsible popout">
+        <li>
+          <div class="collapsible-header active">Auction Length</div>
+          <div class="collapsible-body">
+            <p>In order to get enough bids, we recommend an auction length of at least ten days, but an auction as few as 7 days should get you a good variety of bids on your listing.</p>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header active">Auction Start Date</div>
+          <div class="collapsible-body">
+            <p>We'll email you when your auction starts. Once the auction has completed, we'll send you a list of realtors.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

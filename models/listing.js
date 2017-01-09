@@ -17,9 +17,9 @@ module.exports = function(sequelize, DataTypes) {
     priceMin: DataTypes.INTEGER,
     closingDate: DataTypes.DATE,
     //NOTE: number of days past desiredClosingDate that are acceptable
-    closingDateMaxDays: DataTypes.INTEGER,
+    closingDateMax: DataTypes.DATE,
     //NOTE: number of days before desiredClosingDate that sale is acceptable
-    closingDateMinDays: DataTypes.INTEGER,
+    closingDateMin: DataTypes.DATE,
     //TODO: add active / inactive
     active: DataTypes.BOOLEAN
   }, {

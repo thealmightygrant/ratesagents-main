@@ -117,7 +117,7 @@ function dateField(options){
   }
 
   //QUESTION: remove merge to speed things up a bit?
-  return inputField(merge(options, dateOptions))
+  return inputField(dateOptions)
 }
 
 function textField(options){
@@ -145,7 +145,7 @@ function textField(options){
   }
 
   //QUESTION: remove merge to speed things up a bit?
-  return inputField(merge(options, textOptions))
+  return inputField(textOptions)
 }
 
 function numberField(options){
@@ -176,7 +176,7 @@ function numberField(options){
   }
 
   //QUESTION: remove merge to speed things up a bit?
-  return inputField(merge(options, numberOptions))
+  return inputField(numberOptions)
 }
 
 //NOTE: not very DRY, might be able to merge via
@@ -204,7 +204,7 @@ function inlineCheckbox(options){
     }
   }
   //QUESTION: remove merge to speed things up a bit?
-  return inlineInput(merge(options, checkboxOptions))
+  return inlineInput(checkboxOptions)
 }
 
 //NOTE: not very DRY, might be able to merge via
@@ -236,7 +236,7 @@ function inlineRange(options){
   }
 
   //QUESTION: remove merge to speed things up a bit?
-  return inlineInput(merge(options, rangeOptions))
+  return inlineInput(rangeOptions)
 }
 
 function sliderBlock(options){
@@ -259,7 +259,7 @@ function sliderBlock(options){
   }
 
   //QUESTION: remove merge to speed things up a bit?
-  return inputField(merge(options, rangeOptions))
+  return inputField(rangeOptions)
 }
 
 function attrsTransformer(attrsObj){
@@ -363,7 +363,6 @@ function dropdownLink(dropdownName, href, value){
 function tabLink(href, value, options){
   if(!options) options = {};
   options.liClassName = (typeof options.liClassName === 'string') ? options.liClassName + " tab" : "tab";
-  console.log("tab link: ", options)
   return liLink(href, value, options)
 }
 
@@ -452,6 +451,5 @@ function navLinks(options) {
     })
     break;
   }
-  console.log(navElements)
   return new HBars.SafeString(navElements + childElements);
 }
