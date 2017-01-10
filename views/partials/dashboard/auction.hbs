@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col m12 l8">
       <h3 class="very-small-r-room">Your Auction</h3>
-      <p>Please let us know when and how long you'd like for your auction to be. Then adjust any information related to your home.</p>
+      <p>Fill in when and how long you'd like for your auction to be. Then adjust any information related to your listing before realtors start bidding on it. And, start up your auction!</p>
       <form method="post" id="auction-setup-form" action="/homeowners/auction-information">
         <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
         <div class="row small-t-room">
@@ -35,12 +35,12 @@
               <tbody>
                 <tr>
                   <td>Home Type: </td>
-                  <td>{{#if data.home.homeType}}{{data.homeType}}{{else}}Unknown{{/if}}</td>
+                  <td>{{#if data.home.homeType}}{{data.home.homeType}}{{else}}Unknown{{/if}}</td>
                   <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
                 </tr>
                 <tr>
                   <td>Home Size: </td>
-                  <td>{{#if data.home.homeSize}}{{data.homeSize}}{{else}}Unknown{{/if}}</td>
+                  <td>{{#if data.home.homeSize}}{{data.home.homeSize}} sq.ft.{{else}}Unknown{{/if}}</td>
                   <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
                 </tr>
                 <tr>
@@ -60,7 +60,7 @@
                 </tr>
                 <tr>
                   <td>Listing Price: </td>
-                  <td>{{#if data.listing.price}}{{data.listing.price}}${{else}}Unknown{{/if}}</td>
+                  <td>{{#if data.listing.price}}${{data.listing.price}}{{else}}Unknown{{/if}}</td>
                   <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
                 </tr>
                 <tr>

@@ -11,7 +11,8 @@ module.exports = function(sequelize, DataTypes) {
     size: {
       type: DataTypes.INTEGER,
       set: function(string_val){
-        this.setDataValue('size', +string_val);
+        if(string_val)
+          this.setDataValue('size', +string_val);
       },
       get: function(int_val){
         return int_val.toString();

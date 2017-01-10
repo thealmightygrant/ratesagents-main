@@ -13,8 +13,8 @@ module.exports = {
       homeSize: Sequelize.INTEGER,    //e.g. 2000 sq ft
       //NOTE: try to enumerate these ahead of time, rebuild could be expensive in the future
       homeType: Sequelize.ENUM('house', 'condo', 'townhome', 'land'),
-      numBedrooms: Sequelize.INTEGER,
-      numBathrooms: Sequelize.INTEGER,
+      numBedrooms: Sequelize.DECIMAL(10,2),
+      numBathrooms: Sequelize.DECIMAL(10,2),
       streetNumber: Sequelize.STRING,
       route: Sequelize.STRING,
       city: Sequelize.STRING,

@@ -11,6 +11,13 @@ module.exports = {
   renderData: renderData
 }
 
+function sequelizeCloneCB (value) {
+  // specially for the sequelize instances
+  if (value && value.toJSON) {
+    return value.toJSON();
+  }
+}
+
 function retrieveDataFromSession(session, model_name){
   return new Promise(function(resolve, reject){
     if(session && session[model_name]){
@@ -79,7 +86,7 @@ function determineDashboardLayout(req, res, next) {
           //])
           .then(function(mostRecentListing){
             if(!sessionData.listing)
-              sessionData.listing = cloneDeep(mostRecentListing);
+              sessionData.listing = mostRecentListing;
             localData.listing = mostRecentListing;
             return mostRecentListing;
           }).catch(function(e){
@@ -96,8 +103,9 @@ function determineDashboardLayout(req, res, next) {
           listingPromise.then(retrieveHomeFromDB)
           //])
           .then(function(home){
-            if(!sessionData.home)
-              sessionData.home = cloneDeep(home);
+            if(!sessionData.home){
+              sessionData.home = home;
+            }
             localData.home = home;
 
             const mostRecentHomeAddress = (home && validators.isValidAddress(home)) ? constructHomeAddress(home) : null;
@@ -106,7 +114,7 @@ function determineDashboardLayout(req, res, next) {
             }
 
             if(!sessionData.home.address)
-              sessionData.home.address = cloneDeep(mostRecentHomeAddress);
+              sessionData.home.address = mostRecentHomeAddress;
             localData.home.address = mostRecentHomeAddress;
 
             return home;
@@ -124,8 +132,10 @@ function determineDashboardLayout(req, res, next) {
             listingPromise.then(retrieveDesiredCommissionFromDB)
           //])
           .then(function(desiredCommission){
-            if(!sessionData.desiredCommission)
-              sessionData.desiredCommission = cloneDeep(desiredCommission);
+            if(!sessionData.desiredCommission){
+              //TODO: check into deep cloning here and in model.js
+              sessionData.desiredCommission = desiredCommission;
+            }
             localData.desiredCommission = desiredCommission;
 
             return desiredCommission;
@@ -138,6 +148,8 @@ function determineDashboardLayout(req, res, next) {
             }
           })
 
+  //TODO: add sale data promise here
+
   Promise.all([
     homePromise,
     desiredCommissionPromise
@@ -146,6 +158,8 @@ function determineDashboardLayout(req, res, next) {
     //    req.query["listing-input-step"]){
     //   res.locals.listingInputStep = req.query["listing-input-step"];
     // }
+    if(!res.locals.listingInputStep)
+      res.locals.listingInputStep = "auction";
     res.locals.activeTab = res.locals.listingInputStep;
     next();
   })

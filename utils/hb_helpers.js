@@ -92,6 +92,15 @@ function defaulter(options) {
   }
 }
 
+function validateInputClasses(inputClass, msg, defaultClass){
+  if(msg){
+    return (defaultClass || "") + " validate invalid"
+  }
+  else {
+    return (defaultClass || "") + " validate"
+  }
+}
+
 function dateField(options){
   var dateOptions = {
     input: {
@@ -99,7 +108,7 @@ function dateField(options){
         type: "date"
         , name: options.hash.name
         , id: options.hash.name
-        , class: options.hash.inputClass || "datepicker"
+        , class: validateInputClasses(options.hash.inputClass, options.hash.msg, "datepicker")
         , value: options.hash.data || options.hash.default
         , placeholder: options.hash.placeholder || "your date"
       }
@@ -128,7 +137,7 @@ function textField(options){
         , name: options.hash.name
         , id: options.hash.name
         , placeholder: options.hash.placeholder
-        , class: options.hash.inputClass
+        , class: validateInputClasses(options.hash.inputClass, options.hash.msg)
         , value: options.hash.data || options.hash.default
       }
     }
@@ -157,7 +166,7 @@ function numberField(options){
         , name: options.hash.name
         , id: options.hash.name
         , placeholder: options.hash.placeholder
-        , class: options.hash.inputClass
+        , class: validateInputClasses(options.hash.inputClass, options.hash.msg)
         , max: options.hash.max
         , step: options.hash.step || "100"
         , value: options.hash.data || options.hash.default

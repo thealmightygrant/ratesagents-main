@@ -25,12 +25,13 @@ exports.errorHandler = function errorHandler(err, req, res, next) {
 exports.addMessages = function addMessages(req, res, next){
   res.locals.messages = cloneDeep(req.session.messages) || {};
   res.locals.error = cloneDeep(req.session.error) || {};
+  //TODO: This might be a security issue copying the whole session
   res.locals.data = cloneDeep(req.session.data) || {}
 
   // Remove them so they're not displayed on subsequent renders.
   delete req.session.error;
   delete req.session.messages;
-  req.session.data = {}
+  //req.session.data = {}
 
   next();
 }

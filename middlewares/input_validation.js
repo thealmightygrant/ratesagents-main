@@ -7,7 +7,7 @@ module.exports = {
   validateRegister: validateRegister,
   validateLogin: validateLogin,
   validateHome: validateHome,
-  validateAndSaveHomeDetails: validateAndSaveHomeDetails,
+  validateDesiredCommission: validateDesiredCommission,
   isLoggedIn: isLoggedIn
 }
 
@@ -40,7 +40,8 @@ const default_err_msgs = {
   }
   , standard: {
     empty: 'Sorry, but this can\'t be empty.'
-    , number: "Sorry, but this needs to be a whole number."
+    , wholeNumber: "Sorry, but this needs to be a whole number."
+    , number: "Sorry, but this needs to be a number."
   }
 }
 
@@ -128,120 +129,77 @@ function validateLogin(req, res, next){
 
 function validateHome(req, res, next){
 
-  const homeId = req.body.homeId
-  ,     homeType = req.body.homeType
-  ,     homeSize = req.body.homeSize
-  ,     secondaryDescriptor = req.body.secondaryDescriptor
-  ,     secondaryDesignator = req.body.secondaryDesignator
-  ,     streetNumber = req.body.streetNumber
-  ,     address = req.body.address
-  ,     route = req.body.route
-  ,     neighborhood = req.body.neighborhood
-  ,     city = req.body.city
-  ,     county = req.body.county
-  ,     state = req.body.state
-  ,     zipcode = req.body.zipcode
-  ,     err_view = res.locals.err_view || 'homeowner-dashboard.hbs'
-
+  const rb = req.body;
   let messages = null;
 
   req.checkBody('streetNumber', default_err_msgs.street_number.empty ).notEmpty().isInt();
   req.checkBody('homeSize',  default_err_msgs.standard.empty ).notEmpty();
-  req.checkBody('homeSize',  default_err_msgs.standard.number ).isInt();
+  req.checkBody('homeSize',  default_err_msgs.standard.wholeNumber ).isInt();
   req.checkBody('address', default_err_msgs.address.empty ).notEmpty();
 
-  if(address &&
-     (!route ||
-      !city ||
-      !county ||
-      !state ||
-      !zipcode)){
+  if(rb.address &&
+     (!rb.route ||
+      !rb.city ||
+      !rb.county ||
+      !rb.state ||
+      !rb.zipcode)){
     //add an option to skip address input
     messages = {address: "Please try searching your address again."}
   }
 
-  const errViewData = {
-    googleMaps: conf.get("apis.googleMaps"),
-    homeSize: homeSize,
-    homeType: homeType,
-    address: address,
-    neighborhood: neighborhood,
-    streetNumber: streetNumber,
-    route: route,
-    city: city,
-    county: county,
-    state: state,
-    zipcode: zipcode,
-    secondaryDescriptor: secondaryDescriptor,
-    secondaryDesignator: secondaryDesignator,
-    homeId: homeId
-  };
-
   if(req.validationErrors() || messages){
-    res.render(err_view,
-               merge(res.locals, {
-                 listingInputStep: 'address-and-home-type',
-                 includeMap: true,
-                 data: { home: errViewData,
-                         googleMaps: conf.get("apis.googleMaps"),
-                         csrfToken: req.body._csrf },
-                 messages: merge(arrangeValidationErrors(req.validationErrors()), messages)
-               }))
+    req.session.data.home = merge(req.session.data.home || {}, {
+      homeType: rb.homeType,
+      homeSize: rb.homeSize,
+      secondaryDescriptor: rb.secondaryDescriptor,
+      secondaryDesignator: rb.secondaryDesignator,
+      address: rb.address,
+      streetNumber: rb.streetNumber,
+      route: rb.route,
+      neighborhood: rb.neighborhood,
+      city: rb.city,
+      county: rb.county,
+      state: rb.state,
+      zipcode: rb.zipcode
+    })
+    req.session.messages = merge(arrangeValidationErrors(req.validationErrors()), messages)
   }
   else {
     next()
   }
 }
 
-function validateAndSaveHomeDetails(req, res){
-  //NOTE: for each detail, create a new homeowner detail
-  const options = typeof(res.locals) !== 'undefined' ? res.locals : {}
-  ,   err_view = typeof(options.err_view) === 'string' ? options.err_view : 'basic-home-information.hbs'
-  ,   suc_url = typeof(options.suc_url) === 'string' ? options.suc_url : '/homeowners/advanced-home-information'
-  ,   form_data = req.body
-  ,   parsed_data = {}
+function validateDesiredCommission(req, res, next){
+  const rb = req.body;
 
-  //HACK: materialize is only useful for this prototype :(
-  Object.keys(form_data).forEach(function(key){
-    const s = key.split('_');
-    if(s[1] === 'csrf'){
-      return;
-    }
-    else if(s[1] === 'size'){
-      //numbers
-      if(form_data[key]){
-        parsed_data[s[0]] = parsed_data[s[0]] || {}
-        parsed_data[s[0]]['size'] = form_data[key];
-        //TODO: validate as numbers here
-      }
-    }
-    else {
-      //checkboxes onlyyyyy
-      parsed_data[s[0]] = parsed_data[s[0]] || {}
-      //NOTE: there's got to be a better way then space separated values...
-      parsed_data[s[0]]['text'] = parsed_data[s[0]]['text'] ? parsed_data[s[0]]['text'] + s[1] + " " : s[1] + " "
-    }
-  })
+  req.checkBody('buyPrice',  default_err_msgs.standard.empty ).notEmpty();
+  req.checkBody('buyPrice',  default_err_msgs.standard.number ).isFloat();
+  req.checkBody('price',  default_err_msgs.standard.empty ).notEmpty();
+  req.checkBody('price',  default_err_msgs.standard.number ).isFloat();
+  req.checkBody('flatFee',  default_err_msgs.standard.empty ).notEmpty();
+  req.checkBody('flatFee',  default_err_msgs.standard.number ).isFloat();
+  req.checkBody('tier0Commission',  default_err_msgs.standard.empty ).notEmpty();
+  req.checkBody('tier0Commission',  default_err_msgs.standard.number ).isFloat();
 
-  //TODO: find and update...or create
-  //      can find in db based on name and home id
-  //SEE: http://stackoverflow.com/questions/18304504/create-or-update-sequelize
-  const modelsCreated = Object.keys(parsed_data).map(function(key){
-    return models["homeDetail"].create({
-      homeId: req.session.home.id,
-      name: key,
-      size: parsed_data[key]['size'] || "",
-      features: parsed_data[key]['text'] || ""
+  if(req.validationErrors()){
+    req.session.data.desiredCommission = merge(req.session.data.desiredCommission || {}, {
+      flatFee: rb.flatFee,
+      tier0Commission: rb.tier0Commission
     })
-  })
 
-  Promise.all(modelsCreated).then(function(){
-    res.redirect(suc_url);
-  }).catch(function(e){
-    //TODO: redirect properly on database write
-    console.error("error: ", e)
-  })
+    req.session.data.listing = merge(req.session.data.listing || {}, {
+      buyPrice: rb.buyPrice,
+      price: rb.price
+    })
+
+    req.session.messages = arrangeValidationErrors(req.validationErrors());
+    res.redirect('/homeowners/dashboard')
+  }
+  else {
+    next()
+  }
 }
+
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()){

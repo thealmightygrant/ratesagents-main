@@ -105,12 +105,13 @@ router.post('/listing-commission-information'
               res.locals.suc_url = '/homeowners/dashboard'
               next();
             }
-            , inputValidationWares.validateHome
-            , modelWares.saveHome
+            , inputValidationWares.validateDesiredCommission
+            , modelWares.saveDesiredCommission
             , function(req, res){
-              res.redirect('/homeowners/dashboard?listing-input-step=address-and-home-type');
+              res.redirect('/homeowners/dashboard?listing-input-step=sale-date');
             })
 
+router.use(function(req, res){return res.redirect('/homeowners/dashboard')})
 
 
 // router.post('/listing-commission-information'
