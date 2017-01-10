@@ -7,19 +7,18 @@
         <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
         <div class="row small-t-room">
           <div class="col s12 m5 l4">
-            <!-- NEED: flat fee (if any), tier 0, tier 1, tier 2 price, tier 3 price + commissions for each -->
-            <!-- TODO: make these text fields??  -->
             <div class="row">
               <div class="col s12">
-                {{{numberField name="auction_length" default="14" msg=messages.auction_length label="Auction Length (in days): " data=data.auction_length}}}
+                {{{dateField name="auctionStart" msg=messages.auctionStart label="Auction Start Date: " data=data.listing.auctionStart}}}
               </div>
+              <!-- TODO: change this to auction length for UX reasons -->
               <div class="col s12">
-                {{{dateField name="auction_start_date" msg=messages.auction_start_date label="Auction Start Date: " data=data.auction_start_date}}}
+                {{{dateField name="auctionEnd" msg=messages.auctionEnd label="Auction End Date: " data=data.listing.auctionEnd}}}
               </div>
             </div>
             <p class="extra-info">* All auctions are started at 12AM Central Time and end at 11:59PM Central Time.</p>
             <div class="input-field small-b-room">
-              <button class="btn waves-effect waves-light" type="submit">Next</button>
+              <button class="btn green waves-effect waves-light" type="submit">Save</button>
             </div>
           </div>
           <div class="col s12 m7 l8 small-b-room">
@@ -36,47 +35,47 @@
                 <tr>
                   <td>Home Type: </td>
                   <td>{{#if data.home.homeType}}{{data.home.homeType}}{{else}}Unknown{{/if}}</td>
-                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                  <td><a href="#address-and-home-type" class="btn-flat waves-effect waves-blue">Edit</a></td>
                 </tr>
                 <tr>
                   <td>Home Size: </td>
                   <td>{{#if data.home.homeSize}}{{data.home.homeSize}} sq.ft.{{else}}Unknown{{/if}}</td>
-                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                  <td><a address="#address-and-home-type" class="btn-flat waves-effect waves-blue">Edit</a></td>
                 </tr>
                 <tr>
                   <td>Address: </td>
                   <td>{{#if (and data.home.streetNumber data.home.route)}}{{data.home.streetNumber}} {{data.home.route}}, {{data.home.secondaryDesignator}} {{data.home.secondaryDescriptor}}{{else}}Unknown{{/if}}</td>
-                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                  <td><a href="#address-and-home-type" class="btn-flat waves-effect waves-blue">Edit</a></td>
                 </tr>
                 <tr>
                   <td>Realtor Fee: </td>
                   <td>{{#if data.desiredCommission.flatFee}}${{data.desiredCommission.flatFee}}{{else}}Unknown{{/if}}</td>
-                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                  <td><a href="#listing-price-and-commission" class="btn-flat waves-effect waves-blue">Edit</a></td>
                 </tr>
                 <tr>
                   <td>Realtor Commission: </td>
                   <td>{{#if data.desiredCommission.tier0Commission}}{{data.desiredCommission.tier0Commission}}%{{else}}Unknown{{/if}}</td>
-                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                  <td><a href="#listing-price-and-commission" class="btn-flat waves-effect waves-blue">Edit</a></td>
                 </tr>
                 <tr>
                   <td>Listing Price: </td>
                   <td>{{#if data.listing.price}}${{data.listing.price}}{{else}}Unknown{{/if}}</td>
-                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                  <td><a href="#listing-price-and-commission" class="btn-flat waves-effect waves-blue">Edit</a></td>
                 </tr>
                 <tr>
                   <td>Desired Closing Date: </td>
                   <td>{{#if data.listing.closingDate}}{{data.listing.closingDate}}{{else}}Unknown{{/if}}</td>
-                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                  <td><a href="#closing-date" class="btn-flat waves-effect waves-blue">Edit</a></td>
                 </tr>
                 <tr>
                   <td>Earliest Closing Date: </td>
                   <td>{{#if data.listing.closingDateMin}}{{data.listing.closingDateMin}}{{else}}Unknown{{/if}}</td>
-                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                  <td><a href="#closing-date" class="btn-flat waves-effect waves-blue">Edit</a></td>
                 </tr>
                 <tr>
                   <td>Latest Closing Date: </td>
                   <td>{{#if data.listing.closingDateMax}}{{data.listing.closingDateMax}}{{else}}Unknown{{/if}}</td>
-                  <td><a class="btn-flat waves-effect waves-blue">Edit</a></td>
+                  <td><a href="#closing-date" class="btn-flat waves-effect waves-blue">Edit</a></td>
                 </tr>
               </tbody>
             </table>

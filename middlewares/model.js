@@ -7,7 +7,8 @@ const models = require('../models/index')
 module.exports = {
   saveHome: saveHome,
   saveDesiredCommission: saveDesiredCommission,
-  saveClosingDate: saveClosingDate
+  saveClosingDate: saveClosingDate,
+  saveAuction: saveAuction
 }
 
 const dbErrorMsg = {mainError: "There has been a database issue. Please wait a few seconds and try submitting your info again. Thanks! "}
@@ -141,6 +142,36 @@ function saveClosingDate(req, res, next){
     closingDate: rb.closingDate,
     closingDateMin: rb.closingDateMin,
     closingDateMax: rb.closingDateMax
+  }
+
+  const listingUpdater = function(){
+    if(sessionData.listing && sessionData.listing.id){
+      return modelPromises.updateModel(listingData, sessionData.listing.id, "listing")
+    }
+    else {
+      return models["listing"].create(listingData)
+    }
+  }
+
+  listingUpdater()
+    .then(function(listing){
+      sessionData.listing = merge(sessionData.listing || {}, listing.dataValues);
+      return next();
+    }).catch(function(e){
+      sessionData.listing = merge(sessionData.listing || {}, listingData)
+      res.locals.messages = dbErrorMsg;
+      res.redirect('/homeowners/dashboard')
+    })
+}
+
+function saveAuction(req, res, next){
+  //NOTE: could maybe combine this with closing date function?
+  const sessionData = req.session.data;
+  const rb = req.body;
+
+  const listingData = {
+    auctionStart: rb.auctionStart,
+    auctionEnd: rb.auctionEnd
   }
 
   const listingUpdater = function(){

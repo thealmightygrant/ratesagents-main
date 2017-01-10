@@ -15,6 +15,7 @@ module.exports = function(sequelize, DataTypes) {
     buyPrice: DataTypes.INTEGER,
     price: DataTypes.INTEGER,
     priceMin: DataTypes.INTEGER,
+    //TODO: getters for DATES, something that matches datepickers
     auctionStart: DataTypes.DATE,
     auctionEnd: DataTypes.DATE,
     closingDate: DataTypes.DATE,

@@ -1,7 +1,4 @@
-const conf = require("../config")
-,   merge = require('lodash.merge')
-,   models = require('../models/index')
-,   Promise = require("bluebird")
+const merge = require('lodash.merge')
 
 module.exports = {
   validateRegister: validateRegister,
@@ -9,6 +6,7 @@ module.exports = {
   validateHome: validateHome,
   validateDesiredCommission: validateDesiredCommission,
   validateClosingDate: validateClosingDate,
+  validateAuction: validateAuction,
   isLoggedIn: isLoggedIn
 }
 
@@ -212,11 +210,36 @@ function validateClosingDate(req, res, next){
   req.checkBody('closingDateMin',  default_err_msgs.standard.date ).isDate();
   req.checkBody('closingDateMax',  default_err_msgs.standard.date ).isDate();
 
+  //TODO: min before data, max after date
+
   if(req.validationErrors()){
     req.session.data.listing = merge(req.session.data.listing || {}, {
       closingDate: rb.closingDate,
       closingDateMin: rb.closingDateMin,
       closingDateMax: rb.closingDateMax
+    })
+
+    req.session.messages = arrangeValidationErrors(req.validationErrors());
+    res.redirect('/homeowners/dashboard')
+  }
+  else {
+    next()
+  }
+}
+
+function validateAuction(req, res, next){
+  const rb = req.body;
+
+  req.checkBody('auctionStart',  default_err_msgs.standard.empty ).notEmpty();
+  req.checkBody('auctionEnd',  default_err_msgs.standard.empty ).notEmpty();
+
+  req.checkBody('auctionStart',  default_err_msgs.standard.date ).isDate();
+  req.checkBody('auctionEnd',  default_err_msgs.standard.date ).isDate();
+
+  if(req.validationErrors()){
+    req.session.data.listing = merge(req.session.data.listing || {}, {
+      auctionStart: rb.auctionStart,
+      auctionEnd: rb.auctionEnd
     })
 
     req.session.messages = arrangeValidationErrors(req.validationErrors());

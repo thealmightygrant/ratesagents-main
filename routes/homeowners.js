@@ -124,6 +124,18 @@ router.post('/closing-date-information'
               res.redirect('/homeowners/dashboard');
             })
 
+router.post('/auction-information'
+            , inputValidationWares.isLoggedIn
+            , function(req, res, next){
+              res.locals.err_view = 'homeowner-dashboard.hbs'
+              res.locals.suc_url = '/homeowners/dashboard'
+              next();
+            }
+            , inputValidationWares.validateAuction
+            , modelWares.saveAuction
+            , function(req, res){
+              res.redirect('/homeowners/dashboard');
+            })
 
 
 router.use(function(req, res){return res.redirect('/homeowners/dashboard')})
