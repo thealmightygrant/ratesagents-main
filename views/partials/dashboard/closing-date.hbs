@@ -3,19 +3,19 @@
     <div class="col m12 l8">
       <h3 class="very-small-r-room">Your Desired Sale Date</h3><h5>Step 3 of 4</h5>
       <p>Please tell us about the date by which you'd like to sell your home. We provide these dates to prospective realtors and they will adjust their expectations and bids based on these values.</p>
-      <form method="post" id="sale-date-form" action="/homeowners/sale-date-information">
+      <form method="post" id="closing-date-form" action="/homeowners/closing-date-information">
         <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
         <div class="row small-t-room">
           <div class="col s12 m5 l4">
             <div class="row">
               <div class="col s12">
-                {{{dateField labelFirst="true" overwriteClass="true" name="desired_sale_date" msg=messages.desired_sale_date label="Desired Closing Date: " data=data.desired_sale_date}}}
+                {{{dateField labelFirst="true" overwriteClass="true" name="closingDate" msg=messages.closingDate label="Desired Closing Date: " data=data.listing.closingDate}}}
               </div>
               <div class="col s12">
-                {{{dateField labelFirst="true" overwriteClass="true" name="min_sale_date" msg=messages.min_sale_date label="Earliest Acceptable Closing Date: " data=data.min_sale_date}}}
+                {{{dateField labelFirst="true" overwriteClass="true" name="closingDateMin" msg=messages.closingDateMin label="Earliest Acceptable Closing Date: " data=data.listing.closingDateMin}}}
               </div>
               <div class="col s12">
-                {{{dateField labelFirst="true" overwriteClass="true" name="max_sale_date" msg=messages.max_sale_date label="Latest Acceptable Closing Date: " data=data.max_sale_date}}}
+                {{{dateField labelFirst="true" overwriteClass="true" name="closingDateMax" msg=messages.closingDateMax label="Latest Acceptable Closing Date: " data=data.listing.closingDateMax}}}
               </div>
             </div>
             <div class="input-field small-b-room">

@@ -14,6 +14,8 @@ module.exports = {
       buyPrice: Sequelize.INTEGER,
       price: Sequelize.INTEGER,
       priceMin: Sequelize.INTEGER,
+      auctionStart: Sequelize.DATE,
+      auctionEnd: Sequelize.DATE,
       closingDate: Sequelize.DATE,
       closingDateMax: Sequelize.DATE,
       closingDateMin: Sequelize.DATE,

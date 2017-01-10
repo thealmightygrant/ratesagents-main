@@ -10,14 +10,14 @@ module.exports = function(sequelize, DataTypes) {
     builtIn: {
       type: DataTypes.INTEGER,
       set: function(string_val){
-        if(string_val && parseInt(string_val,10))
+        if(string_val && !isNaN(parseInt(string_val,10)))
           this.setDataValue('builtIn', +string_val);
       }
     },     //e.g. 1999
     homeSize: {
       type: DataTypes.INTEGER,
       set: function(string_val){
-        if(string_val && parseInt(string_val,10))
+        if(string_val && !isNaN(parseInt(string_val,10)))
           this.setDataValue('homeSize', +string_val);
       }
     },    //e.g. 2000 sq ft
@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DECIMAL(10,2),
       set: function(string_val){
         var dec_val = parseFloat(string_val).toFixed(2);
-        if(string_val && dec_val){
+        if(string_val && !isNaN(dec_val)){
           this.setDataValue('numBedrooms', dec_val);
         }
       }
@@ -35,7 +35,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DECIMAL(10,2),
       set: function(string_val){
         var dec_val = parseFloat(string_val).toFixed(2);
-        if(string_val && dec_val){
+        if(string_val && !isNaN(dec_val)){
           this.setDataValue('numBathrooms', dec_val);
         }
       }

@@ -8,6 +8,7 @@ module.exports = {
   validateLogin: validateLogin,
   validateHome: validateHome,
   validateDesiredCommission: validateDesiredCommission,
+  validateClosingDate: validateClosingDate,
   isLoggedIn: isLoggedIn
 }
 
@@ -190,6 +191,32 @@ function validateDesiredCommission(req, res, next){
     req.session.data.listing = merge(req.session.data.listing || {}, {
       buyPrice: rb.buyPrice,
       price: rb.price
+    })
+
+    req.session.messages = arrangeValidationErrors(req.validationErrors());
+    res.redirect('/homeowners/dashboard')
+  }
+  else {
+    next()
+  }
+}
+
+function validateClosingDate(req, res, next){
+  const rb = req.body;
+
+  req.checkBody('closingDate',  default_err_msgs.standard.empty ).notEmpty();
+  req.checkBody('closingDateMin',  default_err_msgs.standard.empty ).notEmpty();
+  req.checkBody('closingDateMax',  default_err_msgs.standard.empty ).notEmpty();
+
+  req.checkBody('closingDate',  default_err_msgs.standard.date ).isDate();
+  req.checkBody('closingDateMin',  default_err_msgs.standard.date ).isDate();
+  req.checkBody('closingDateMax',  default_err_msgs.standard.date ).isDate();
+
+  if(req.validationErrors()){
+    req.session.data.listing = merge(req.session.data.listing || {}, {
+      closingDate: rb.closingDate,
+      closingDateMin: rb.closingDateMin,
+      closingDateMax: rb.closingDateMax
     })
 
     req.session.messages = arrangeValidationErrors(req.validationErrors());

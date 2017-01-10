@@ -11,13 +11,45 @@ module.exports = function(sequelize, DataTypes) {
     //TODO: tiered commissions by default?
     commissionType: DataTypes.ENUM('none', 'traditional', 'tieredTotal', 'tieredMarginal'),
     tier0price: DataTypes.INTEGER,  //tier 0 probably price min -> desired price
-    tier0Commission: DataTypes.DECIMAL(10,2),
+    tier0Commission: {
+      type: DataTypes.DECIMAL(10,2),
+      set: function(string_val){
+        var dec_val = parseFloat(string_val).toFixed(2);
+        if(string_val && !isNaN(dec_val)){
+          this.setDataValue('tier0Commission', dec_val);
+        }
+      }
+    },
     tier1Price: DataTypes.INTEGER,  //tier 1 = tier 0 price -> this price
-    tier1Commission: DataTypes.DECIMAL(10,2),
+    tier1Commission: {
+      type: DataTypes.DECIMAL(10,2),
+      set: function(string_val){
+        var dec_val = parseFloat(string_val).toFixed(2);
+        if(string_val && !isNaN(dec_val)){
+          this.setDataValue('tier1Commission', dec_val);
+        }
+      }
+    },
     tier2Price: DataTypes.INTEGER,  //etc
-    tier2Commission: DataTypes.DECIMAL(10,2),
+    tier2Commission: {
+      type: DataTypes.DECIMAL(10,2),
+      set: function(string_val){
+        var dec_val = parseFloat(string_val).toFixed(2);
+        if(string_val && !isNaN(dec_val)){
+          this.setDataValue('tier2Commission', dec_val);
+        }
+      }
+    },
     tier3Price: DataTypes.INTEGER,
-    tier3Commission: DataTypes.DECIMAL(10,2)
+    tier3Commission: {
+      type: DataTypes.DECIMAL(10,2),
+      set: function(string_val){
+        var dec_val = parseFloat(string_val).toFixed(2);
+        if(string_val && !isNaN(dec_val)){
+          this.setDataValue('tier3Commission', dec_val);
+        }
+      },
+    }
   }, {
     freezeTableName: true
   });

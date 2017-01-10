@@ -95,7 +95,7 @@ router.post('/basic-home-information'
             , inputValidationWares.validateHome
             , modelWares.saveHome
             , function(req, res){
-              res.redirect('/homeowners/dashboard?listing-input-step=address-and-home-type');
+              res.redirect('/homeowners/dashboard');
             })
 
 router.post('/listing-commission-information'
@@ -108,8 +108,23 @@ router.post('/listing-commission-information'
             , inputValidationWares.validateDesiredCommission
             , modelWares.saveDesiredCommission
             , function(req, res){
-              res.redirect('/homeowners/dashboard?listing-input-step=sale-date');
+              res.redirect('/homeowners/dashboard');
             })
+
+router.post('/closing-date-information'
+            , inputValidationWares.isLoggedIn
+            , function(req, res, next){
+              res.locals.err_view = 'homeowner-dashboard.hbs'
+              res.locals.suc_url = '/homeowners/dashboard'
+              next();
+            }
+            , inputValidationWares.validateClosingDate
+            , modelWares.saveClosingDate
+            , function(req, res){
+              res.redirect('/homeowners/dashboard');
+            })
+
+
 
 router.use(function(req, res){return res.redirect('/homeowners/dashboard')})
 

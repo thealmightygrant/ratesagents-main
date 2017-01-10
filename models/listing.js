@@ -15,6 +15,8 @@ module.exports = function(sequelize, DataTypes) {
     buyPrice: DataTypes.INTEGER,
     price: DataTypes.INTEGER,
     priceMin: DataTypes.INTEGER,
+    auctionStart: DataTypes.DATE,
+    auctionEnd: DataTypes.DATE,
     closingDate: DataTypes.DATE,
     //NOTE: number of days past desiredClosingDate that are acceptable
     closingDateMax: DataTypes.DATE,
