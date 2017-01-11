@@ -402,18 +402,25 @@ function navLinks(options) {
   switch(navType){
   case 'main-nav':
     Object.keys(navData).forEach(function(key){
-      if(navData[key].linkData && navData[key].linkData.length){
+      const curDatum = navData[key];
+      if(curDatum.linkData && curDatum.linkData.length){
         navElements = navElements +
-          dropdownLink(key + '-dropdown-link', navData[key].href, navData[key].value);
+          dropdownLink(key + '-dropdown-link', curDatum.href, curDatum.value);
         childElements = childElements +
-          dropdownGroup(navData[key].linkData, {
+          dropdownGroup(curDatum.linkData, {
             groupId: (key + '-dropdown-link'),
             groupClassName: 'dropdown-content'
           })
       }
       else {
-        navElements = navElements +
-          liLink(navData[key].href, navData[key].value);
+        let regularNavElement;
+        if(curDatum.type){
+          regularNavElement = liLink(curDatum.href, curDatum.value, {anchorClassName: curDatum.type});
+        }
+        else{
+          regularNavElement = liLink(curDatum.href, curDatum.value);
+        }
+        navElements = navElements + regularNavElement;
       }
     })
     break;
@@ -422,7 +429,7 @@ function navLinks(options) {
       '<li><a class="logo" href="/">Rates and Agents</a><a class="close" href="#!"><i class="material-icons">close</i></a></li>' +
       '<li><div class="divider"></div></li>';
     Object.keys(tabData).forEach(function(key, index){
-      let curDatum = tabData[key];
+      const curDatum = tabData[key];
       if(curDatum.linkData && curDatum.linkData.length){
         navElements +=
           sidenavSubheader(curDatum.value, sidenavBar(curDatum.linkData))
@@ -438,7 +445,7 @@ function navLinks(options) {
     navElements = navElements +
       '<div class="bottom-cta">';
     Object.keys(navData).forEach(function(key){
-      let curDatum = navData[key];
+      const curDatum = navData[key];
       navElements = navElements +
         liLink(curDatum.href, curDatum.value, {liClassName: 'bottom-link'})
     });

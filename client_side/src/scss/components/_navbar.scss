@@ -136,6 +136,12 @@ nav {
         margin-top: -2px;
         margin-left: 15px;
         margin-right: 15px;
+
+        &:hover {
+          color: $button-raised-color;
+          background-color: $button-raised-background-hover;
+          @extend .z-depth-1-half;
+        }
       }
 
       &:hover {

@@ -1,0 +1,12 @@
+{
+  "pages": {
+    "realtors-login": {
+      "socialData": {
+        "pageName": "realtors/login"
+        , "description": "Realtor agent matching. Find more clients today in the Dallas area."
+        //, "image": "/images/bat-country.jpg"
+        , "title": "Login to Rates and Agents"
+      }
+    }
+  }
+}
