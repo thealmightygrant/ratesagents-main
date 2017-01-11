@@ -10,7 +10,14 @@
     });
 
     //init tabs
-    $('ul.tabs').tabs();
+    $('ul.tabs').tabs({
+      onShow: function(tab){
+        if(tab.selector === "#all-listings")
+          $("nav.secondary").hide()
+        else if(tab.selector === "#current-listing")
+          $("nav.secondary").show()
+      }
+    });
 
     //init selects
     $('select').material_select();
