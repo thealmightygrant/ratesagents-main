@@ -144,7 +144,7 @@ function calcCommission(options){
 }
 
 function formatDate(date){
-  if(!date.getMonth)
+  if(!date || !date.getMonth)
     return "";
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const dateString = months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear()
