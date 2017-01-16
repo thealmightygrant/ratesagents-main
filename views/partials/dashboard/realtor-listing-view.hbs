@@ -29,13 +29,48 @@
                 <td>{{#if data.listing.price}}${{addCommas data.listing.price}}{{else}}Unknown{{/if}}</td>
                 <!-- <td><a href="#listing-price-and-commission" class="btn-flat waves-effect waves-blue">Edit</a></td> -->
               </tr>
+              <tr>
+                <td>Total for sale at full listing price: </td>
+                <td>{{#if data.listing.price}}${{addCommas (calcCommission price=data.listing.price flatFee=data.desiredCommission.flatFee commission=data.desiredCommission.tier0Commission)}}{{else}}Unknown{{/if}}</td>
+                <!-- <td><a href="#listing-price-and-commission" class="btn-flat waves-effect waves-blue">Edit</a></td> -->
+              </tr>
+              <tr>
+                <td>Total for sale at 110% of listing price: </td>
+                <td>{{#if data.listing.price}}${{addCommas (calcCommission price=data.listing.price priceChange="10.0" flatFee=data.desiredCommission.flatFee commission=data.desiredCommission.tier0Commission)}}{{else}}Unknown{{/if}}</td>
+                <!-- <td><a href="#listing-price-and-commission" class="btn-flat waves-effect waves-blue">Edit</a></td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col s12 m6 very-small-v-room">
+          <button class="btn very-small-t-room green">Place a bid</button>
+          <a class="btn very-small-t-room" target="_blank" href="http://www.zillow.com/homes/{{querystring data.home.address dashes=true}}_rb/">View on Zillow</a>
+          <table class="bordered small-t-room">
+            <thead>
+              <tr>
+                <th data-field="id">Important Dates:</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Desired Closing Date: </td>
+                <td>{{#if data.listing.closingDate}}{{formatDate data.listing.closingDate}}{{else}}Unknown{{/if}}</td>
+              </tr>
+              <tr>
+                <td>Earliest Closing Date: </td>
+                <td>{{#if data.listing.closingDateMin}}{{formatDate data.listing.closingDateMin}}{{else}}Unknown{{/if}}</td>
+              </tr>
+              <tr>
+                <td>Latest Closing Date: </td>
+                <td>{{#if data.listing.closingDateMax}}{{formatDate data.listing.closingDateMax}}{{else}}Unknown{{/if}}</td>
+              </tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
-    <div class="col l4 med-t-room hide-on-med-and-down"></div>
-    <div class="col m12 l4">
+    <div class="col l4 med-t-room hide-on-large-and-up"></div>
+    <div class="col m12 l4 hide-on-med-and-down">
       <div id="zillow-large-search-box-widget-container" style="width:432px;overflow:hidden;background-color:#e7f1fd;color:#555; font: normal normal normal 13px verdana,arial,sans-serif;line-height:13px;margin:0 auto;padding:0;text-align:center;border:1px solid #adcfff;letter-spacing:0;text-transform:none;">
         <h2 style="color:#d61;text-align:left;font-size:20px;line-height:20px;font-weight:normal;float:left;width:200px;margin-left:10px;margin-top:5px;letter-spacing:0;text-transform:none;">Find Homes</h2>
         <div style="float:right;"><a href="http://www.zillow.com/" target="_blank" rel="nofollow"><img alt="Zillow Real Estate Information" style="border:0;" src="http://www.zillow.com/widgets/GetVersionedResource.htm?path=/static/images/powered-by-zillow.gif"></img></a></div>

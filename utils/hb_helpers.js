@@ -16,6 +16,7 @@ module.exports = {
   , case: caser
   , default: defaulter
 
+  , calcCommission: calcCommission
   , addCommas: addCommas
   , formatDate: formatDate
   , querystring: querystring
@@ -110,6 +111,38 @@ function addCommas(value){
   }
 }
 
+function calcCommission(options){
+  let price = options.hash.price;
+  let priceChange = options.hash.priceChange;
+  let commission = options.hash.commission;
+  let flatFee = options.hash.flatFee;
+
+  if(!flatFee || !commission || !price) {
+    return "";
+  }
+
+  if((typeof flatFee !== "number") ||
+     (typeof commission !== "number") ||
+     (typeof price !== "number")){
+    flatFee = parseFloat(flatFee)
+    commission = parseFloat(commission)
+    price = parseFloat(price)
+    priceChange = parseFloat(priceChange);
+  }
+
+  if(isNaN(priceChange) || !priceChange){
+    priceChange = 0;
+  }
+
+  if(isNaN(flatFee) ||
+     isNaN(commission) ||
+     isNaN(price)){
+    return  "";
+  }
+
+  return ((price + (price * (priceChange / 100.0))) * (commission / 100.0) + flatFee).toFixed(0);
+}
+
 function formatDate(date){
   if(!date.getMonth)
     return "";
@@ -120,12 +153,16 @@ function formatDate(date){
 
 function querystring() {
   let args = Array.from(arguments);
+  const options = args[args.length - 1];
+
+  let fillerType = options.hash.dashes ? "-" : "+";
+
   let qs = ""
   args.forEach((value) => {
     if(typeof value !== "string")
       return;
 
-    const spaceToPlus = value.replace(/\s/g, "+").replace(/,/g, "");
+    const spaceToPlus = value.replace(/\s/g, fillerType).replace(/,/g, "");
     if(qs.length)
       qs += "+" + spaceToPlus;
     else

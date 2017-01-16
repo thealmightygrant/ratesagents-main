@@ -88,7 +88,7 @@
 
         @if $i < $num-cols {
           &.m#{$i} {
-            padding-right: $gutter-width / 2;
+            padding-right: $gutter-width / 1.5;
           }
         }
 
@@ -125,7 +125,7 @@
 
         @if $i < $num-cols {
           &.m#{$i} {
-            padding-right: $gutter-width / 2;
+            padding-right: $gutter-width / 1.5;
           }
         }
 
@@ -161,7 +161,7 @@
 
         @if $i < $num-cols {
           &.m#{$i} {
-            padding-right: $gutter-width / 2;
+            padding-right: $gutter-width / 1.5;
           }
         }
 
