@@ -20,6 +20,9 @@
   "apis": {
     "googleMaps": {
       "apiKey": "AIzaSyAjfFyZYkmNldGYxhuez3UJRSOW1WjD6zM"
+    },
+    "zillow": {
+      "apiKey": "X1-ZWz19gjrakrj0r_5w3uy"
     }
   }
 }

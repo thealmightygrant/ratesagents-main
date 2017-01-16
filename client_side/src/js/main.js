@@ -38,12 +38,10 @@
     //init scrolling animation
     $('.scrollspy').scrollSpy();
 
-    //$('input[type="number"]').on("input", function(e){
-    //  var curVal = $(e.currentTarget).val();
-    //  $(e.currentTarget).val(curVal.toString().replace(/[0-9](?=(?:[0-9]{3})+(?![0-9]))/, "$&,"))
-    //})
-
-    //TODO: not very DRY, refactor pleeeeeeeease
+    //TODO: refactor pleeeeeeeease
+    //TODO: -- calculate diff between avg % commission in Dallas and
+    //         %commission on display, times by listing price
+    //      -- throw out other fees?
     if(window.Chart) {
       var commissionCalculator = (function() {
         var listingPriceNode = $("#price")

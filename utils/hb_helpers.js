@@ -8,13 +8,17 @@ const HBars = require('handlebars')
 module.exports = {
   getDateNumeral: getDateNumeral
   , ifEquals: ifEquals
-  , str: str  //Where the fuck is this used?? and why does it exist?
+  , capitalize: capitalize
+  , str: str
   , or: or
   , and: and
   , switch: switcher
   , case: caser
   , default: defaulter
 
+  , addCommas: addCommas
+  , formatDate: formatDate
+  , querystring: querystring
   , textField: textField
   , dateField: dateField
   , numberField: numberField
@@ -39,6 +43,10 @@ function ifEquals(item1, item2, options){
   else {
     return options.inverse(this);
   }
+}
+
+function capitalize(str1){
+  return str1.substring(0, 1).toUpperCase() + str1.substring(1);
 }
 
 function str(str1, str2){
@@ -92,6 +100,40 @@ function defaulter(options) {
   }
 }
 
+function addCommas(value){
+  if((typeof value !== "string") && (typeof value !== "number")){
+    return "";
+  }
+  else {
+    const commaThousands = value.toString().replace(/[0-9](?=(?:[0-9]{3})+(?![0-9]))/, "$&,");
+    return new HBars.SafeString(commaThousands);
+  }
+}
+
+function formatDate(date){
+  if(!date.getMonth)
+    return "";
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const dateString = months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear()
+  return new HBars.SafeString(dateString);
+}
+
+function querystring() {
+  let args = Array.from(arguments);
+  let qs = ""
+  args.forEach((value) => {
+    if(typeof value !== "string")
+      return;
+
+    const spaceToPlus = value.replace(/\s/g, "+").replace(/,/g, "");
+    if(qs.length)
+      qs += "+" + spaceToPlus;
+    else
+      qs += spaceToPlus;
+  })
+  return new HBars.SafeString(qs);
+}
+
 function validateInputClasses(inputClass, msg, defaultClass){
   if(msg){
     return (defaultClass || "") + " validate invalid"
@@ -105,7 +147,7 @@ function dateField(options){
   var dateOptions = {
     input: {
       attrs: {
-        type: "date"
+        type: "text"
         , name: options.hash.name
         , id: options.hash.name
         , class: validateInputClasses(options.hash.inputClass, options.hash.msg, "datepicker")
@@ -392,80 +434,124 @@ function dropdownGroup(dataArr, options){
 }
 
 function navLinks(options) {
-  var navData = options.hash.navData || {}
-  ,   tabData = options.hash.tabData || []
-  ,   navType = options.hash.navType
-  ,   activeTab = options.hash.activeTab
-  ,   navElements = ''
+  const navData = options.hash.navData || {}
+  ,     tabData = options.hash.tabData || []
+  ,     navType = options.hash.navType
+
+  let navElements = ''
   ,   childElements = ''
+  ,   navProcessor
 
   switch(navType){
   case 'main-nav':
-    Object.keys(navData).forEach(function(key){
-      const curDatum = navData[key];
-      if(curDatum.linkData && curDatum.linkData.length){
-        navElements = navElements +
-          dropdownLink(key + '-dropdown-link', curDatum.href, curDatum.value);
-        childElements = childElements +
-          dropdownGroup(curDatum.linkData, {
-            groupId: (key + '-dropdown-link'),
-            groupClassName: 'dropdown-content'
-          })
-      }
-      else {
-        let regularNavElement;
-        if(curDatum.type){
-          regularNavElement = liLink(curDatum.href, curDatum.value, {anchorClassName: curDatum.type});
-        }
-        else{
-          regularNavElement = liLink(curDatum.href, curDatum.value);
-        }
-        navElements = navElements + regularNavElement;
-      }
-    })
+    navProcessor = mainNavProcessor(navElements, childElements);
+    navProcessor.addNavElements(navData);
+    navElements = navElements + navProcessor.navElements() +
+      navProcessor.childElements();
     break;
-  case 'mobile-main-nav':
-    navElements = navElements +
-      '<li><a class="logo" href="/">Rates and Agents</a><a class="close" href="#!"><i class="material-icons">close</i></a></li>' +
-      '<li><div class="divider"></div></li>';
-    Object.keys(tabData).forEach(function(key, index){
-      const curDatum = tabData[key];
-      if(curDatum.linkData && curDatum.linkData.length){
+  case 'mobile-main-nav': {
+    navProcessor = mobileTabProcessor(navElements, options)
+    navProcessor.addNavTitle();
+    tabData.forEach(navProcessor.fillTabNav)
+    navProcessor.addBottomCTA(navData);
+    navElements = navElements + navProcessor.navElements()
+    break;
+  }
+  case 'tabs':
+    navProcessor = tabProcessor(navElements, options);
+    tabData.forEach(navProcessor.fillTabNav);
+    navElements = navElements + navProcessor.navElements();
+    break;
+  }
+  return new HBars.SafeString(navElements);
+}
+
+function mainNavProcessor(navElements, childElements){
+  return {
+    navElements: function(){
+      return navElements;
+    },
+    childElements: function(){
+      return childElements;
+    },
+    addNavElements: function(navData){
+      Object.keys(navData).forEach(function(key){
+        const curDatum = navData[key];
+        if(curDatum.linkData && curDatum.linkData.length){
+          navElements = navElements +
+            dropdownLink(key + '-dropdown-link', curDatum.href, curDatum.value);
+          childElements = childElements +
+            dropdownGroup(curDatum.linkData, {
+              groupId: (key + '-dropdown-link'),
+              groupClassName: 'dropdown-content'
+            })
+        }
+        else {
+          let regularNavElement;
+          if(curDatum.type){
+            regularNavElement = liLink(curDatum.href, curDatum.value, {anchorClassName: curDatum.type});
+          }
+          else{
+            regularNavElement = liLink(curDatum.href, curDatum.value);
+          }
+          navElements = navElements + regularNavElement;
+        }
+      })
+    }
+  }
+}
+
+function mobileTabProcessor(navElements){
+  return {
+    navElements: function(){
+      return navElements;
+    },
+    addNavTitle: function(){
+      navElements = navElements +
+        '<li><a class="logo" href="/">Rates & Agents</a><a class="close" href="#!"><i class="material-icons">close</i></a></li>' +
+        '<li><div class="divider"></div></li>';
+    },
+    addBottomCTA: function(navData){
+      navElements = navElements +
+        '<div class="bottom-cta">';
+      Object.keys(navData).forEach(function(key){
+        const curDatum = navData[key];
+        navElements = navElements +
+          liLink(curDatum.href, curDatum.value, {liClassName: 'bottom-link'})
+      });
+      navElements = navElements + '</div>';
+    },
+    fillTabNav: function(tab, index, tabData){
+      if(tab.linkData && tab.linkData.length){
         navElements +=
-          sidenavSubheader(curDatum.value, sidenavBar(curDatum.linkData))
+          sidenavSubheader(tab.value, sidenavBar(tab.linkData))
       }
       else {
         navElements = navElements +
-          liLink(curDatum.href, curDatum.value)
+          liLink(tab.href, tab.value)
       }
       if(index < tabData.length)
         navElements = navElements + '<li><div class="divider"></div></li>'
-    })
+    }
+  }
+}
 
-    navElements = navElements +
-      '<div class="bottom-cta">';
-    Object.keys(navData).forEach(function(key){
-      const curDatum = navData[key];
-      navElements = navElements +
-        liLink(curDatum.href, curDatum.value, {liClassName: 'bottom-link'})
-    });
-    navElements = navElements + '</div>';
-
-    break;
-  case 'tabs':
-    tabData.forEach(function(tab, index){
+function tabProcessor(navElements, options){
+  return {
+    navElements: function(){
+      return navElements;
+    },
+    fillTabNav: function(tab, index){
       let tabOptions = {};
 
-      if(activeTab && (tab.href === ('#' + activeTab))){
+      if(options.hash.activeTab && (tab.href === ('#' + options.hash.activeTab))){
         tabOptions = {anchorClassName: "active"}
       }
-      else if(!activeTab && (index === 0)){
+      else if(!options.hash.activeTab && (index === 0)){
         tabOptions = {anchorClassName: "active"}
       }
       navElements = navElements +
         tabLink(tab.href, tab.value, tabOptions)
-    })
-    break;
+    }
   }
-  return new HBars.SafeString(navElements + childElements);
 }

@@ -27,6 +27,10 @@
         {
           "href": "#auction",
           "value": "Auction"
+        },
+        {
+          "href": "#realtor-listing-view",
+          "value": "Realtor Listing View"
         }
       ],
       "navData": {

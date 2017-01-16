@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col m12 l8">
-      <h3 class="very-small-r-room">Your Desired Sale Date</h3><h5>Step 3 of 4</h5>
+      <h3 class="very-small-r-room">Your Desired Closing Date</h3><h5>Step 3 of 4</h5>
       <p>Please tell us about the date by which you'd like to sell your home. We provide these dates to prospective realtors and they will adjust their expectations and bids based on these values.</p>
       <form method="post" id="closing-date-form" action="/homeowners/closing-date-information">
         <input type="hidden" name="_csrf" value="{{data.csrfToken}}">
@@ -9,13 +9,13 @@
           <div class="col s12 m5 l4">
             <div class="row">
               <div class="col s12">
-                {{{dateField labelFirst="true" overwriteClass="true" name="closingDate" msg=messages.closingDate label="Desired Closing Date: " data=data.listing.closingDate}}}
+                {{{dateField labelFirst="true" overwriteClass="true" name="closingDate" msg=messages.closingDate label="Desired Closing Date: " data=(formatDate data.listing.closingDate)}}}
               </div>
               <div class="col s12">
-                {{{dateField labelFirst="true" overwriteClass="true" name="closingDateMin" msg=messages.closingDateMin label="Earliest Acceptable Closing Date: " data=data.listing.closingDateMin}}}
+                {{{dateField labelFirst="true" overwriteClass="true" name="closingDateMin" msg=messages.closingDateMin label="Earliest Acceptable Closing Date: " data=(formatDate data.listing.closingDateMin)}}}
               </div>
               <div class="col s12">
-                {{{dateField labelFirst="true" overwriteClass="true" name="closingDateMax" msg=messages.closingDateMax label="Latest Acceptable Closing Date: " data=data.listing.closingDateMax}}}
+                {{{dateField labelFirst="true" overwriteClass="true" name="closingDateMax" msg=messages.closingDateMax label="Latest Acceptable Closing Date: " data=(formatDate data.listing.closingDateMax)}}}
               </div>
             </div>
             <div class="input-field small-b-room">
@@ -40,7 +40,7 @@
         <li>
           <div class="collapsible-header">Closing Dates and Move Out Dates</div>
           <div class="collapsible-body">
-            <p>Pick an earliest and latest sales date that you can actually abide by. This does not have to be your offical move out date, but it should be within a reasonable time of it. One to two weeks is the standard. Anything beyond this will have to be negotiated with the buyers and may result in having a negative impace upon your sale price.</p>
+            <p>Pick an earliest and latest sales date that you can actually abide by. This does not have to be your offical move out date, but it should be within a reasonable time of it. One to two weeks is the standard. Anything beyond this will have to be negotiated with the buyers and may result in having a negative impact upon your sale price.</p>
           </div>
         </li>
         <li>

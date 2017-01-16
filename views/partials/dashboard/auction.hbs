@@ -9,11 +9,11 @@
           <div class="col s12 m5 l4">
             <div class="row">
               <div class="col s12">
-                {{{dateField name="auctionStart" msg=messages.auctionStart label="Auction Start Date: " data=data.listing.auctionStart}}}
+                {{{dateField name="auctionStart" msg=messages.auctionStart label="Auction Start Date: " data=(formatDate data.listing.auctionStart)}}}
               </div>
               <!-- TODO: change this to auction length for UX reasons -->
               <div class="col s12">
-                {{{dateField name="auctionEnd" msg=messages.auctionEnd label="Auction End Date: " data=data.listing.auctionEnd}}}
+                {{{dateField name="auctionEnd" msg=messages.auctionEnd label="Auction End Date: " data=(formatDate data.listing.auctionEnd)}}}
               </div>
             </div>
             <p class="extra-info">* All auctions are started at 12AM Central Time and end at 11:59PM Central Time.</p>
@@ -31,12 +31,12 @@
               <tbody>
                 <tr>
                   <td>Home Type: </td>
-                  <td>{{#if data.home.homeType}}{{data.home.homeType}}{{else}}Unknown{{/if}}</td>
+                  <td>{{#if data.home.homeType}}{{capitalize data.home.homeType}}{{else}}Unknown{{/if}}</td>
                   <!-- <td><a href="#address-and-home-type" class="btn-flat waves-effect waves-blue">Edit</a></td> -->
                 </tr>
                 <tr>
                   <td>Home Size: </td>
-                  <td>{{#if data.home.homeSize}}{{data.home.homeSize}} sq.ft.{{else}}Unknown{{/if}}</td>
+                  <td>{{#if data.home.homeSize}}{{addCommas data.home.homeSize}} sq.ft.{{else}}Unknown{{/if}}</td>
                   <!-- <td><a address="#address-and-home-type" class="btn-flat waves-effect waves-blue">Edit</a></td> -->
                 </tr>
                 <tr>
@@ -46,7 +46,7 @@
                 </tr>
                 <tr>
                   <td>Realtor Fee: </td>
-                  <td>{{#if data.desiredCommission.flatFee}}${{data.desiredCommission.flatFee}}{{else}}Unknown{{/if}}</td>
+                  <td>{{#if data.desiredCommission.flatFee}}${{addCommas data.desiredCommission.flatFee}}{{else}}Unknown{{/if}}</td>
                   <!-- <td><a href="#listing-price-and-commission" class="btn-flat waves-effect waves-blue">Edit</a></td> -->
                 </tr>
                 <tr>
@@ -56,22 +56,22 @@
                 </tr>
                 <tr>
                   <td>Listing Price: </td>
-                  <td>{{#if data.listing.price}}${{data.listing.price}}{{else}}Unknown{{/if}}</td>
+                  <td>{{#if data.listing.price}}${{addCommas data.listing.price}}{{else}}Unknown{{/if}}</td>
                   <!-- <td><a href="#listing-price-and-commission" class="btn-flat waves-effect waves-blue">Edit</a></td> -->
                 </tr>
                 <tr>
                   <td>Desired Closing Date: </td>
-                  <td>{{#if data.listing.closingDate}}{{data.listing.closingDate}}{{else}}Unknown{{/if}}</td>
+                  <td>{{#if data.listing.closingDate}}{{formatDate data.listing.closingDate}}{{else}}Unknown{{/if}}</td>
                   <!-- <td><a href="#closing-date" class="btn-flat waves-effect waves-blue">Edit</a></td> -->
                 </tr>
                 <tr>
                   <td>Earliest Closing Date: </td>
-                  <td>{{#if data.listing.closingDateMin}}{{data.listing.closingDateMin}}{{else}}Unknown{{/if}}</td>
+                  <td>{{#if data.listing.closingDateMin}}{{formatDate data.listing.closingDateMin}}{{else}}Unknown{{/if}}</td>
                   <!-- <td><a href="#closing-date" class="btn-flat waves-effect waves-blue">Edit</a></td> -->
                 </tr>
                 <tr>
                   <td>Latest Closing Date: </td>
-                  <td>{{#if data.listing.closingDateMax}}{{data.listing.closingDateMax}}{{else}}Unknown{{/if}}</td>
+                  <td>{{#if data.listing.closingDateMax}}{{formatDate data.listing.closingDateMax}}{{else}}Unknown{{/if}}</td>
                   <!-- <td><a href="#closing-date" class="btn-flat waves-effect waves-blue">Edit</a></td> -->
                 </tr>
               </tbody>
@@ -86,7 +86,7 @@
         <li>
           <div class="collapsible-header active">Auction Length</div>
           <div class="collapsible-body">
-            <p>In order to get enough bids, we recommend an auction length of at least ten days, but an auction as few as 7 days should get you a good variety of bids on your listing.</p>
+            <p>In order to get enough bids, we recommend an auction length of at least 10 days, but an auction as few as 7 days should get you a good variety of bids on your listing. As our network of agents grows, we expect that you will be able receive results back in as little as 24 hours.</p>
           </div>
         </li>
         <li>

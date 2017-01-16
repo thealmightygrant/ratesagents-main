@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="row">
+    <div class="col m12 l8">
+      <h3 class="very-small-r-room">{{#if data.home.address}}{{data.home.address}}{{else}}Unknown Address{{/if}}</h3>
+      <p class="bigger">{{#if (and data.home.homeType data.home.homeSize)}}{{capitalize data.home.homeType}} with {{addCommas data.home.homeSize}} sq.ft.{{/if}}</p>
+      <p class="bigger">Listing Price: {{#if data.listing.price}}${{addCommas data.listing.price}}{{else}}Unavailable{{/if}}</p>
+      <div class="row">
+        <div class="col s12 m6">
+          <table class="bordered small-t-room">
+            <thead>
+              <tr>
+                <th data-field="id">Commission Structure:</th>
+              </tr>
+            </thead>
+            <!-- TODO: add href to each Edit button, prob should create hb helper -->
+            <tbody>
+              <tr>
+                <td>Realtor Fee: </td>
+                <td>{{#if data.desiredCommission.flatFee}}${{addCommas data.desiredCommission.flatFee}}{{else}}Unknown{{/if}}</td>
+                <!-- <td><a href="#listing-price-and-commission" class="btn-flat waves-effect waves-blue">Edit</a></td> -->
+              </tr>
+              <tr>
+                <td>Realtor Commission: </td>
+                <td>{{#if data.desiredCommission.tier0Commission}}{{data.desiredCommission.tier0Commission}}%{{else}}Unknown{{/if}}</td>
+                <!-- <td><a href="#listing-price-and-commission" class="btn-flat waves-effect waves-blue">Edit</a></td> -->
+              </tr>
+              <tr>
+                <td>Listing Price: </td>
+                <td>{{#if data.listing.price}}${{addCommas data.listing.price}}{{else}}Unknown{{/if}}</td>
+                <!-- <td><a href="#listing-price-and-commission" class="btn-flat waves-effect waves-blue">Edit</a></td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col l4 med-t-room hide-on-med-and-down"></div>
+    <div class="col m12 l4">
+      <div id="zillow-large-search-box-widget-container" style="width:432px;overflow:hidden;background-color:#e7f1fd;color:#555; font: normal normal normal 13px verdana,arial,sans-serif;line-height:13px;margin:0 auto;padding:0;text-align:center;border:1px solid #adcfff;letter-spacing:0;text-transform:none;">
+        <h2 style="color:#d61;text-align:left;font-size:20px;line-height:20px;font-weight:normal;float:left;width:200px;margin-left:10px;margin-top:5px;letter-spacing:0;text-transform:none;">Find Homes</h2>
+        <div style="float:right;"><a href="http://www.zillow.com/" target="_blank" rel="nofollow"><img alt="Zillow Real Estate Information" style="border:0;" src="http://www.zillow.com/widgets/GetVersionedResource.htm?path=/static/images/powered-by-zillow.gif"></img></a></div>
+        <iframe scrolling="no" src="http://www.zillow.com/widgets/search/LargeSearchBoxWidget.htm?did=zillow-large-search-box-iframe-widget&type=iframe&rgname={{querystring data.home.neighborhood data.home.city data.home.state}}&shvi=yes" width="430" frameborder="0" height="400"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
